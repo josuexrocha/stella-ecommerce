@@ -1,0 +1,14 @@
+ETOILE (id, nom, description, constellation, proximite_terre, luminosite, masse, magnitude, prix)
+Clé primaire : id
+
+UTILISATEUR (id, prenom, nom, email, mot_de_passe, role)
+Clé primaire : id
+
+COMMANDE (id, date, statut, montant_total, utilisateur_id)
+Clé primaire : id
+Clé étrangère : utilisateur_id référence UTILISATEUR(id)
+
+COMMANDE_ETOILE (commande_id, etoile_id, quantite)
+Clé primaire : (commande_id, etoile_id)
+Clé étrangère : commande_id référence COMMANDE(id)
+Clé étrangère : etoile_id référence ETOILE(id)

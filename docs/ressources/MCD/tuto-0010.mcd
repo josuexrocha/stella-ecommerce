@@ -1,0 +1,17 @@
+ETOILE: id, nom, description, constellation, proximite_terre, luminosite, masse, magnitude, prix
+CONTENIR, 0N ETOILE, 1N COMMANDE
+COMMANDE: id, date, statut, montant_total
+PASSER, 11 COMMANDE, 0N UTILISATEUR
+UTILISATEUR: id, prenom, nom, email, mot_de_passe, role
+
+Voici quelques explications sur cette syntaxe :
+
+Chaque ligne représente soit une entité, soit une association.
+Les entités sont définies avec leur nom suivi de deux points, puis la liste de leurs attributs séparés par des virgules.
+Les associations sont définies avec leur nom, suivi des cardinalités et des noms des entités qu'elles relient.
+Les cardinalités sont représentées comme suit :
+
+01 : zéro ou un
+0N : zéro à plusieurs
+11 : exactement un
+1N : un à plusieurs
