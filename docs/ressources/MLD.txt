@@ -1,0 +1,41 @@
+ETOILE (
+    id: INT AUTO_INCREMENT,
+    nom: VARCHAR(100) NOT NULL,
+    description: TEXT NOT NULL,
+    constellation: VARCHAR(50) NOT NULL,
+    proximite_terre: FLOAT NOT NULL,  -- en années-lumière
+    luminosite: FLOAT NOT NULL,  -- par rapport au Soleil
+    masse: FLOAT NOT NULL,  -- en masses solaires
+    magnitude: FLOAT NOT NULL,
+    prix: DECIMAL(10, 2) NOT NULL  -- en euros ou dollars
+)
+Clé primaire : id
+
+UTILISATEUR (
+    id: INT AUTO_INCREMENT,
+    prenom: VARCHAR(50) NOT NULL,
+    nom: VARCHAR(50) NOT NULL,
+    email: VARCHAR(100) NOT NULL UNIQUE,
+    mot_de_passe: VARCHAR(255) NOT NULL,
+    role: ENUM('client', 'admin') NOT NULL DEFAULT 'client'
+)
+Clé primaire : id
+
+COMMANDE (
+    id: INT AUTO_INCREMENT,
+    date: DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    statut: ENUM('en attente', 'payée', 'expédiée', 'annulée') NOT NULL DEFAULT 'en attente',
+    montant_total: DECIMAL(10, 2) NOT NULL,
+    utilisateur_id: INT NOT NULL
+)
+Clé primaire : id
+Clé étrangère : utilisateur_id référence UTILISATEUR(id)
+
+COMMANDE_ETOILE (
+    commande_id: INT,
+    etoile_id: INT,
+    quantite: INT NOT NULL DEFAULT 1
+)
+Clé primaire : (commande_id, etoile_id)
+Clé étrangère : commande_id référence COMMANDE(id)
+Clé étrangère : etoile_id référence ETOILE(id)
