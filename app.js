@@ -1,12 +1,12 @@
 // app.js
 
-const express = require('express');
-const { sequelize } = require('./src/models');
-const initializeData = require('./src/utils/initializeData');
+const express = require("express");
+const { sequelize } = require("./src/models");
+const initializeData = require("./src/utils/initializeData");
 
-const starsRoutes = require('./src/routes/starsRoutes');
-const usersRoutes = require('./src/routes/usersRoutes');
-const ordersRoutes = require('./src/routes/ordersRoutes');
+const starsRoutes = require("./src/routes/starsRoutes");
+const usersRoutes = require("./src/routes/usersRoutes");
+const ordersRoutes = require("./src/routes/ordersRoutes");
 
 const app = express();
 
@@ -14,9 +14,9 @@ const app = express();
 app.use(express.json());
 
 // Routes
-app.use('/api/stars', starsRoutes);
-app.use('/api/users', usersRoutes);
-app.use('/api/orders', ordersRoutes);
+app.use("/api/stars", starsRoutes);
+app.use("/api/users", usersRoutes);
+app.use("/api/orders", ordersRoutes);
 
 // Gestion des erreurs 404
 app.use((req, res, next) => {
@@ -32,9 +32,10 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3000;
 
 // Synchronisation de la base de données et démarrage du serveur
-sequelize.sync({ force: true }) // Utilisez { force: true } seulement en développement
+sequelize
+  .sync({ force: true }) // Utilisez { force: true } seulement en développement
   .then(() => {
-    console.log('Database synced');
+    console.log("Database synced");
     return initializeData();
   })
   .then(() => {
@@ -42,8 +43,8 @@ sequelize.sync({ force: true }) // Utilisez { force: true } seulement en dévelo
       console.log(`Server is running on port ${PORT}`);
     });
   })
-  .catch(error => {
-    console.error('Unable to sync database:', error);
+  .catch((error) => {
+    console.error("Unable to sync database:", error);
   });
 
 module.exports = app; // Pour les tests unitaires si nécessaire

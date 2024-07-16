@@ -1,4 +1,6 @@
-const { Order } = require('../models');
+// src/controllers/orderController.js
+
+const { Order } = require("../models");
 
 exports.createOrder = async (req, res) => {
   // TODO: Implement create order logic

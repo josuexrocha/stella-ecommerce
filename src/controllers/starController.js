@@ -1,6 +1,6 @@
 // src/controllers/starController.js
 
-const { Star } = require('../models');
+const { Star } = require("../models");
 
 exports.getAllStars = async (req, res) => {
   try {

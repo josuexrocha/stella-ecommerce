@@ -1,21 +1,23 @@
-const { Sequelize } = require('sequelize');
-const config = require('../config/database.js');
+// src/models/index.js
+
+const { Sequelize } = require("sequelize");
+const config = require("../config/database.js");
 
 const sequelize = new Sequelize(config.development);
 
-const Star = require('./Star.js')(sequelize, Sequelize.DataTypes);
-const User = require('./User.js')(sequelize, Sequelize.DataTypes);
-const Order = require('./Order.js')(sequelize, Sequelize.DataTypes);
+const Star = require("./Star.js")(sequelize, Sequelize.DataTypes);
+const User = require("./User.js")(sequelize, Sequelize.DataTypes);
+const Order = require("./Order.js")(sequelize, Sequelize.DataTypes);
 
 User.hasMany(Order);
 Order.belongsTo(User);
 
-const OrderStar = sequelize.define('OrderStar', {
+const OrderStar = sequelize.define("OrderStar", {
   quantity: {
     type: Sequelize.INTEGER,
     allowNull: false,
-    defaultValue: 1
-  }
+    defaultValue: 1,
+  },
 });
 
 Order.belongsToMany(Star, { through: OrderStar });
@@ -26,5 +28,5 @@ module.exports = {
   Star,
   User,
   Order,
-  OrderStar
+  OrderStar,
 };

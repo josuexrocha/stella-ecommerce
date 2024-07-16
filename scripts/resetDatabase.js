@@ -1,3 +1,4 @@
+// scripts/resetDatabase.js
 const { sequelize } = require('../src/models');
 const createTables = require('./createTables');
 const generateSampleData = require('./sampleData');
@@ -14,4 +15,8 @@ async function resetDatabase() {
   }
 }
 
-resetDatabase();
+if (require.main === module) {
+  resetDatabase();
+}
+
+module.exports = resetDatabase;

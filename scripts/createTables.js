@@ -1,3 +1,4 @@
+// scripts/createTables.js
 const { sequelize } = require('../src/models');
 
 async function createTables() {
@@ -6,9 +7,12 @@ async function createTables() {
     console.log('Tables created successfully.');
   } catch (error) {
     console.error('Error creating tables:', error);
-  } finally {
-    await sequelize.close();
+    throw error;
   }
 }
 
-createTables();
+if (require.main === module) {
+  createTables().then(() => sequelize.close());
+}
+
+module.exports = createTables;

@@ -1,41 +1,41 @@
-ETOILE (
+STAR (
     id: INT AUTO_INCREMENT,
-    nom: VARCHAR(100) NOT NULL,
+    name: VARCHAR(100) NOT NULL,
     description: TEXT NOT NULL,
     constellation: VARCHAR(50) NOT NULL,
-    proximite_terre: FLOAT NOT NULL,  -- en années-lumière
-    luminosite: FLOAT NOT NULL,  -- par rapport au Soleil
-    masse: FLOAT NOT NULL,  -- en masses solaires
+    distance_from_earth: FLOAT NOT NULL,  -- in light-years
+    luminosity: FLOAT NOT NULL,  -- relative to the Sun
+    mass: FLOAT NOT NULL,  -- in solar masses
     magnitude: FLOAT NOT NULL,
-    prix: DECIMAL(10, 2) NOT NULL  -- en euros ou dollars
+    price: DECIMAL(10, 2) NOT NULL  -- in euros or dollars
 )
-Clé primaire : id
+Primary key: id
 
-UTILISATEUR (
+USER (
     id: INT AUTO_INCREMENT,
-    prenom: VARCHAR(50) NOT NULL,
-    nom: VARCHAR(50) NOT NULL,
+    first_name: VARCHAR(50) NOT NULL,
+    last_name: VARCHAR(50) NOT NULL,
     email: VARCHAR(100) NOT NULL UNIQUE,
-    mot_de_passe: VARCHAR(255) NOT NULL,
+    password: VARCHAR(255) NOT NULL,
     role: ENUM('client', 'admin') NOT NULL DEFAULT 'client'
 )
-Clé primaire : id
+Primary key: id
 
-COMMANDE (
+ORDER (
     id: INT AUTO_INCREMENT,
     date: DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    statut: ENUM('en attente', 'payée', 'expédiée', 'annulée') NOT NULL DEFAULT 'en attente',
-    montant_total: DECIMAL(10, 2) NOT NULL,
-    utilisateur_id: INT NOT NULL
+    status: ENUM('pending', 'paid', 'shipped', 'cancelled') NOT NULL DEFAULT 'pending',
+    total_amount: DECIMAL(10, 2) NOT NULL,
+    user_id: INT NOT NULL
 )
-Clé primaire : id
-Clé étrangère : utilisateur_id référence UTILISATEUR(id)
+Primary key: id
+Foreign key: user_id references USER(id)
 
-COMMANDE_ETOILE (
-    commande_id: INT,
-    etoile_id: INT,
-    quantite: INT NOT NULL DEFAULT 1
+ORDER_STAR (
+    order_id: INT,
+    star_id: INT,
+    quantity: INT NOT NULL DEFAULT 1
 )
-Clé primaire : (commande_id, etoile_id)
-Clé étrangère : commande_id référence COMMANDE(id)
-Clé étrangère : etoile_id référence ETOILE(id)
+Primary key: (order_id, star_id)
+Foreign key: order_id references ORDER(id)
+Foreign key: star_id references STAR(id)
