@@ -6,7 +6,7 @@ exports.getAllStars = async (req, res) => {
   try {
     const stars = await Star.findAll();
     res.json(stars);
-  } catch (error) {
+  } catch (_error) {
     res.status(500).json({ message: "Error retrieving stars" });
   }
 };
@@ -19,7 +19,7 @@ exports.getStarById = async (req, res) => {
     } else {
       res.status(404).json({ message: "Star not found" });
     }
-  } catch (error) {
+  } catch (_error) {
     res.status(500).json({ message: "Error retrieving star" });
   }
 };

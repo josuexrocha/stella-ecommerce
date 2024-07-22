@@ -1,9 +1,5 @@
-// app.js
-require('dotenv').config();
-
 const express = require("express");
 const { sequelize } = require("./src/models");
-const initializeData = require("./src/utils/initializeData");
 
 const starsRoutes = require("./src/routes/starsRoutes");
 const usersRoutes = require("./src/routes/usersRoutes");
@@ -20,32 +16,35 @@ app.use("/api/users", usersRoutes);
 app.use("/api/orders", ordersRoutes);
 
 // Gestion des erreurs 404
-app.use((req, res, next) => {
+app.use((req, res, _next) => {
   res.status(404).json({ message: "Route not found" });
 });
 
 // Gestion globale des erreurs
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Something went wrong" });
 });
 
 const PORT = process.env.PORT || 3000;
 
-// Synchronisation de la base de données et démarrage du serveur
-sequelize
-  .sync({ force: true }) // Utilisez { force: true } seulement en développement
-  .then(() => {
+// Fonction pour démarrer le serveur
+const startServer = async () => {
+  try {
+    await sequelize.sync({ force: false }); // Utilisez { force: true } seulement en développement
     console.log("Database synced");
-    return initializeData();
-  })
-  .then(() => {
+
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
-  })
-  .catch((error) => {
-    console.error("Unable to sync database:", error);
-  });
+  } catch (error) {
+    console.error("Unable to start server:", error);
+  }
+};
 
-module.exports = app; // Pour les tests unitaires si nécessaire
+// Si ce fichier est exécuté directement (pas importé comme un module)
+if (require.main === module) {
+  startServer();
+}
+
+module.exports = app; // Pour les tests unitaires

@@ -15,3 +15,6 @@ yarn-error.log*
 # Fichiers du système d'exploitation
 .DS_Store
 Thumbs.db
+
+# ESLint cache
+.eslintcache
