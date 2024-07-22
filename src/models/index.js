@@ -10,6 +10,7 @@ const config =
 
 const sequelize = new Sequelize({
   ...config,
+  dialect: config.dialect, // Ajoutez cette ligne
   storage: config.storage,
 });
 
