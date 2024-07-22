@@ -1,4 +1,5 @@
 // config/database.js
+
 require('dotenv').config({ path: '../../.env' });
 const testConfig = require('./database.test.config');
 

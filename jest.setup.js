@@ -1,3 +1,5 @@
+// jest.setup.js
+
 const { sequelize } = require('./src/models');
 
 global.beforeAll(async () => {

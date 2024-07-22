@@ -1,3 +1,5 @@
+// src/controllers/cartController.js
+
 const { Cart, CartItem, Star } = require('../models');
 
 exports.getCart = async (req, res) => {
