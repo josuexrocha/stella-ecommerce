@@ -8,12 +8,10 @@ const config =
     ? require("../config/database.test.config.js").test
     : require("../config/database.js").development;
 
-const sequelize = new Sequelize(
-  config.database,
-  config.username,
-  config.password,
-  config
-);
+const sequelize = new Sequelize({
+  ...config,
+  storage: config.storage, // Ceci est important pour SQLite
+});
 
 const models = {};
 

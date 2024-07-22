@@ -1,15 +1,24 @@
-// jest.setup.js
-
 const { sequelize } = require('./src/models');
 
 global.beforeAll(async () => {
-  await sequelize.sync({ force: true });
+  console.log('Syncing database...');
+  try {
+    await sequelize.sync({ force: true });
+    console.log('Database synced successfully');
+  } catch (error) {
+    console.error('Failed to sync database:', error);
+    throw error;
+  }
 });
 
 global.afterAll(async () => {
-  // Vérifiez si la connexion est toujours ouverte avant de la fermer
-  if (sequelize && sequelize.connectionManager.hasOwnProperty('connections') && sequelize.connectionManager.connections.sqlite) {
+  console.log('Closing database connection...');
+  try {
     await sequelize.close();
+    console.log('Database connection closed successfully');
+  } catch (error) {
+    console.error('Failed to close database connection:', error);
+    throw error;
   }
 });
 

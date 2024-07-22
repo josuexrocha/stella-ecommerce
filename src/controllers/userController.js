@@ -1,14 +1,19 @@
 // src/controllers/userController.js
 
 const { User } = require("../models");
-// Nous utiliserons bcrypt pour le hachage des mots de passe plus tard
-// const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
-    // TODO: Add password hashing
-    const newUser = await User.create({ firstName, lastName, email, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.create({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+    });
     res
       .status(201)
       .json({ message: "User registered successfully", userId: newUser.id });
@@ -20,11 +25,39 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  // TODO: Implement login logic
-  res.status(501).json({ message: "Login not implemented yet" });
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(401).json({ message: "Authentication failed" });
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Authentication failed" });
+    }
+    const token = jwt.sign(
+      { userId: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    res.json({ token, userId: user.id });
+  } catch (error) {
+    res.status(500).json({ message: "Error logging in", error: error.message });
+  }
 };
 
 exports.getUserProfile = async (req, res) => {
-  // TODO: Implement get user profile logic
-  res.status(501).json({ message: "Get user profile not implemented yet" });
+  try {
+    const user = await User.findByPk(req.user.userId, {
+      attributes: { exclude: ["password"] },
+    });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching user profile", error: error.message });
+  }
 };

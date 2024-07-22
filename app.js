@@ -4,6 +4,7 @@ const { sequelize } = require("./src/models");
 const starsRoutes = require("./src/routes/starsRoutes");
 const usersRoutes = require("./src/routes/usersRoutes");
 const ordersRoutes = require("./src/routes/ordersRoutes");
+const cartRoutes = require("./src/routes/cartRoutes");
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use("/api/stars", starsRoutes);
 app.use("/api/users", usersRoutes);
 app.use("/api/orders", ordersRoutes);
+app.use("/api/cart", cartRoutes);
 
 // Gestion des erreurs 404
 app.use((req, res, _next) => {

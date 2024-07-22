@@ -1,5 +1,6 @@
 // config/database.js
 require('dotenv').config({ path: '../../.env' });
+const testConfig = require('./database.test.config');
 
 module.exports = {
   development: {
@@ -9,4 +10,5 @@ module.exports = {
     host: process.env.DB_HOST,
     dialect: process.env.DB_DIALECT,
   },
+  test: testConfig.test
 };
