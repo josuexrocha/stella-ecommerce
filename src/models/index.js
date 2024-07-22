@@ -40,17 +40,11 @@ Object.keys(models).forEach((modelName) => {
 models.User.hasMany(models.Order);
 models.Order.belongsTo(models.User);
 
-models.User.hasMany(models.Review);
-models.Review.belongsTo(models.User);
+models.User.hasMany(models.Review, { foreignKey: "userId" });
+models.Star.hasMany(models.Review, { foreignKey: "starId" });
 
-models.Star.hasMany(models.Review);
-models.Review.belongsTo(models.Star);
-
-models.User.hasMany(models.Wishlist);
-models.Wishlist.belongsTo(models.User);
-
-models.Star.hasMany(models.Wishlist);
-models.Wishlist.belongsTo(models.Star);
+models.User.hasMany(models.Wishlist, { foreignKey: "userId" });
+models.Star.hasMany(models.Wishlist, { foreignKey: "starId" });
 
 const OrderStar = sequelize.define("OrderStar", {
   quantity: {
@@ -64,14 +58,22 @@ models.Order.belongsToMany(models.Star, { through: OrderStar });
 models.Star.belongsToMany(models.Order, { through: OrderStar });
 
 // Associations pour le panier
-models.User.hasOne(models.Cart);
-models.Cart.belongsTo(models.User);
+models.User.hasOne(models.Cart, {
+  foreignKey: "userId",
+  as: "cart",
+});
+models.Cart.belongsTo(models.User, {
+  foreignKey: "userId",
+});
 
-models.Cart.hasMany(models.CartItem);
-models.CartItem.belongsTo(models.Cart);
-
-models.Star.hasMany(models.CartItem);
-models.CartItem.belongsTo(models.Star);
+models.Cart.hasMany(models.CartItem, {
+  foreignKey: "cartId",
+  as: "cartItems",
+  onDelete: "CASCADE",
+});
+models.CartItem.belongsTo(models.Cart, {
+  foreignKey: "cartId",
+});
 
 module.exports = {
   sequelize,

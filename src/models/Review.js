@@ -1,14 +1,6 @@
 // models/Review.js
 module.exports = (sequelize, DataTypes) => {
   const Review = sequelize.define("Review", {
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    starId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     rating: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -21,8 +13,14 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Review.associate = (models) => {
-    Review.belongsTo(models.User);
-    Review.belongsTo(models.Star);
+    Review.belongsTo(models.User, {
+      foreignKey: "userId",
+      onDelete: "CASCADE",
+    });
+    Review.belongsTo(models.Star, {
+      foreignKey: "starId",
+      onDelete: "CASCADE",
+    });
   };
 
   return Review;

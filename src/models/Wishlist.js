@@ -1,19 +1,16 @@
 // models/Wishlist.js
-module.exports = (sequelize, DataTypes) => {
-  const Wishlist = sequelize.define("Wishlist", {
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    starId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-  });
+module.exports = (sequelize, _DataTypes) => {
+  const Wishlist = sequelize.define("Wishlist", {});
 
   Wishlist.associate = (models) => {
-    Wishlist.belongsTo(models.User);
-    Wishlist.belongsTo(models.Star);
+    Wishlist.belongsTo(models.User, {
+      foreignKey: "userId",
+      onDelete: "CASCADE",
+    });
+    Wishlist.belongsTo(models.Star, {
+      foreignKey: "starId",
+      onDelete: "CASCADE",
+    });
   };
 
   return Wishlist;

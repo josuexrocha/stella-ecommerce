@@ -1,19 +1,37 @@
 // src/models/Cart.js
-module.exports = (sequelize, DataTypes) => {
-  const Cart = sequelize.define("Cart", {
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      unique: true,
+
+module.exports = (sequelize, _DataTypes) => {
+  const Cart = sequelize.define(
+    "Cart",
+    {
+      // Aucun champ défini explicitement ici
     },
-  });
+    {
+      tableName: "Carts",
+      timestamps: true,
+    }
+  );
 
   Cart.associate = (models) => {
     Cart.belongsTo(models.User, {
-      foreignKey: "userId", // Utilisez 'userId' au lieu de la clé étrangère par défaut
-      as: "user",
+      foreignKey: "userId",
+      onDelete: "CASCADE",
     });
-    Cart.hasMany(models.CartItem);
+
+    Cart.hasMany(models.CartItem, {
+      foreignKey: "cartId",
+      as: "cartitems",
+      onDelete: "CASCADE",
+    });
+  };
+
+  Cart.prototype.getTotalPrice = async function () {
+    let total = 0;
+    const cartItems = await this.getCartItems();
+    for (let item of cartItems) {
+      total += item.quantity * item.Star.price;
+    }
+    return total;
   };
 
   return Cart;
