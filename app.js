@@ -2,6 +2,7 @@
 
 const express = require("express");
 const { sequelize } = require("./src/models");
+const { errorHandler, AppError } = require("./src/middlewares/errorHandler");
 
 const starsRoutes = require("./src/routes/starsRoutes");
 const usersRoutes = require("./src/routes/usersRoutes");
@@ -24,15 +25,12 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/reviews", reviewRoutes);
 
 // Gestion des erreurs 404
-app.use((req, res, _next) => {
-  res.status(404).json({ message: "Route not found" });
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
 // Gestion globale des erreurs
-app.use((err, req, res, _next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: "Something went wrong" });
-});
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 

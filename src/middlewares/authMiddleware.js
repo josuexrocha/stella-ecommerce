@@ -1,25 +1,26 @@
 // src/middlewares/authMiddleware.js
 
 const jwt = require("jsonwebtoken");
+const { AppError } = require("./errorHandler");
 
 exports.authenticateUser = (req, res, next) => {
   const token = req.header("Authorization")?.replace("Bearer ", "");
   if (!token) {
-    return res.status(401).json({ message: "Authentication required" });
+    return next(new AppError("Authentication required", 401));
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
-} catch (error) {
-    console.error('Token verification failed:', error);
-    res.status(401).json({ message: 'Invalid token', error: error.message });
+  } catch (error) {
+    console.error("Token verification failed:", error);
+    next(new AppError("Invalid token", 401));
   }
 };
 
 exports.authorizeAdmin = (req, res, next) => {
   if (req.user.role !== "admin") {
-    return res.status(403).json({ message: "Admin access required" });
+    return next(new AppError("Admin access required", 403));
   }
   next();
 };
