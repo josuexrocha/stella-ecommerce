@@ -7,7 +7,7 @@ const sequelize = new Sequelize(config.development);
 
 const Star = require("./Star.js")(sequelize, Sequelize.DataTypes);
 const User = require("./User.js")(sequelize, Sequelize.DataTypes);
-const Order = require("./Order.js")(sequelize, Sequelize.DataTypes);
+const Order = require("./Order")(sequelize, Sequelize.DataTypes);
 
 User.hasMany(Order);
 Order.belongsTo(User);
