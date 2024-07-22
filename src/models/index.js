@@ -10,7 +10,7 @@ const config =
 
 const sequelize = new Sequelize({
   ...config,
-  storage: config.storage, // Ceci est important pour SQLite
+  storage: config.storage,
 });
 
 const models = {};
@@ -40,6 +40,18 @@ Object.keys(models).forEach((modelName) => {
 models.User.hasMany(models.Order);
 models.Order.belongsTo(models.User);
 
+models.User.hasMany(models.Review);
+models.Review.belongsTo(models.User);
+
+models.Star.hasMany(models.Review);
+models.Review.belongsTo(models.Star);
+
+models.User.hasMany(models.Wishlist);
+models.Wishlist.belongsTo(models.User);
+
+models.Star.hasMany(models.Wishlist);
+models.Wishlist.belongsTo(models.Star);
+
 const OrderStar = sequelize.define("OrderStar", {
   quantity: {
     type: Sequelize.INTEGER,
@@ -50,6 +62,16 @@ const OrderStar = sequelize.define("OrderStar", {
 
 models.Order.belongsToMany(models.Star, { through: OrderStar });
 models.Star.belongsToMany(models.Order, { through: OrderStar });
+
+// Associations pour le panier
+models.User.hasOne(models.Cart);
+models.Cart.belongsTo(models.User);
+
+models.Cart.hasMany(models.CartItem);
+models.CartItem.belongsTo(models.Cart);
+
+models.Star.hasMany(models.CartItem);
+models.CartItem.belongsTo(models.Star);
 
 module.exports = {
   sequelize,

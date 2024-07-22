@@ -10,4 +10,7 @@ router.get("/", starController.getAllStars);
 // GET a single star by ID
 router.get("/:id", starController.getStarById);
 
+// GET pour le filtrage
+router.get("/filter", starController.filterStars);
+
 module.exports = router;

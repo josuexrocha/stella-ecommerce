@@ -60,3 +60,20 @@ exports.getOrderDetails = async (req, res) => {
     res.status(500).json({ message: "Error fetching order details", error: error.message });
   }
 };
+
+exports.updateOrderStatus = async (req, res) => {
+  try {
+    const { orderId, status } = req.body;
+    const order = await Order.findOne({
+      where: { id: orderId, UserId: req.user.userId }
+    });
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    order.status = status;
+    await order.save();
+    res.json({ message: "Order status updated", order });
+  } catch (error) {
+    res.status(400).json({ message: "Error updating order status", error: error.message });
+  }
+};
