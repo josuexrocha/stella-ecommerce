@@ -1,11 +1,13 @@
 const express = require("express");
-const path = require("path");
 const morgan = require("morgan");
-const config = require("./src/config/config");
+const path = require("path");
 const { sequelize } = require("./src/models");
 const { errorHandler, AppError } = require("./src/middlewares/errorHandler");
 const routes = require("./src/routes");
+const config = require("./src/config/config");
 const logger = require("./src/utils/logger");
+const swagger = require('./src/utils/swagger');
+
 
 const app = express();
 
@@ -20,6 +22,12 @@ if (config.NODE_ENV !== "test") {
 
 // Middleware pour parser le JSON
 app.use(express.json());
+
+// Swagger UI
+app.use('/api-docs', swagger.serve, swagger.setup);
+
+// Middleware pour parser les données de formulaire
+app.use(express.urlencoded({ extended: true }));
 
 // Servir les fichiers statiques
 app.use(express.static(path.join(__dirname, "public")));
@@ -40,7 +48,7 @@ app.use("/api", (req, res, next) => {
 // Gestion globale des erreurs
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3000;
+const PORT = config.PORT || 3000;
 
 // Fonction pour démarrer le serveur
 const startServer = async () => {
@@ -49,10 +57,13 @@ const startServer = async () => {
     console.log("Database synced");
 
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      console.log(
+        `Server is running in ${config.NODE_ENV} mode on port ${PORT}`
+      );
     });
   } catch (error) {
     console.error("Unable to start server:", error);
+    process.exit(1);
   }
 };
 

@@ -1,16 +1,12 @@
 // src/routes/starsRoutes.js
-
 const express = require("express");
 const router = express.Router();
 const starController = require("../controllers/starController");
+const validate = require("../middlewares/validate");
+const { idSchema, filterSchema } = require("../validations/starValidation");
 
-// GET all stars
 router.get("/", starController.getAllStars);
-
-// GET a single star by ID
-router.get("/:id", starController.getStarById);
-
-// GET pour le filtrage
-router.get("/filter", starController.filterStars);
+router.get("/:id", validate(idSchema, 'params'), starController.getStarById);
+router.get("/filter", validate(filterSchema, 'query'), starController.filterStars);
 
 module.exports = router;
