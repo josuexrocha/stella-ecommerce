@@ -1,15 +1,40 @@
 // config/database.js
 
-require('dotenv').config();
+require("dotenv").config();
 const testConfig = require("./database.test.config");
+
+const defaultConfig = {
+  dialect: "postgres",
+  logging: false,
+  define: {
+    underscored: true,
+    timestamps: true,
+  },
+};
 
 module.exports = {
   development: {
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-    host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
+    ...defaultConfig,
+    username: process.env.DB_USERNAME || "root",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_DATABASE || "stella_dev",
+    host: process.env.DB_HOST || "localhost",
   },
-  test: testConfig.test,
+  test: {
+    ...defaultConfig,
+    ...testConfig.test,
+  },
+  production: {
+    ...defaultConfig,
+    username: process.env.PROD_DB_USERNAME,
+    password: process.env.PROD_DB_PASSWORD,
+    database: process.env.PROD_DB_DATABASE,
+    host: process.env.PROD_DB_HOST,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  },
 };
