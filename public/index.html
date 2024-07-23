@@ -1,21 +1,46 @@
+<!-- public/index.html -->
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stella - Accueil</title>
+    <title>Stella - Illuminez votre vie</title>
     <link href="/css/tailwind.css" rel="stylesheet">
 </head>
-<body class="flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen bg-gray-100">
     <header class="bg-blue-600 text-white p-4">
-        <nav>
-            <!-- La navigation sera ajoutée ici plus tard -->
+        <nav id="main-nav">
+            <!-- La navigation sera ajoutée dynamiquement ici -->
         </nav>
     </header>
 
     <main class="flex-grow container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-4">Bienvenue sur Stella</h1>
-        <!-- Le contenu spécifique à la page sera ajouté ici -->
+        <section class="text-center mb-12">
+            <h1 class="text-4xl font-bold mb-2">Stella</h1>
+            <p class="text-xl">Illuminez votre vie</p>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4">Nouveautés</h2>
+            <div id="nouveautes" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Les cartes d'étoiles seront ajoutées dynamiquement ici -->
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4">Qui sommes-nous ?</h2>
+            <p class="text-gray-700">
+                Chez Stella, nous croyons que chaque étoile raconte une histoire unique. Notre mission est de vous permettre de faire partie de cette histoire cosmique en vous offrant la possibilité de posséder votre propre étoile. Explorez notre catalogue céleste et trouvez l'étoile qui illuminera votre vie.
+            </p>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-semibold mb-4">Le saviez-vous ?</h2>
+            <div id="fun-facts" class="bg-white p-4 rounded-lg shadow-md">
+                <!-- Les faits amusants seront ajoutés dynamiquement ici -->
+            </div>
+        </section>
     </main>
 
     <footer class="bg-gray-200 p-4 text-center">
@@ -23,6 +48,7 @@
     </footer>
 
     <script src="/js/main.js"></script>
+    <script src="/js/nav.js"></script>
     <script src="/js/index.js"></script>
 </body>
 </html>

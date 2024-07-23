@@ -1,6 +1,5 @@
-// app.js
-
 const express = require("express");
+const path = require("path");
 const { sequelize } = require("./src/models");
 const { errorHandler, AppError } = require("./src/middlewares/errorHandler");
 const routes = require("./src/routes");
@@ -10,11 +9,19 @@ const app = express();
 // Middleware pour parser le JSON
 app.use(express.json());
 
-// Routes centralisées
+// Servir les fichiers statiques
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Routes API centralisées
 app.use("/api", routes);
 
-// Gestion des erreurs 404
-app.all("*", (req, res, next) => {
+// Route pour gérer toutes les requêtes non-API
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Gestion des erreurs 404 pour l'API
+app.use('/api', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
@@ -26,7 +33,7 @@ const PORT = process.env.PORT || 3000;
 // Fonction pour démarrer le serveur
 const startServer = async () => {
   try {
-    await sequelize.sync({ force: false }); // Utilisez { force: true } seulement en développement
+    await sequelize.sync({ force: false });
     console.log("Database synced");
 
     app.listen(PORT, () => {
@@ -37,9 +44,8 @@ const startServer = async () => {
   }
 };
 
-// Si ce fichier est exécuté directement (pas importé comme un module)
 if (require.main === module) {
   startServer();
 }
 
-module.exports = app; // Pour les tests unitaires
+module.exports = app;
