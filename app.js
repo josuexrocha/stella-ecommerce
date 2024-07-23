@@ -6,7 +6,7 @@ const { errorHandler, AppError } = require("./src/middlewares/errorHandler");
 const routes = require("./src/routes");
 const config = require("./src/config/config");
 const logger = require("./src/utils/logger");
-const swagger = require('./src/utils/swagger');
+const swaggerDocs = require("./src/utils/swagger");
 
 
 const app = express();
@@ -24,7 +24,7 @@ if (config.NODE_ENV !== "test") {
 app.use(express.json());
 
 // Swagger UI
-app.use('/api-docs', swagger.serve, swagger.setup);
+app.use("/api-docs", swaggerDocs.serve, swaggerDocs.setup);
 
 // Middleware pour parser les données de formulaire
 app.use(express.urlencoded({ extended: true }));
