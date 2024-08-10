@@ -1,3 +1,5 @@
+// src/models/CartItem.js
+
 module.exports = (sequelize, DataTypes) => {
   const CartItem = sequelize.define(
     "CartItem",

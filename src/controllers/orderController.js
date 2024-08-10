@@ -1,26 +1,31 @@
 // src/controllers/orderController.js
-const { Order, OrderStar, Star } = require("../models");
 
-exports.createOrder = async (req, res) => {
+const { Order, OrderStar, Star, User } = require("../models");
+const { AppError } = require("../middlewares/errorHandler");
+
+exports.createOrder = async (req, res, next) => {
   try {
-    const { items } = req.body;
+    console.log("Create order function called with body:", req.body);
+    const { items, shippingAddress, paymentMethod } = req.body;
     const order = await Order.create({
       UserId: req.user.userId,
       date: new Date(),
-      status: 'pending',
-      totalAmount: 0 // Sera calculé plus tard
+      status: "pending",
+      totalAmount: 0,
+      shippingAddress,
+      paymentMethod,
     });
 
     let totalAmount = 0;
     for (let item of items) {
       const star = await Star.findByPk(item.starId);
       if (!star) {
-        throw new Error(`Star with id ${item.starId} not found`);
+        throw new AppError(`Star with id ${item.starId} not found`, 404);
       }
       await OrderStar.create({
         OrderId: order.id,
         StarId: star.id,
-        quantity: item.quantity
+        quantity: item.quantity,
       });
       totalAmount += star.price * item.quantity;
     }
@@ -28,52 +33,70 @@ exports.createOrder = async (req, res) => {
     order.totalAmount = totalAmount;
     await order.save();
 
-    res.status(201).json({ message: "Order created successfully", orderId: order.id });
+    res
+      .status(201)
+      .json({ message: "Order created successfully", orderId: order.id });
   } catch (error) {
-    res.status(400).json({ message: "Error creating order", error: error.message });
+    console.error("Error in createOrder function:", error);
+    next(new AppError(`Error creating order: ${error.message}`, 400));
   }
 };
 
-exports.getUserOrders = async (req, res) => {
+exports.getUserOrders = async (req, res, next) => {
   try {
     const orders = await Order.findAll({
       where: { UserId: req.user.userId },
-      include: [{ model: OrderStar, include: [Star] }]
+      include: [
+        {
+          model: OrderStar,
+          include: [Star],
+        },
+      ],
     });
     res.json(orders);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching user orders", error: error.message });
+    next(new AppError(`Error fetching user orders: ${error.message}`, 500));
   }
 };
 
-exports.getOrderDetails = async (req, res) => {
+exports.getOrderDetails = async (req, res, next) => {
   try {
     const order = await Order.findOne({
-      where: { id: req.params.orderId, UserId: req.user.userId },
-      include: [{ model: OrderStar, include: [Star] }]
+      where: { id: req.params.id, UserId: req.user.userId },
+      include: [{ model: OrderStar, include: [Star] }],
     });
     if (!order) {
-      return res.status(404).json({ message: "Order not found" });
+      return next(new AppError("Order not found", 404));
     }
     res.json(order);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching order details", error: error.message });
+    next(new AppError(`Error fetching order details: ${error.message}`, 500));
   }
 };
 
-exports.updateOrderStatus = async (req, res) => {
+exports.updateOrderStatus = async (req, res, next) => {
   try {
-    const { orderId, status } = req.body;
-    const order = await Order.findOne({
-      where: { id: orderId, UserId: req.user.userId }
-    });
-    if (!order) {
-      return res.status(404).json({ message: "Order not found" });
+    const { status } = req.body;
+    const orderId = req.params.id;
+
+    // Vérifier si l'utilisateur est un admin
+    const user = await User.findByPk(req.user.userId);
+    if (user.role !== "admin") {
+      return next(new AppError("Only admins can update order status", 403));
     }
+
+    const order = await Order.findByPk(orderId);
+    if (!order) {
+      return next(new AppError("Order not found", 404));
+    }
+
     order.status = status;
     await order.save();
+
     res.json({ message: "Order status updated", order });
   } catch (error) {
-    res.status(400).json({ message: "Error updating order status", error: error.message });
+    next(new AppError(`Error updating order status: ${error.message}`, 400));
   }
 };
+
+module.exports = exports;

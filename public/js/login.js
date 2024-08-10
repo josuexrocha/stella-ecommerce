@@ -1,6 +1,6 @@
 // public/js/login.js
 
-/* global document, localStorage, window, fetch, updateNavigation */
+/* global document, localStorage, window, updateNavigation */
 
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();

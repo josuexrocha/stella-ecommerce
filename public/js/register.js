@@ -1,7 +1,5 @@
 // public/js/register.js
 
-/* global document, localStorage, window, fetch, updateNavigation */
-
 document
   .getElementById("registerForm")
   .addEventListener("submit", async (e) => {

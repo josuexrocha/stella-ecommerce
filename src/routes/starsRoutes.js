@@ -25,30 +25,6 @@ router.get("/", starController.getAllStars);
 
 /**
  * @swagger
- * /stars/{id}:
- *   get:
- *     summary: Get a star by ID
- *     tags: [Stars]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Star details
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Star'
- *       404:
- *         description: Star not found
- */
-router.get("/:id", validate(idSchema, 'params'), starController.getStarById);
-
-/**
- * @swagger
  * /stars/filter:
  *   get:
  *     summary: Filter stars
@@ -76,6 +52,30 @@ router.get("/:id", validate(idSchema, 'params'), starController.getStarById);
  *               items:
  *                 $ref: '#/components/schemas/Star'
  */
-router.get("/filter", validate(filterSchema, 'query'), starController.filterStars);
+router.get("/filter", validate(filterSchema, "query"), starController.filterStars);
+
+/**
+ * @swagger
+ * /stars/{id}:
+ *   get:
+ *     summary: Get a star by ID
+ *     tags: [Stars]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Star details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Star'
+ *       404:
+ *         description: Star not found
+ */
+router.get("/:id", validate(idSchema, "params"), starController.getStarById);
 
 module.exports = router;

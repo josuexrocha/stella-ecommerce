@@ -1,3 +1,5 @@
+// app.js
+
 const express = require("express");
 const morgan = require("morgan");
 const path = require("path");
@@ -7,7 +9,7 @@ const routes = require("./src/routes");
 const config = require("./src/config/config");
 const logger = require("./src/utils/logger");
 const swaggerDocs = require("./src/utils/swagger");
-
+const { authenticateUser } = require("./src/middlewares/authMiddleware");
 
 const app = express();
 
@@ -23,14 +25,17 @@ if (config.NODE_ENV !== "test") {
 // Middleware pour parser le JSON
 app.use(express.json());
 
-// Swagger UI
-app.use("/api-docs", swaggerDocs.serve, swaggerDocs.setup);
-
 // Middleware pour parser les données de formulaire
 app.use(express.urlencoded({ extended: true }));
 
+// Swagger UI
+app.use("/api-docs", swaggerDocs.serve, swaggerDocs.setup);
+
 // Servir les fichiers statiques
 app.use(express.static(path.join(__dirname, "public")));
+
+// Appliquer le middleware d'authentification à toutes les routes API
+app.use("/api", authenticateUser);
 
 // Routes API centralisées
 app.use("/api", routes);

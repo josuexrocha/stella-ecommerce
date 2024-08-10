@@ -1,7 +1,7 @@
-// models/Star.js
+// src/models/Star.js
 
 module.exports = (sequelize, DataTypes) => {
-  const Star = sequelize.define("Star", {
+  const Star = sequelize.define('Star', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -40,6 +40,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
+
+  Star.associate = (models) => {
+    Star.belongsToMany(models.Order, { through: models.OrderStar });
+  };
 
   return Star;
 };

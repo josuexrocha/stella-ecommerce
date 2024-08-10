@@ -1,6 +1,6 @@
 // public/js/main.js
 
-/* global document, localStorage, window, fetch, updateNavigation */
+/* global updateNavigation */
 
 function initializeApp() {
   updateNavigation();

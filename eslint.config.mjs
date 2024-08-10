@@ -11,11 +11,12 @@ export default [
       sourceType: "module",
       globals: {
         ...globals.node,
-        ...globals.es2021
+        ...globals.es2021,
+        ...globals.browser  // Ajout des globals du navigateur
       },
     },
     rules: {
-      // Vous pouvez ajouter ou modifier des règles ici
+      // Vos règles existantes
       "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
       "no-console": ["warn", { allow: ["warn", "error"] }],
     },

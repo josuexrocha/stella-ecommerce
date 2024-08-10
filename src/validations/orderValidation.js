@@ -2,13 +2,17 @@
 const Joi = require('joi');
 
 const createOrderSchema = Joi.object({
-  // Ajoutez ici les champs nécessaires pour créer une commande
   shippingAddress: Joi.string().required(),
   paymentMethod: Joi.string().required(),
+  items: Joi.array().items(
+    Joi.object({
+      starId: Joi.number().integer().positive().required(),
+      quantity: Joi.number().integer().positive().required()
+    })
+  ).required()
 });
 
 const updateOrderStatusSchema = Joi.object({
-  orderId: Joi.number().integer().positive().required(),
   status: Joi.string().valid('processing', 'shipped', 'delivered').required(),
 });
 

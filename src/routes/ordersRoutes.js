@@ -2,11 +2,12 @@
 const express = require("express");
 const router = express.Router();
 const orderController = require("../controllers/orderController");
-const { authenticateUser } = require("../middlewares/authMiddleware");
+const { requireAuth } = require("../middlewares/authMiddleware");
 const validate = require("../middlewares/validate");
 const { createOrderSchema, updateOrderStatusSchema } = require("../validations/orderValidation");
 
-router.use(authenticateUser);
+// Toutes les routes d'ordre nécessitent une authentification
+router.use(requireAuth);
 
 /**
  * @swagger
@@ -88,12 +89,18 @@ router.get("/:id", orderController.getOrderDetails);
 
 /**
  * @swagger
- * /orders/update-status:
+ * /orders/{id}/update-status:
  *   put:
- *     summary: Update order status
+ *     summary: Update order status (Admin only)
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -111,9 +118,11 @@ router.get("/:id", orderController.getOrderDetails);
  *         description: Invalid input
  *       401:
  *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admin access required
  *       404:
  *         description: Order not found
  */
-router.put("/update-status", validate(updateOrderStatusSchema), orderController.updateOrderStatus);
+router.put("/:id/update-status", validate(updateOrderStatusSchema), orderController.updateOrderStatus);
 
 module.exports = router;

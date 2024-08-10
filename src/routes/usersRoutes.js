@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
-const { authenticateUser } = require("../middlewares/authMiddleware");
+const { authenticateUser, requireAuth } = require("../middlewares/authMiddleware");
 const validate = require("../middlewares/validate");
 const { registerSchema, loginSchema } = require("../validations/userValidation");
 
@@ -77,6 +77,48 @@ router.post("/login", validate(loginSchema), userController.login);
  *       401:
  *         description: Unauthorized
  */
-router.get("/profile", authenticateUser, userController.getUserProfile);
+router.get("/profile", requireAuth, userController.getUserProfile);
+
+/**
+ * @swagger
+ * /users/profile:
+ *   put:
+ *     summary: Update user profile
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateUserInput'
+ *     responses:
+ *       200:
+ *         description: Profile updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized
+ */
+router.put("/profile", requireAuth, userController.updateProfile);
+
+/**
+ * @swagger
+ * /users/logout:
+ *   post:
+ *     summary: User logout
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ *       401:
+ *         description: Unauthorized
+ */
+router.post("/logout", requireAuth, userController.logout);
 
 module.exports = router;

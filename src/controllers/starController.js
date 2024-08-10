@@ -1,55 +1,47 @@
 // src/controllers/starController.js
 
 const { Star } = require("../models");
+const { Op } = require("sequelize");
+const { AppError } = require('../middlewares/errorHandler');
 
-exports.getAllStars = async (req, res) => {
+exports.getAllStars = async (req, res, next) => {
   try {
     const stars = await Star.findAll();
     res.json(stars);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error retrieving stars", error: error.message });
+    next(new AppError(`Error retrieving stars: ${error.message}`, 500));
   }
 };
 
-exports.getStarById = async (req, res) => {
+exports.getStarById = async (req, res, next) => {
   try {
     const star = await Star.findByPk(req.params.id);
     if (star) {
       res.json(star);
     } else {
-      res.status(404).json({ message: "Star not found" });
+      next(new AppError("Star not found", 404));
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error retrieving star", error: error.message });
+    next(new AppError(`Error retrieving star: ${error.message}`, 500));
   }
 };
 
-exports.filterStars = async (req, res) => {
+exports.filterStars = async (req, res, next) => {
+  console.log("Filter stars function called with query:", req.query);
   try {
-    const { constellation, minPrice, maxPrice, minMagnitude, maxMagnitude } =
-      req.query;
+    const { constellation, minPrice, maxPrice, minMagnitude, maxMagnitude } = req.query;
     let whereClause = {};
 
     if (constellation) whereClause.constellation = constellation;
     if (minPrice) whereClause.price = { [Op.gte]: minPrice };
-    if (maxPrice)
-      whereClause.price = { ...whereClause.price, [Op.lte]: maxPrice };
+    if (maxPrice) whereClause.price = { ...whereClause.price, [Op.lte]: maxPrice };
     if (minMagnitude) whereClause.magnitude = { [Op.gte]: minMagnitude };
-    if (maxMagnitude)
-      whereClause.magnitude = {
-        ...whereClause.magnitude,
-        [Op.lte]: maxMagnitude,
-      };
+    if (maxMagnitude) whereClause.magnitude = { ...whereClause.magnitude, [Op.lte]: maxMagnitude };
 
     const stars = await Star.findAll({ where: whereClause });
     res.json(stars);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error filtering stars", error: error.message });
+    console.error("Error in filterStars function:", error);
+    next(new AppError(`Error filtering stars: ${error.message}`, 500));
   }
 };
