@@ -1,0 +1,49 @@
+/* public/css/custom.css */
+
+body {
+  background-image: url("/public/images/space-background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: #f8f8f8; /* Off-white color for better readability */
+}
+
+.font-space-grotesk {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+/* Overlay sans effet de flou */
+.bg-overlay {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Navbar avec effet de flou */
+.navbar-blur {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Footer avec effet de flou */
+.footer-blur {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Adjust card styles */
+.card {
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Adjust fun facts background */
+#fun-facts {
+  background-color: rgba(30, 30, 30, 0.6);
+}

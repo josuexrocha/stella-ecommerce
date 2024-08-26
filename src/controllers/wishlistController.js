@@ -15,7 +15,7 @@ exports.addToWishlist = async (req, res, next) => {
     }
 
     await Wishlist.create({ userId, starId });
-    
+
     // Récupérer la liste de souhaits mise à jour
     const updatedWishlist = await Wishlist.findAll({
       where: { userId },
