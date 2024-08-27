@@ -10,10 +10,8 @@ let userId;
 
 global.beforeAll(async () => {
   if (!isDBSynced) {
-    console.log("Syncing database...");
     try {
       await sequelize.sync({ force: true });
-      console.log("Database synced successfully");
 
       // Create a test user and generate a token
       const hashedPassword = await bcrypt.hash("testpassword", 10);

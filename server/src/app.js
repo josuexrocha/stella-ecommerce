@@ -2,7 +2,7 @@
 
 const express = require("express");
 const morgan = require("morgan");
-const path = require("path");
+const path = require("node:path");
 const { sequelize } = require("./models");
 const { errorHandler, AppError } = require("./middlewares/errorHandler");
 const routes = require("./routes");
@@ -41,12 +41,12 @@ app.use("/api", authenticateUser);
 app.use("/api", routes);
 
 // Route pour gérer toutes les requêtes non-API
-app.get("*", (req, res) => {
+app.get("*", (res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // Gestion des erreurs 404 pour l'API
-app.use("/api", (req, res, next) => {
+app.use("/api", (req, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 

@@ -1,7 +1,7 @@
 // src/models/index.js
 
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 const { Sequelize } = require("sequelize");
 const config =
   process.env.NODE_ENV === "test"
@@ -17,19 +17,19 @@ const sequelize = new Sequelize({
 const models = {};
 
 // Charger automatiquement tous les modèles du dossier actuel
-fs.readdirSync(__dirname)
-  .filter((file) => file.indexOf(".") !== 0 && file !== "index.js" && file.slice(-3) === ".js")
-  .forEach((file) => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    models[model.name] = model;
-  });
+for (const file of fs
+  .readdirSync(__dirname)
+  .filter((file) => file.indexOf(".") !== 0 && file !== "index.js" && file.slice(-3) === ".js")) {
+  const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+  models[model.name] = model;
+}
 
 // Appliquer les associations
-Object.keys(models).forEach((modelName) => {
+for (const modelName of Object.keys(models)) {
   if (models[modelName].associate) {
     models[modelName].associate(models);
   }
-});
+}
 
 // Définir les associations spécifiques
 models.User.hasMany(models.Order);

@@ -1,5 +1,5 @@
 // scripts/sampleData.js
-const { Star, User, Order, OrderStar } = require("../src/models");
+const { Star, User, Order, OrderStar } = require("../server/src/models");
 
 const stars = [
   {
@@ -292,7 +292,7 @@ async function generateSampleData() {
 }
 
 if (require.main === module) {
-  const { sequelize } = require("../src/models");
+  const { sequelize } = require("../server/src/models");
   generateSampleData().then(() => sequelize.close());
 }
 
