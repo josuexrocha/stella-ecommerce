@@ -18,7 +18,7 @@ if (config.NODE_ENV !== "test") {
   app.use(
     morgan("combined", {
       stream: { write: (message) => logger.info(message.trim()) },
-    })
+    }),
   );
 }
 
@@ -62,9 +62,7 @@ const startServer = async () => {
     console.log("Database synced");
 
     app.listen(PORT, () => {
-      console.log(
-        `Server is running in ${config.NODE_ENV} mode on port ${PORT}`
-      );
+      console.log(`Server is running in ${config.NODE_ENV} mode on port ${PORT}`);
     });
   } catch (error) {
     console.error("Unable to start server:", error);

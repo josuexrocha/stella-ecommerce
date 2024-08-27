@@ -5,7 +5,6 @@ const { AppError } = require("../middlewares/errorHandler");
 
 exports.createOrder = async (req, res, next) => {
   try {
-    console.log("Create order function called with body:", req.body);
     const { items, shippingAddress, paymentMethod } = req.body;
     const order = await Order.create({
       UserId: req.user.userId,
@@ -17,7 +16,7 @@ exports.createOrder = async (req, res, next) => {
     });
 
     let totalAmount = 0;
-    for (let item of items) {
+    for (const item of items) {
       const star = await Star.findByPk(item.starId);
       if (!star) {
         throw new AppError(`Star with id ${item.starId} not found`, 404);
@@ -33,9 +32,7 @@ exports.createOrder = async (req, res, next) => {
     order.totalAmount = totalAmount;
     await order.save();
 
-    res
-      .status(201)
-      .json({ message: "Order created successfully", orderId: order.id });
+    res.status(201).json({ message: "Order created successfully", orderId: order.id });
   } catch (error) {
     console.error("Error in createOrder function:", error);
     next(new AppError(`Error creating order: ${error.message}`, 400));

@@ -36,8 +36,7 @@ const handleDuplicateFieldsDB = (error) => {
   return new AppError(message, 400);
 };
 
-const handleJWTError = () =>
-  new AppError("Invalid token. Please log in again!", 401);
+const handleJWTError = () => new AppError("Invalid token. Please log in again!", 401);
 
 const handleJWTExpiredError = () =>
   new AppError("Your token has expired! Please log in again.", 401);
@@ -70,7 +69,7 @@ const sendErrorProd = (err, res) => {
   }
 };
 
-const errorHandler = (err, req, res, _next) => {
+const errorHandler = (err, res, _next) => {
   console.error("Error caught in errorHandler:", err);
 
   err.statusCode = err.statusCode || 500;
@@ -78,10 +77,7 @@ const errorHandler = (err, req, res, _next) => {
 
   if (process.env.NODE_ENV === "development") {
     sendErrorDev(err, res);
-  } else if (
-    process.env.NODE_ENV === "production" ||
-    process.env.NODE_ENV === "test"
-  ) {
+  } else if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "test") {
     let error = Object.assign({}, err);
     error.message = err.message;
 

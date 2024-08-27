@@ -11,10 +11,7 @@ const validate =
       stripUnknown: true,
     };
 
-    const { error, value } = Joi.compile(schema).validate(
-      req[property],
-      options
-    );
+    const { error, value } = Joi.compile(schema).validate(req[property], options);
 
     if (error) {
       const errors = error.details.map((detail) => detail.message);

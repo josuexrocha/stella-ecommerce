@@ -20,12 +20,6 @@ exports.getReviewsForStar = async (req, res, next) => {
 };
 
 exports.addReview = async (req, res, next) => {
-  console.log(
-    "Add review function called with body:",
-    req.body,
-    "and user:",
-    req.user
-  );
   try {
     const { starId, rating, comment } = req.body;
     // Vérifier si l'utilisateur a acheté l'étoile
@@ -39,9 +33,7 @@ exports.addReview = async (req, res, next) => {
       ],
     });
     if (!order) {
-      return next(
-        new AppError("You can only review stars you've purchased", 403)
-      );
+      return next(new AppError("You can only review stars you've purchased", 403));
     }
     const review = await Review.create({
       userId: req.user.userId,
@@ -65,12 +57,7 @@ exports.updateReview = async (req, res, next) => {
     });
 
     if (!review) {
-      return next(
-        new AppError(
-          "Review not found or you don't have permission to update it",
-          404
-        )
-      );
+      return next(new AppError("Review not found or you don't have permission to update it", 404));
     }
 
     review.rating = rating;
@@ -91,12 +78,7 @@ exports.deleteReview = async (req, res, next) => {
     });
 
     if (!review) {
-      return next(
-        new AppError(
-          "Review not found or you don't have permission to delete it",
-          404
-        )
-      );
+      return next(new AppError("Review not found or you don't have permission to delete it", 404));
     }
 
     await review.destroy();

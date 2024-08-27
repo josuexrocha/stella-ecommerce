@@ -1,5 +1,5 @@
 // src/validations/starValidation.js
-const Joi = require('joi');
+const Joi = require("joi");
 
 const idSchema = Joi.object({
   id: Joi.number().integer().positive().required(),

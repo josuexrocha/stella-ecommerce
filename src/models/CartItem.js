@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: "CartItems",
-    }
+    },
   );
 
   CartItem.associate = (models) => {

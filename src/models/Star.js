@@ -1,7 +1,7 @@
 // src/models/Star.js
 
 module.exports = (sequelize, DataTypes) => {
-  const Star = sequelize.define('Star', {
+  const Star = sequelize.define("Star", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,

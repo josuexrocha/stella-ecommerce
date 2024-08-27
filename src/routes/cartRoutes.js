@@ -89,11 +89,7 @@ router.post("/add", validate(addToCartSchema), cartController.addToCart);
  *       404:
  *         description: Cart item not found
  */
-router.put(
-  "/update",
-  validate(updateCartItemSchema),
-  cartController.updateCartItem
-);
+router.put("/update", validate(updateCartItemSchema), cartController.updateCartItem);
 
 /**
  * @swagger
@@ -124,7 +120,7 @@ router.put(
 router.delete(
   "/remove/:cartItemId",
   validate(removeFromCartSchema, "params"),
-  cartController.removeFromCart
+  cartController.removeFromCart,
 );
 
 module.exports = router;

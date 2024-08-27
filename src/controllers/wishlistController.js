@@ -1,7 +1,7 @@
 // src/controllers/wishlistController.js
 
 const { Wishlist, Star } = require("../models");
-const { AppError } = require('../middlewares/errorHandler');
+const { AppError } = require("../middlewares/errorHandler");
 
 exports.addToWishlist = async (req, res, next) => {
   try {
@@ -46,7 +46,7 @@ exports.removeFromWishlist = async (req, res, next) => {
     const userId = req.user.userId;
 
     const wishlistItem = await Wishlist.findOne({
-      where: { userId, starId }
+      where: { userId, starId },
     });
 
     if (!wishlistItem) {

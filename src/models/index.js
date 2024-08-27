@@ -1,12 +1,12 @@
 // src/models/index.js
 
-const fs = require('fs');
-const path = require('path');
-const { Sequelize } = require('sequelize');
+const fs = require("fs");
+const path = require("path");
+const { Sequelize } = require("sequelize");
 const config =
-  process.env.NODE_ENV === 'test'
-    ? require('../config/database.test.config.js').test
-    : require('../config/database.js').development;
+  process.env.NODE_ENV === "test"
+    ? require("../config/database.test.config.js").test
+    : require("../config/database.js").development;
 
 const sequelize = new Sequelize({
   ...config,
@@ -18,12 +18,7 @@ const models = {};
 
 // Charger automatiquement tous les modèles du dossier actuel
 fs.readdirSync(__dirname)
-  .filter(
-    (file) =>
-      file.indexOf('.') !== 0 &&
-      file !== 'index.js' &&
-      file.slice(-3) === '.js'
-  )
+  .filter((file) => file.indexOf(".") !== 0 && file !== "index.js" && file.slice(-3) === ".js")
   .forEach((file) => {
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
     models[model.name] = model;
@@ -40,11 +35,11 @@ Object.keys(models).forEach((modelName) => {
 models.User.hasMany(models.Order);
 models.Order.belongsTo(models.User);
 
-models.User.hasMany(models.Review, { foreignKey: 'userId' });
-models.Star.hasMany(models.Review, { foreignKey: 'starId' });
+models.User.hasMany(models.Review, { foreignKey: "userId" });
+models.Star.hasMany(models.Review, { foreignKey: "starId" });
 
-models.User.hasMany(models.Wishlist, { foreignKey: 'userId' });
-models.Star.hasMany(models.Wishlist, { foreignKey: 'starId' });
+models.User.hasMany(models.Wishlist, { foreignKey: "userId" });
+models.Star.hasMany(models.Wishlist, { foreignKey: "starId" });
 
 // Définir les associations many-to-many
 models.Order.belongsToMany(models.Star, { through: models.OrderStar });
@@ -52,11 +47,11 @@ models.Star.belongsToMany(models.Order, { through: models.OrderStar });
 
 // Associations pour le panier
 models.User.hasOne(models.Cart, {
-  foreignKey: 'userId',
-  as: 'cart',
+  foreignKey: "userId",
+  as: "cart",
 });
 models.Cart.belongsTo(models.User, {
-  foreignKey: 'userId',
+  foreignKey: "userId",
 });
 
 module.exports = {

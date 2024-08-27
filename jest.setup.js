@@ -42,8 +42,8 @@ global.beforeEach(async () => {
   try {
     await Promise.all(
       Object.values(sequelize.models).map((model) =>
-        model.destroy({ truncate: true, force: true })
-      )
+        model.destroy({ truncate: true, force: true }),
+      ),
     );
     console.log("Database cleared successfully");
   } catch (error) {

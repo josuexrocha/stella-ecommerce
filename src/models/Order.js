@@ -1,7 +1,7 @@
 // src/models/Order.js
 
 module.exports = (sequelize, DataTypes) => {
-  const Order = sequelize.define('Order', {
+  const Order = sequelize.define("Order", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -13,9 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
     },
     status: {
-      type: DataTypes.ENUM('pending', 'paid', 'shipped', 'cancelled'),
+      type: DataTypes.ENUM("pending", "paid", "shipped", "cancelled"),
       allowNull: false,
-      defaultValue: 'pending',
+      defaultValue: "pending",
     },
     totalAmount: {
       type: DataTypes.DECIMAL(10, 2),
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
   Order.associate = (models) => {
     Order.belongsToMany(models.Star, { through: models.OrderStar });
     Order.belongsTo(models.User);
-    Order.hasMany(models.OrderStar);  // Ajoutez cette ligne
+    Order.hasMany(models.OrderStar); // Ajoutez cette ligne
   };
 
   return Order;

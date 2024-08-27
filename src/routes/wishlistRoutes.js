@@ -4,7 +4,10 @@ const router = express.Router();
 const wishlistController = require("../controllers/wishlistController");
 const { requireAuth } = require("../middlewares/authMiddleware");
 const validate = require("../middlewares/validate");
-const { addToWishlistSchema, removeFromWishlistSchema } = require("../validations/wishlistValidation");
+const {
+  addToWishlistSchema,
+  removeFromWishlistSchema,
+} = require("../validations/wishlistValidation");
 
 // Toutes les routes de la liste de souhaits nécessitent une authentification
 router.use(requireAuth);
@@ -83,6 +86,10 @@ router.post("/add", validate(addToWishlistSchema), wishlistController.addToWishl
  *       404:
  *         description: Item not found in wishlist
  */
-router.delete("/remove/:starId", validate(removeFromWishlistSchema, 'params'), wishlistController.removeFromWishlist);
+router.delete(
+  "/remove/:starId",
+  validate(removeFromWishlistSchema, "params"),
+  wishlistController.removeFromWishlist,
+);
 
 module.exports = router;

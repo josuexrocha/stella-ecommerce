@@ -123,6 +123,10 @@ router.get("/:id", orderController.getOrderDetails);
  *       404:
  *         description: Order not found
  */
-router.put("/:id/update-status", validate(updateOrderStatusSchema), orderController.updateOrderStatus);
+router.put(
+  "/:id/update-status",
+  validate(updateOrderStatusSchema),
+  orderController.updateOrderStatus,
+);
 
 module.exports = router;

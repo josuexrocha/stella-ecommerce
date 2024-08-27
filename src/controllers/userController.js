@@ -6,14 +6,12 @@ const jwt = require("jsonwebtoken");
 const { AppError } = require("../middlewares/errorHandler");
 
 exports.register = async (req, res, next) => {
-  console.log("Register function called with body:", req.body);
   try {
     const { firstName, lastName, email, password } = req.body;
 
     // Vérifier si l'utilisateur existe déjà
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      console.log("User already exists with email:", email);
       return next(new AppError("Email already in use", 400));
     }
 
@@ -26,14 +24,10 @@ exports.register = async (req, res, next) => {
       // Le rôle "client" sera automatiquement attribué par défaut
     });
 
-    console.log("New user created:", newUser.id);
-
     // Générer un token JWT pour le nouvel utilisateur
-    const token = jwt.sign(
-      { userId: newUser.id, role: newUser.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ userId: newUser.id, role: newUser.role }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     res.status(201).json({
       message: "User registered successfully",
@@ -54,11 +48,9 @@ exports.login = async (req, res, next) => {
       return next(new AppError("Invalid email or password", 401));
     }
 
-    const token = jwt.sign(
-      { userId: user.id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     res.json({
       message: "Login successful",
@@ -118,7 +110,7 @@ exports.updateProfile = async (req, res, next) => {
 };
 
 // Nouvelle fonction pour la déconnexion
-exports.logout = async (req, res, next) => {
+exports.logout = async (res ) => {
   // Dans une implémentation JWT, la déconnexion se fait côté client
   // en supprimant le token. Côté serveur, nous pouvons simplement
   // envoyer une réponse de succès.

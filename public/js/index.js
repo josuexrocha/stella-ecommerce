@@ -28,16 +28,10 @@ function displayStars(stars) {
       "bg-white bg-opacity-10 rounded-lg shadow-lg p-6 transition-transform duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg";
     card.style.animationDelay = `${index * 0.1}s`;
     card.innerHTML = `
-            <h3 class="font-orbitron font-semibold text-xl mb-3">${
-              star.name
-            }</h3>
+            <h3 class="font-orbitron font-semibold text-xl mb-3">${star.name}</h3>
             <p class="text-purple-300 mb-2">${star.constellation}</p>
-            <p class="text-yellow-400 text-2xl mb-4">${star.price.toFixed(
-              2
-            )} €</p>
-            <a href="/star/${
-              star.id
-            }" class="inline-block bg-purple-600 text-white px-6 py-2 rounded-full hover:bg-purple-700 transition duration-300">Découvrir</a>
+            <p class="text-yellow-400 text-2xl mb-4">${star.price.toFixed(2)} €</p>
+            <a href="/star/${star.id}" class="inline-block bg-purple-600 text-white px-6 py-2 rounded-full hover:bg-purple-700 transition duration-300">Découvrir</a>
         `;
     container.appendChild(card);
     setTimeout(() => card.classList.add("opacity-100"), 50);

@@ -1,10 +1,10 @@
 // src/middlewares/authMiddleware.js
 
-const jwt = require('jsonwebtoken');
-const { AppError } = require('./errorHandler');
+const jwt = require("jsonwebtoken");
+const { AppError } = require("./errorHandler");
 
-exports.authenticateUser = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
+exports.authenticateUser = (req, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
     req.user = null; // Pas d'utilisateur authentifié
@@ -16,13 +16,13 @@ exports.authenticateUser = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    return next(new AppError('Invalid token', 401));
+    return next(new AppError(`Error validating token: ${error.message}`, 401));
   }
 };
 
-exports.requireAuth = (req, res, next) => {
+exports.requireAuth = (req, next) => {
   if (!req.user) {
-    return next(new AppError('Authentication required', 401));
+    return next(new AppError("Authentication required", 401));
   }
   next();
 };

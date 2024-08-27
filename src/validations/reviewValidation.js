@@ -1,5 +1,5 @@
 // src/validations/reviewValidation.js
-const Joi = require('joi');
+const Joi = require("joi");
 
 const addReviewSchema = Joi.object({
   starId: Joi.number().integer().positive().required(),

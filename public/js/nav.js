@@ -24,9 +24,7 @@ async function updateNavigation() {
                     ? `
                     <li><a href="/cart.html" class="hover:text-gray-300">Panier</a></li>
                     <li><a href="/profile.html" class="hover:text-gray-300">Profil</a></li>
-                    <li><span class="text-gray-300">${
-                      userProfile ? userProfile.firstName : ""
-                    }</span></li>
+                    <li><span class="text-gray-300">${userProfile ? userProfile.firstName : ""}</span></li>
                     <li><a href="#" onclick="logout()" class="hover:text-gray-300">Déconnexion</a></li>
                     ${
                       userProfile && userProfile.role === "admin"

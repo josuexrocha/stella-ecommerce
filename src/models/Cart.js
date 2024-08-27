@@ -9,7 +9,7 @@ module.exports = (sequelize, _DataTypes) => {
     {
       tableName: "Carts",
       timestamps: true,
-    }
+    },
   );
 
   Cart.associate = (models) => {
@@ -28,7 +28,7 @@ module.exports = (sequelize, _DataTypes) => {
   Cart.prototype.getTotalPrice = async function () {
     let total = 0;
     const cartItems = await this.getCartItems();
-    for (let item of cartItems) {
+    for (const item of cartItems) {
       total += item.quantity * item.Star.price;
     }
     return total;

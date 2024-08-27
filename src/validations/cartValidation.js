@@ -1,5 +1,5 @@
 // src/validations/cartValidation.js
-const Joi = require('joi');
+const Joi = require("joi");
 
 const addToCartSchema = Joi.object({
   starId: Joi.number().integer().positive().required(),

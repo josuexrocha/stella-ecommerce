@@ -2,9 +2,9 @@
 
 const { Star } = require("../models");
 const { Op } = require("sequelize");
-const { AppError } = require('../middlewares/errorHandler');
+const { AppError } = require("../middlewares/errorHandler");
 
-exports.getAllStars = async (req, res, next) => {
+exports.getAllStars = async (res, next) => {
   try {
     const stars = await Star.findAll();
     res.json(stars);
@@ -27,10 +27,9 @@ exports.getStarById = async (req, res, next) => {
 };
 
 exports.filterStars = async (req, res, next) => {
-  console.log("Filter stars function called with query:", req.query);
   try {
     const { constellation, minPrice, maxPrice, minMagnitude, maxMagnitude } = req.query;
-    let whereClause = {};
+    const whereClause = {};
 
     if (constellation) whereClause.constellation = constellation;
     if (minPrice) whereClause.price = { [Op.gte]: minPrice };
