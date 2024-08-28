@@ -4,10 +4,10 @@ const { Star } = require("../models");
 const { Op } = require("sequelize");
 const { AppError } = require("../middlewares/errorHandler");
 
-exports.getAllStars = async (res, next) => {
+exports.getAllStars = async (_, res, next) => {
   try {
     const stars = await Star.findAll();
-    res.json(stars);
+    res.json({ data: stars });
   } catch (error) {
     next(new AppError(`Error retrieving stars: ${error.message}`, 500));
   }

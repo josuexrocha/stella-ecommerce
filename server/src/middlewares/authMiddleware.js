@@ -3,7 +3,7 @@
 const jwt = require("jsonwebtoken");
 const { AppError } = require("./errorHandler");
 
-exports.authenticateUser = (req, next) => {
+exports.authenticateUser = (req, _, next) => {
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {

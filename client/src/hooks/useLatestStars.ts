@@ -1,11 +1,6 @@
-import { useEffect, useState } from "react";
-
-interface Star {
-  id: string;
-  name: string;
-  constellation: string;
-  price: number;
-}
+import { useState, useEffect } from "react";
+import { fetchStars } from "../services/api";
+import type { Star } from "../types/index";
 
 export const useLatestStars = (limit = 4) => {
   const [stars, setStars] = useState<Star[]>([]);
@@ -13,23 +8,29 @@ export const useLatestStars = (limit = 4) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchLatestStars = async () => {
+    const getStars = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/stars?limit=${limit}&sort=createdAt,desc`);
-        if (!response.ok) throw new Error("Erreur lors du chargement des étoiles");
-        const data = await response.json();
-        setStars(data);
+        const response = await fetchStars();
+        // Vérifiez si response.data existe et est un tableau
+        if (Array.isArray(response.data)) {
+          setStars(response.data.slice(0, limit));
+        } else if (Array.isArray(response)) {
+          // Si la réponse est directement un tableau
+          setStars(response.slice(0, limit));
+        } else {
+          throw new Error("Unexpected response format");
+        }
         setError(null);
       } catch (err) {
+        console.error("Erreur lors de la récupération des étoiles:", err);
         setError("Impossible de charger les nouveautés pour le moment.");
-        console.error("Erreur:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchLatestStars();
+    getStars();
   }, [limit]);
 
   return { stars, loading, error };

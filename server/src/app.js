@@ -3,15 +3,22 @@
 const express = require("express");
 const morgan = require("morgan");
 const path = require("node:path");
+const cors = require("cors");
 const { sequelize } = require("./models");
 const { errorHandler, AppError } = require("./middlewares/errorHandler");
 const routes = require("./routes");
 const config = require("./config/config");
 const logger = require("./utils/logger");
 const swaggerDocs = require("./utils/swagger");
-const { authenticateUser } = require("./middlewares/authMiddleware");
 
 const app = express();
+
+// Configuration CORS
+const corsOptions = {
+  origin: "http://localhost:3001", // L'URL de votre frontend
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 
 // Logging middleware
 if (config.NODE_ENV !== "test") {
@@ -34,19 +41,16 @@ app.use("/api-docs", swaggerDocs.serve, swaggerDocs.setup);
 // Servir les fichiers statiques
 app.use(express.static(path.join(__dirname, "public")));
 
-// Appliquer le middleware d'authentification à toutes les routes API
-app.use("/api", authenticateUser);
-
 // Routes API centralisées
 app.use("/api", routes);
 
 // Route pour gérer toutes les requêtes non-API
-app.get("*", (res) => {
+app.get("*", (_, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // Gestion des erreurs 404 pour l'API
-app.use("/api", (req, next) => {
+app.use("/api", (req, _, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
@@ -59,13 +63,13 @@ const PORT = config.PORT || 3000;
 const startServer = async () => {
   try {
     await sequelize.sync({ force: false });
-    console.log("Database synced");
+    logger.info("Database synced");
 
     app.listen(PORT, () => {
-      console.log(`Server is running in ${config.NODE_ENV} mode on port ${PORT}`);
+      logger.info(`Server is running in ${config.NODE_ENV} mode on port ${PORT}`);
     });
   } catch (error) {
-    console.error("Unable to start server:", error);
+    logger.error("Unable to start server:", error);
     process.exit(1);
   }
 };
