@@ -1,4 +1,5 @@
-// src/pages/About.tsx
+// client/src/pages/About.tsx
+
 import type React from "react";
 import { Container, Header, Segment } from "semantic-ui-react";
 

@@ -1,39 +1,38 @@
+// client/src/pages/Home.tsx
+
 import type React from "react";
-import { Card, Container, Header, Message } from "semantic-ui-react";
-import StarCard from "../components/StarCard";
-import { useFunFacts } from "../hooks/useFunFacts";
-import { useLatestStars } from "../hooks/useLatestStars";
+import { Container, Header, Segment, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { useFunFacts } from '../hooks/useFunFacts';
+import '../styles/Home.css';
 
 const Home: React.FC = () => {
   const currentFact = useFunFacts();
-  const { stars, loading, error } = useLatestStars();
 
   return (
-    <Container>
-      <Header as="h1">Bienvenue chez Stella</Header>
-      <p>Découvrez notre catalogue d'étoiles uniques.</p>
+    <Container className="main-content">
+      <Header as="h1" textAlign="center" className="neon-title main-title font-playwrite">Stella</Header>
+      <Header as="h2" textAlign="center" className="subtitle font-roboto-slab">Illuminez votre vie</Header>
 
-      <Message info>
-        <Message.Header>Le saviez-vous ?</Message.Header>
+      <Segment className="blur-segment">
+        <Header as="h3" className="font-roboto-slab">Nouveautés</Header>
+
+        <Button as={Link} to="/catalog" primary>Voir le catalogue</Button>
+      </Segment>
+
+      <Segment className="blur-segment">
+        <Header as="h3" className="font-roboto-slab">Qui sommes-nous ?</Header>
+        <p>
+          Bienvenue chez Stella, votre portail vers les étoiles. Fondée en 2024, notre mission est
+          de rapprocher l'univers de chacun d'entre vous.
+        </p>
+        <Button as={Link} to="/about">Voir plus</Button>
+      </Segment>
+
+      <Segment className="blur-segment">
+        <Header as="h3" className="font-roboto-slab">Le saviez-vous ?</Header>
         <p>{currentFact}</p>
-      </Message>
-
-      <Header as="h2">Nouveautés</Header>
-      {loading && <p>Chargement des nouveautés...</p>}
-      {error && <Message negative>{error}</Message>}
-      {!loading && !error && (
-        <Card.Group>
-          {stars.map((star) => (
-            <StarCard
-              key={star.id}
-              id={star.id}
-              name={star.name}
-              constellation={star.constellation}
-              price={star.price}
-            />
-          ))}
-        </Card.Group>
-      )}
+      </Segment>
     </Container>
   );
 };

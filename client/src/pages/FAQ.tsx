@@ -1,4 +1,5 @@
-// src/pages/FAQ.tsx
+// client/src/pages/FAQ.tsx
+
 import React from "react";
 import { Accordion, Container, Header } from "semantic-ui-react";
 

@@ -1,0 +1,45 @@
+/* client/src/styles/global.css */
+
+/* Styles généraux */
+body {
+    color: #AEC9FF;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Styles pour les en-têtes */
+  .ui.header,
+  h1.ui.header,
+  h2.ui.header,
+  h3.ui.header,
+  h4.ui.header,
+  h5.ui.header {
+    font-family: "Roboto Slab", serif;
+    color: #AEC9FF;
+  }
+  
+  /* Style spécifique pour h1 */
+  h1.ui.header.main-title,
+  .main-content h1.ui.header {
+    font-family: "Playwrite FR Moderne", serif;
+    font-weight: 400;
+  }
+  
+  /* Classes utilitaires */
+  .font-playwrite {
+    font-family: "Playwrite FR Moderne", serif;
+  }
+  
+  .font-roboto-slab {
+    font-family: "Roboto Slab", serif;
+  }
+  
+  /* Overrides pour Semantic UI */
+  .ui.segment {
+    background-color: rgba(128, 128, 128, 0.5);
+  }
+  
+  .ui.container {
+    margin-top: 2rem;
+  }

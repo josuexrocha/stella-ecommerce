@@ -1,3 +1,5 @@
+// client/src/components/StarCard.tsx
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card } from 'semantic-ui-react';

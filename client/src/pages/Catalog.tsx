@@ -1,3 +1,5 @@
+// client/src/pages/Catalog.tsx
+
 import type React from "react";
 import { useEffect, useState } from "react";
 import { Card, Container, Header } from "semantic-ui-react";

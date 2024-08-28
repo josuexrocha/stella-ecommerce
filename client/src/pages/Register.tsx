@@ -1,4 +1,5 @@
-// src/pages/Register.tsx
+// client/src/pages/Register.tsx
+
 import type React from "react";
 import { Button, Container, Form, Header } from "semantic-ui-react";
 

@@ -1,4 +1,5 @@
-// src/pages/Contact.tsx
+// client/src/pages/Contact.tsx
+
 import type React from "react";
 import { Button, Container, Form, Header, Segment } from "semantic-ui-react";
 
