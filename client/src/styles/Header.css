@@ -1,20 +1,19 @@
 /* client/src/styles/Header.css */
+.ui.menu.custom-header {
+  background-color: rgba(9, 9, 9, 0.5) !important;
+  backdrop-filter: blur(5px);
+}
 
-.ui.secondary.menu.custom-header {
-    background-color: rgba(128, 128, 128, 0.5);
-    padding: 0.5em 0;
-  }
+.ui.menu.custom-header .item {
+  color: #AEC9FF !important;
+  font-weight: normal;
+}
 
-  .ui.secondary.menu.custom-header .item {
-    color: #AEC9FF !important;
-    font-weight: normal;
-  }
+.ui.menu.custom-header .header.item {
+  font-size: 1.2em;
+  font-weight: bold;
+}
 
-  .ui.secondary.menu.custom-header .header.item {
-    font-size: 1.2em;
-    font-weight: bold;
-  }
-
-  .ui.secondary.menu.custom-header .item:hover {
-    background-color: rgba(174, 201, 255, 0.1);
-  }
+.ui.menu.custom-header .item:hover {
+  background-color: rgba(174, 201, 255, 0.1);
+}

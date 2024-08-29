@@ -11,13 +11,13 @@ const Home: React.FC = () => {
 
   return (
     <Container className="main-content">
-      <Header as="h1" textAlign="center" className="neon-title main-title font-playwrite">Stella</Header>
+      <Header as="h1" textAlign="center" className="elegant-title main-title font-playwrite">Stella</Header>
       <Header as="h2" textAlign="center" className="subtitle font-roboto-slab">Illuminez votre vie</Header>
 
       <Segment className="blur-segment">
         <Header as="h3" className="font-roboto-slab">Nouveautés</Header>
 
-        <Button as={Link} to="/catalog" primary>Voir le catalogue</Button>
+        <Button as={Link} to="/catalog">Voir le catalogue</Button>
       </Segment>
 
       <Segment className="blur-segment">

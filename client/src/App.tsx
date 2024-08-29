@@ -1,3 +1,5 @@
+// client/src/App.tsx
+
 import React, { Suspense } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { Container, Loader } from "semantic-ui-react";
@@ -5,7 +7,6 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import backgroundImage from "./images/space-background.jpg";
-import "./styles/global.css";
 
 // Lazy loading des pages
 const Home = React.lazy(() => import("./pages/Home"));
@@ -44,7 +45,6 @@ const App: React.FC = () => {
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/faq" element={<FAQ />} />
-                {/* Ajout d'autres routes ici si nécessaire */}
               </Routes>
             </Suspense>
           </Container>

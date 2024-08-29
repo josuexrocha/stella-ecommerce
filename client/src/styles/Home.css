@@ -1,44 +1,45 @@
 /* client/src/styles/Home.css */
-
 .main-content {
-    padding-top: 5rem;
-    color: #AEC9FF;
-  }
-  
-  .neon-title {
-    font-size: 6rem !important;
-    color: #AEC9FF !important;
-    text-shadow: 
-      0 0 5px #AEC9FF,
-      0 0 10px #AEC9FF,
-      0 0 20px #AEC9FF,
-      0 0 40px #AEC9FF;
-    margin-bottom: 0 !important;
-  }
-  
-  .subtitle {
-    font-size: 2rem !important;
-    color: #FFFFFF !important;
-    margin-top: 0 !important;
-    margin-bottom: 2rem !important;
-  }
-  
-  .blur-segment {
-    background-color: rgba(128, 128, 128, 0.5) !important;
-    backdrop-filter: blur(10px);
-    color: #AEC9FF !important;
-    margin-bottom: 2rem !important;
-  }
-  
-  .blur-segment h3 {
-    color: #AEC9FF !important;
-  }
-  
-  .ui.button {
-    background-color: #3D5A80;
-    color: #FFFFFF;
-  }
-  
-  .ui.button:hover {
-    background-color: #2C3E50;
-  }
+  padding-top: 5rem;
+  color: #AEC9FF;
+}
+
+.elegant-title {
+  font-size: 6rem !important;
+  color: #AEC9FF !important;
+  text-shadow: 0 0 2px rgba(174, 201, 255, 0.5);
+  margin-bottom: 0 !important;
+  transition: all 0.3s ease;
+}
+
+.elegant-title:hover {
+  text-shadow: 0 0 5px rgba(174, 201, 255, 0.8), 0 0 10px rgba(174, 201, 255, 0.5);
+}
+
+.subtitle {
+  font-size: 2rem !important;
+  color: #AEC9FF !important;
+  margin-top: 0 !important;
+  margin-bottom: 2rem !important;
+}
+
+.blur-segment {
+  background-color: rgba(9, 9, 9, 0.5) !important;
+  backdrop-filter: blur(5px);
+  color: #AEC9FF !important;
+  margin-bottom: 2rem !important;
+}
+
+.blur-segment h3 {
+  color: #AEC9FF !important;
+}
+
+.ui.button {
+  background-color: #3D5A80;
+  color: #FFFFFF;
+  transition: background-color 0.3s ease;
+}
+
+.ui.button:hover {
+  background-color: #2C3E50;
+}
