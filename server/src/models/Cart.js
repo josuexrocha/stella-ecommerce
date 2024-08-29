@@ -13,16 +13,8 @@ module.exports = (sequelize, _DataTypes) => {
   );
 
   Cart.associate = (models) => {
-    Cart.belongsTo(models.User, {
-      foreignKey: "userId",
-      onDelete: "CASCADE",
-    });
-
-    Cart.hasMany(models.CartItem, {
-      foreignKey: "cartId",
-      as: "cartItems",
-      onDelete: "CASCADE",
-    });
+    Cart.belongsTo(models.User, { foreignKey: "userId", onDelete: "CASCADE" });
+    Cart.hasMany(models.CartItem, { foreignKey: "cartId", as: "cartItems", onDelete: "CASCADE" });
   };
 
   Cart.prototype.getTotalPrice = async function () {

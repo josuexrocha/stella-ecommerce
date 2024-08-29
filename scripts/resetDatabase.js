@@ -5,8 +5,17 @@ const generateSampleData = require("./sampleData");
 
 async function resetDatabase() {
   try {
+    // Supprime toutes les tables existantes
+    await sequelize.query("DROP SCHEMA public CASCADE;");
+    await sequelize.query("CREATE SCHEMA public;");
+
+    // Recrée les tables
     await createTables();
+
+    // Génère les données d'exemple
     await generateSampleData();
+
+    console.log("Database reset successfully");
   } catch (error) {
     console.error("Error resetting database:", error);
   } finally {

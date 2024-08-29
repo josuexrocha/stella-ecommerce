@@ -39,11 +39,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
+  }, {
+    tableName: 'stars',
+    timestamps: true
   });
 
-  Star.associate = (models) => {
-    Star.belongsToMany(models.Order, { through: models.OrderStar });
-  };
+     Star.associate = (models) => {
+       Star.belongsToMany(models.Order, { through: models.OrderStar, foreignKey: 'starId' });
+       Star.hasMany(models.Review, { foreignKey: 'starId' });
+       Star.hasMany(models.Wishlist, { foreignKey: 'starId' });
+       Star.hasMany(models.CartItem, { foreignKey: 'starId' });
+     };
 
   return Star;
 };

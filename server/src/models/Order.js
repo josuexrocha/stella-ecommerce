@@ -1,32 +1,39 @@
 // src/models/Order.js
 
 module.exports = (sequelize, DataTypes) => {
-  const Order = sequelize.define("Order", {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
+  const Order = sequelize.define(
+    "Order",
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      date: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+      status: {
+        type: DataTypes.ENUM("pending", "paid", "shipped", "cancelled"),
+        allowNull: false,
+        defaultValue: "pending",
+      },
+      totalAmount: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+      },
     },
-    date: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
+    {
+      tableName: "orders",
+      timestamps: true,
     },
-    status: {
-      type: DataTypes.ENUM("pending", "paid", "shipped", "cancelled"),
-      allowNull: false,
-      defaultValue: "pending",
-    },
-    totalAmount: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-    },
-  });
+  );
 
   Order.associate = (models) => {
-    Order.belongsToMany(models.Star, { through: models.OrderStar });
-    Order.belongsTo(models.User);
-    Order.hasMany(models.OrderStar); // Ajoutez cette ligne
+    Order.belongsTo(models.User, { foreignKey: "userId" });
+    Order.belongsToMany(models.Star, { through: models.OrderStar, foreignKey: "orderId" });
+    Order.hasMany(models.OrderStar, { foreignKey: "orderId" });
   };
 
   return Order;

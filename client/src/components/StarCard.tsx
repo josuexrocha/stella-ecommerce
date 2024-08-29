@@ -1,8 +1,7 @@
 // client/src/components/StarCard.tsx
-
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Card } from 'semantic-ui-react';
+import { Button, Card, Image } from 'semantic-ui-react';
 
 interface StarCardProps {
   id: string;
@@ -12,8 +11,16 @@ interface StarCardProps {
 }
 
 const StarCard: React.FC<StarCardProps> = React.memo(({ id, name, constellation, price }) => {
-    return (
+  
+  console.log("StarCard render:", { id, name, constellation, price });
+
+
+  const imageName = name.toLowerCase().replace(/\s+/g, '');
+  const imagePath = `/src/assets/images/stars/${imageName}.jpg`;
+
+  return (
     <Card>
+      <Image src={imagePath} wrapped ui={false} />
       <Card.Content>
         <Card.Header>{name}</Card.Header>
         <Card.Meta>{constellation}</Card.Meta>
@@ -22,7 +29,7 @@ const StarCard: React.FC<StarCardProps> = React.memo(({ id, name, constellation,
         </Card.Description>
       </Card.Content>
       <Card.Content extra>
-        <Button as={Link} to={`/star/${id}`} primary>
+        <Button as={Link} to={`/star/${id}`} primary fluid>
           Découvrir
         </Button>
       </Card.Content>

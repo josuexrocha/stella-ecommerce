@@ -29,7 +29,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: "client",
     },
+  }, {
+    tableName: "users",
+    timestamps: true,
   });
+
+  User.associate = (models) => {
+    User.hasMany(models.Order, { foreignKey: 'userId' });
+    User.hasMany(models.Review, { foreignKey: 'userId' });
+    User.hasMany(models.Wishlist, { foreignKey: 'userId' });
+    User.hasOne(models.Cart, { foreignKey: 'userId', as: 'cart' });
+  };
 
   return User;
 };

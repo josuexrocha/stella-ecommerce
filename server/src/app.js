@@ -16,7 +16,7 @@ const app = express();
 // Configuration CORS
 const corsOptions = {
   origin: "http://localhost:3001", // L'URL de votre frontend
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 
@@ -64,6 +64,7 @@ const startServer = async () => {
   try {
     await sequelize.sync({ force: false });
     logger.info("Database synced");
+    logger.info(`Connected to database: ${sequelize.config.database}`);
 
     app.listen(PORT, () => {
       logger.info(`Server is running in ${config.NODE_ENV} mode on port ${PORT}`);

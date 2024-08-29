@@ -6,22 +6,28 @@ const { AppError } = require("../middlewares/errorHandler");
 
 exports.getAllStars = async (_, res, next) => {
   try {
+    console.log("Fetching all stars...");
     const stars = await Star.findAll();
+    console.log("Stars fetched:", stars.length);
     res.json({ data: stars });
   } catch (error) {
+    console.error("Error in getAllStars:", error);
     next(new AppError(`Error retrieving stars: ${error.message}`, 500));
   }
 };
 
 exports.getStarById = async (req, res, next) => {
   try {
+    console.log("Fetching star with ID:", req.params.id);
     const star = await Star.findByPk(req.params.id);
+    console.log("Star found:", star);
     if (star) {
       res.json(star);
     } else {
       next(new AppError("Star not found", 404));
     }
   } catch (error) {
+    console.error("Error in getStarById:", error);
     next(new AppError(`Error retrieving star: ${error.message}`, 500));
   }
 };

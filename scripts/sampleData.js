@@ -257,7 +257,7 @@ const orders = [
   { UserId: 2, date: new Date("2024-07-11"), status: "paid", totalAmount: 11000 },
 ];
 
-const orderStars = [
+const _orderStars = [
   { OrderId: 1, StarId: 1, quantity: 1 },
   { OrderId: 2, StarId: 2, quantity: 1 },
   { OrderId: 3, StarId: 3, quantity: 1 },
@@ -278,10 +278,19 @@ async function generateSampleData() {
     await User.bulkCreate(users);
     console.log("Users generated successfully");
 
-    await Order.bulkCreate(orders);
+    const createdOrders = await Order.bulkCreate(orders);
     console.log("Orders generated successfully");
 
-    await OrderStar.bulkCreate(orderStars);
+    const orderStarsData = [];
+    for (let i = 0; i < createdOrders.length; i++) {
+      orderStarsData.push({
+        orderId: createdOrders[i].id,
+        starId: i + 1,  // Assurez-vous que ces IDs correspondent à vos étoiles
+        quantity: Math.floor(Math.random() * 3) + 1  // Quantité aléatoire entre 1 et 3
+      });
+    }
+
+    await OrderStar.bulkCreate(orderStarsData);
     console.log("OrderStars generated successfully");
 
     console.log("All sample data generated successfully");

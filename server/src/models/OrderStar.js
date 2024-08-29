@@ -1,4 +1,4 @@
-// src/models/OrderStar.js
+// models/OrderStar.js
 module.exports = (sequelize, DataTypes) => {
   const OrderStar = sequelize.define("OrderStar", {
     quantity: {
@@ -6,11 +6,22 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 1,
     },
+    orderId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    starId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
+  }, {
+    tableName: 'order_stars',
+    timestamps: true
   });
 
   OrderStar.associate = (models) => {
-    OrderStar.belongsTo(models.Order);
-    OrderStar.belongsTo(models.Star);
+    OrderStar.belongsTo(models.Order, { foreignKey: 'orderId' });
+    OrderStar.belongsTo(models.Star, { foreignKey: 'starId' });
   };
 
   return OrderStar;

@@ -6,7 +6,7 @@ import { Container, Loader } from "semantic-ui-react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import backgroundImage from "./images/space-background.jpg";
+import backgroundImage from "./assets/images/space-background.jpg";
 
 // Lazy loading des pages
 const Home = React.lazy(() => import("./pages/Home"));

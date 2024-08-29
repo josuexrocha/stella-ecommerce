@@ -1,3 +1,5 @@
+// client/src/types/index.ts
+
 // User related types
 export interface User {
   id: string;

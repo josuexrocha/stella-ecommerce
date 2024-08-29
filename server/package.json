@@ -15,9 +15,9 @@
     "lint": "biome lint .",
     "format": "biome format .",
     "check": "biome check .",
-    "create-tables": "node scripts/createTables.js",
-    "generate-data": "node scripts/sampleData.js",
-    "reset-db": "node scripts/resetDatabase.js"
+    "create-tables": "node ../scripts/createTables.js",
+    "generate-data": "node ../scripts/sampleData.js",
+    "reset-db": "node ../scripts/resetDatabase.js"
   },
   "keywords": [],
   "author": "",
