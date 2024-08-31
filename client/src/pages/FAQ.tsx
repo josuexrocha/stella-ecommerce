@@ -1,7 +1,4 @@
-// client/src/pages/FAQ.tsx
-
-import React from "react";
-import { Accordion, Container, Header } from "semantic-ui-react";
+import { useState } from "react";
 
 const faqItems = [
   {
@@ -37,18 +34,34 @@ const faqItems = [
 ];
 
 const FAQ: React.FC = () => {
+  const [activeIndex, setActiveIndex] = useState<number | null>(0);
+
+  const handleToggle = (index: number) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
+
   return (
-    <Container>
-      <Header as="h1">Foire Aux Questions</Header>
-      <Accordion defaultActiveIndex={0} fluid styled>
-        {faqItems.map((item) => (
-          <React.Fragment key={item.key}>
-            <Accordion.Title content={item.title} />
-            <Accordion.Content content={item.content} />
-          </React.Fragment>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-4xl font-display mb-6 text-center">Foire Aux Questions</h1>
+      <div className="space-y-4">
+        {faqItems.map((item, index) => (
+          <div key={item.key} className="border-b border-gray-600">
+            <button
+              type="button"
+              onClick={() => handleToggle(index)}
+              className="w-full text-left py-4 px-2 font-serif text-lg text-primary focus:outline-none"
+            >
+              {item.title}
+            </button>
+            {activeIndex === index && (
+              <div className="px-4 pb-4 text-text">
+                <p>{item.content}</p>
+              </div>
+            )}
+          </div>
         ))}
-      </Accordion>
-    </Container>
+      </div>
+    </div>
   );
 };
 

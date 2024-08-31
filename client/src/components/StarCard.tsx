@@ -1,40 +1,32 @@
-// client/src/components/StarCard.tsx
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Card, Image } from 'semantic-ui-react';
+import type React from "react";
+import type { Star } from "../types";
 
 interface StarCardProps {
-  id: string;
-  name: string;
-  constellation: string;
-  price: number;
+  star: Star;
 }
 
-const StarCard: React.FC<StarCardProps> = React.memo(({ id, name, constellation, price }) => {
-  
-  console.log("StarCard render:", { id, name, constellation, price });
-
-
-  const imageName = name.toLowerCase().replace(/\s+/g, '');
-  const imagePath = `/src/assets/images/stars/${imageName}.jpg`;
+const StarCard: React.FC<StarCardProps> = ({ star }) => {
+  const price = typeof star.price === "number" ? star.price.toFixed(2) : "N/A";
 
   return (
-    <Card>
-      <Image src={imagePath} wrapped ui={false} />
-      <Card.Content>
-        <Card.Header>{name}</Card.Header>
-        <Card.Meta>{constellation}</Card.Meta>
-        <Card.Description>
-          <strong>{price.toFixed(2)} €</strong>
-        </Card.Description>
-      </Card.Content>
-      <Card.Content extra>
-        <Button as={Link} to={`/star/${id}`} primary fluid>
-          Découvrir
-        </Button>
-      </Card.Content>
-    </Card>
+    <div className="bg-secondary text-text rounded-lg shadow-lg overflow-hidden">
+      <img
+        src={`/assets/images/stars/${star.name.toLowerCase().replace(/\s+/g, "")}.jpg`}
+        alt={star.name}
+        className="w-full h-48 object-cover"
+      />
+      <div className="p-4">
+        <h2 className="text-xl font-serif mb-2">{star.name}</h2>
+        <p className="text-sm mb-4">{star.description}</p>
+        <div className="flex justify-between items-center">
+          <span className="text-lg font-semibold">{price} €</span>
+          <a href="/" className="text-primary hover:underline">
+            Découvrir
+          </a>
+        </div>
+      </div>
+    </div>
   );
-});
+};
 
 export default StarCard;

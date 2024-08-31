@@ -1,39 +1,29 @@
-// client/src/components/Header.tsx
-
 import type React from "react";
-import { Link } from "react-router-dom";
-import { Menu, Container } from "semantic-ui-react";
-import "../styles/Header.css";
+import { FaHome, FaSearch, FaUser } from "react-icons/fa"; // Utilisation des icônes FontAwesome
 
 const Header: React.FC = () => {
   return (
-    <Menu inverted fixed="top" className="custom-header">
-      <Container>
-        <Menu.Item as={Link} to="/" header>
-          Stella
-        </Menu.Item>
-        <Menu.Menu position="right">
-          <Menu.Item as={Link} to="/catalog">
-            Catalogue
-          </Menu.Item>
-          <Menu.Item as={Link} to="/register">
-            S'inscrire
-          </Menu.Item>
-          <Menu.Item as={Link} to="/login">
-            Se connecter
-          </Menu.Item>
-          <Menu.Item as={Link} to="/faq">
-            FAQ
-          </Menu.Item>
-          <Menu.Item as={Link} to="/about">
-            Qui sommes-nous ?
-          </Menu.Item>
-          <Menu.Item as={Link} to="/contact">
-            Contact
-          </Menu.Item>
-        </Menu.Menu>
-      </Container>
-    </Menu>
+    <header className="bg-primary text-text flex justify-between items-center p-4 shadow-lg">
+      <div className="flex items-center space-x-4">
+        <FaHome className="text-2xl text-text" />
+        <span className="text-2xl font-display">Stella</span>
+      </div>
+      <div className="flex-grow mx-8">
+        <div className="relative">
+          <input
+            type="text"
+            className="w-full p-2 pl-10 pr-4 text-secondary rounded-md bg-secondary"
+            placeholder="Rechercher"
+          />
+          <FaSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-text" />
+        </div>
+      </div>
+      <div className="flex items-center space-x-4">
+        <a href="/login" className="text-xl text-text hover:text-white">
+          <FaUser />
+        </a>
+      </div>
+    </header>
   );
 };
 

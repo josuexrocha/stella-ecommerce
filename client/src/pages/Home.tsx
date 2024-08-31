@@ -1,83 +1,70 @@
-// client/src/pages/Home.tsx
-
 import type React from "react";
-import { Container, Header, Segment, Button, Grid, Card } from "semantic-ui-react";
-import { Link } from "react-router-dom";
-import { useFunFacts } from "../hooks/useFunFacts";
-import { useLatestStars } from "../hooks/useLatestStars";
+import HeroSection from "../components/HeroSection";
 import StarCard from "../components/StarCard";
-import "../styles/Home.css";
+import { useLatestStars } from "../hooks/useLatestStars";
+import { useFunFacts } from "../hooks/useFunFacts";
 
 const Home: React.FC = () => {
-  const currentFact = useFunFacts();
-  const { stars, loading, error } = useLatestStars(6);
-
-  console.log("Home render - stars:", stars);
-  console.log("Home render - loading:", loading);
-  console.log("Home render - error:", error);
+  const { stars, loading, error } = useLatestStars(6); // Récupération des 6 dernières étoiles
+  const currentFact = useFunFacts(); // Récupération du fait actuel
 
   return (
-    <Container className="main-content">
-      <Header as="h1" textAlign="center" className="elegant-title main-title font-playwrite">
-        Stella
-      </Header>
-      <Header as="h2" textAlign="center" className="subtitle font-roboto-slab">
-        Illuminez votre vie
-      </Header>
+    <div className="container mx-auto px-4">
+      <HeroSection />
 
-      <Segment className="blur-segment news-segment">
-        <Header as="h3" className="font-roboto-slab">
-          Nouveautés
-        </Header>
-        {loading && <p>Chargement des nouveautés...</p>}
-        {error && <p>Erreur: {error}</p>}
+      {/* Section Nouveautés */}
+      <section className="my-8">
+        <h2 className="text-3xl font-display text-center mb-6">Nouveautés</h2>
+        {loading && <p className="text-center text-text">Chargement des étoiles...</p>}
+        {error && <p className="text-center text-red-600">{error}</p>}
+
         {!loading && !error && (
-          <Card.Group itemsPerRow={3} stackable>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {stars.map((star) => (
-              <StarCard
-                key={star.id}
-                id={star.id}
-                name={star.name}
-                constellation={star.constellation}
-                price={star.price}
-              />
+              <StarCard key={star.id} star={star} />
             ))}
-          </Card.Group>
+          </div>
         )}
-        <Button as={Link} to="/catalog" className="top-right-button">
-          Voir le catalogue
-        </Button>
-      </Segment>
+      </section>
 
-      <Grid columns={2} stackable>
-        <Grid.Column>
-          <Segment className="blur-segment about-segment">
-            <Header as="h3" className="font-roboto-slab">
-              Qui sommes-nous ?
-            </Header>
-            <div className="segment-content">
-              <p>
-                Bienvenue chez Stella, votre portail vers les étoiles. Fondée en 2024, notre mission
-                est de rapprocher l'univers de chacun d'entre vous.
-              </p>
-            </div>
-            <Button as={Link} to="/about" className="top-right-button">
-              Voir plus
-            </Button>
-          </Segment>
-        </Grid.Column>
-        <Grid.Column>
-          <Segment className="blur-segment funfact-segment">
-            <Header as="h3" className="font-roboto-slab">
-              Le saviez-vous ?
-            </Header>
-            <div className="segment-content">
-              <p>{currentFact}</p>
-            </div>
-          </Segment>
-        </Grid.Column>
-      </Grid>
-    </Container>
+      {/* Section Qui sommes-nous ? */}
+      <section className="my-8 flex flex-col md:flex-row items-center">
+        <div className="md:w-1/2">
+          <h2 className="text-3xl font-display mb-4">Qui sommes-nous ?</h2>
+          <p className="text-lg font-serif">
+            Chez Stella, nous sommes passionnés par les étoiles et leur capacité à inspirer des
+            générations. Nous vous proposons une expérience unique : adopter une étoile et la
+            personnaliser pour en faire un cadeau inoubliable. Notre mission est d'illuminer la vie
+            de nos clients en leur offrant un morceau du ciel.
+          </p>
+        </div>
+        <div className="md:w-1/2 mt-6 md:mt-0 flex justify-center">
+          <img
+            src="/assets/images/astro.png"
+            alt="Astronaute"
+            className="w-3/4 md:w-full object-contain"
+          />
+        </div>
+      </section>
+
+      {/* Section Le saviez-vous ? */}
+      <section className="my-8 p-4 bg-primary text-text rounded-md">
+        <h2 className="text-2xl font-display mb-4">Le saviez-vous ?</h2>
+        <p className="text-lg font-serif">{currentFact}</p>
+      </section>
+
+      {/* Section Rejoignez-nous */}
+      <section className="my-8 bg-secondary text-text py-8 rounded-md text-center">
+        <h2 className="text-3xl font-display mb-4">Rejoignez-nous</h2>
+        <p className="text-lg font-serif mb-6">
+          Rejoignez la communauté Stella pour être au courant des dernières nouveautés et événements
+          autour des étoiles. Inscrivez-vous à notre newsletter et faites partie de notre univers.
+        </p>
+        <button type="button" className="btn">
+          S'inscrire
+        </button>
+      </section>
+    </div>
   );
 };
 

@@ -15,7 +15,6 @@ async function resetDatabase() {
     // Génère les données d'exemple
     await generateSampleData();
 
-    console.log("Database reset successfully");
   } catch (error) {
     console.error("Error resetting database:", error);
   } finally {

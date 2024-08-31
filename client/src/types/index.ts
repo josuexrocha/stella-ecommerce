@@ -20,9 +20,13 @@ export interface Star {
   id: string;
   name: string;
   constellation: string;
+  description: string;
   magnitude: number;
   price: number;
   createdAt: string;
+  distance: number;
+  luminosity: number;
+  mass: number;
 }
 
 // Order related types

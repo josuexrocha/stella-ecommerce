@@ -14,7 +14,6 @@ export const useLatestStars = (limit = 6) => {
       try {
         setLoading(true);
         const response = await fetchStars();
-        console.log("API response:", response); // Ajoutez ceci
         if (Array.isArray(response.data)) {
           setStars(response.data.slice(0, limit));
         } else if (Array.isArray(response)) {
@@ -23,7 +22,6 @@ export const useLatestStars = (limit = 6) => {
           throw new Error("Unexpected response format");
         }
         setError(null);
-        console.log("Stars set:", stars); // Et ceci après avoir set les étoiles
       } catch (err) {
         console.error("Erreur lors de la récupération des étoiles:", err);
         setError("Impossible de charger les nouveautés pour le moment.");

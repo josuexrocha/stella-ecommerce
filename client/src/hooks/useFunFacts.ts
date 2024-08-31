@@ -1,3 +1,5 @@
+// client/src/hooks/useFunFacts.ts
+
 import { useEffect, useState } from "react";
 
 const funFacts = [

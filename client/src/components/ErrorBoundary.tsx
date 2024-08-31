@@ -1,6 +1,4 @@
-// src/components/ErrorBoundary.tsx
 import React, { Component, type ErrorInfo, type ReactNode } from "react";
-import { Message } from "semantic-ui-react";
 
 interface Props {
   children: ReactNode;
@@ -26,10 +24,10 @@ class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <Message negative>
-          <Message.Header>Oops, something went wrong</Message.Header>
-          <p>We're sorry for the inconvenience. Please try again later.</p>
-        </Message>
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <strong className="font-bold">Oops, something went wrong!</strong>
+          <span className="block sm:inline"> We're sorry for the inconvenience. Please try again later.</span>
+        </div>
       );
     }
 
