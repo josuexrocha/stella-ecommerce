@@ -21,7 +21,7 @@ const App: React.FC = () => {
       <ErrorBoundary>
         <div className="flex flex-col min-h-screen">
           <Header />
-          <main className="flex-grow container mx-auto px-4 py-8">
+          <main className="flex-grow container mx-auto px-1 py-6">
             <Suspense fallback={<div className="text-center text-white">Chargement...</div>}>
               <Routes>
                 <Route path="/" element={<Home />} />

@@ -5,15 +5,19 @@ import { useLatestStars } from "../hooks/useLatestStars";
 import { useFunFacts } from "../hooks/useFunFacts";
 
 const Home: React.FC = () => {
-  const { stars, loading, error } = useLatestStars(6); // Récupération des 6 dernières étoiles
-  const currentFact = useFunFacts(); // Récupération du fait actuel
+  const { stars, loading, error } = useLatestStars(6);
+  const currentFact = useFunFacts();
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="pt-16">
+      <div className="text-center mb-8">
+        <h1 className="text-5xl md:text-6xl font-display mb-4">Stella</h1>
+        <p className="text-lg md:text-2xl font-serif">Illuminez votre vie</p>
+      </div>
       <HeroSection />
 
       {/* Section Nouveautés */}
-      <section className="my-8">
+      <section className="my-8 container mx-auto px-4">
         <h2 className="text-3xl font-display text-center mb-6">Nouveautés</h2>
         {loading && <p className="text-center text-text">Chargement des étoiles...</p>}
         {error && <p className="text-center text-red-600">{error}</p>}
@@ -28,14 +32,13 @@ const Home: React.FC = () => {
       </section>
 
       {/* Section Qui sommes-nous ? */}
-      <section className="my-8 flex flex-col md:flex-row items-center">
+      <section className="my-8 container mx-auto px-4 flex flex-col md:flex-row items-center">
         <div className="md:w-1/2">
           <h2 className="text-3xl font-display mb-4">Qui sommes-nous ?</h2>
           <p className="text-lg font-serif">
-            Chez Stella, nous sommes passionnés par les étoiles et leur capacité à inspirer des
-            générations. Nous vous proposons une expérience unique : adopter une étoile et la
-            personnaliser pour en faire un cadeau inoubliable. Notre mission est d'illuminer la vie
-            de nos clients en leur offrant un morceau du ciel.
+            Chez Stella, nous sommes passionnés par les étoiles et leur capacité à inspirer des générations.
+            Nous vous proposons une expérience unique : adopter une étoile et la personnaliser pour en faire un cadeau inoubliable.
+            Notre mission est d'illuminer la vie de nos clients en leur offrant un morceau du ciel.
           </p>
         </div>
         <div className="md:w-1/2 mt-6 md:mt-0 flex justify-center">
@@ -48,7 +51,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Section Le saviez-vous ? */}
-      <section className="my-8 p-4 bg-primary text-text rounded-md">
+      <section className="my-8 container mx-auto px-4 p-4 bg-primary text-text rounded-md">
         <h2 className="text-2xl font-display mb-4">Le saviez-vous ?</h2>
         <p className="text-lg font-serif">{currentFact}</p>
       </section>
