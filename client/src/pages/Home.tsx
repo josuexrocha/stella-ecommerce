@@ -10,7 +10,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="pt-16">
-      <div className="text-center mb-8">
+      <div className="text-center mb-4">
         <h1 className="text-5xl md:text-6xl font-display mb-4">Stella</h1>
         <p className="text-lg md:text-2xl font-serif">Illuminez votre vie</p>
       </div>

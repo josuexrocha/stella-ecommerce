@@ -9,7 +9,7 @@ const HeroSection: React.FC = () => {
           <img
             src="/assets/images/hero/1.jpg"
             alt="Constellations"
-            className="w-full h-80 object-cover"
+            className="w-full h-96 object-cover"
           />
           <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end items-center text-left p-4">
             <h2 className="text-lg md:text-xl font-serif text-text mb-2">
@@ -27,7 +27,7 @@ const HeroSection: React.FC = () => {
           <img
             src="/assets/images/hero/2.jpg"
             alt="Étoiles éclatantes"
-            className="w-full h-80 object-cover"
+            className="w-full h-96 object-cover"
           />
           <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end items-center text-left p-4">
             <h2 className="text-lg md:text-xl font-serif text-text mb-2">
@@ -45,7 +45,7 @@ const HeroSection: React.FC = () => {
           <img
             src="/assets/images/hero/3.jpg"
             alt="Adopter une étoile"
-            className="w-full h-80 object-cover"
+            className="w-full h-96 object-cover"
           />
           <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end items-center text-left p-4">
             <h2 className="text-lg md:text-xl font-serif text-text mb-2">

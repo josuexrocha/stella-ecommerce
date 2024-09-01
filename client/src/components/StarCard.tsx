@@ -1,28 +1,31 @@
 import type React from "react";
 import type { Star } from "../types";
+import { Link } from "react-router-dom";
 
 interface StarCardProps {
   star: Star;
 }
 
 const StarCard: React.FC<StarCardProps> = ({ star }) => {
-  const price = typeof star.price === "number" ? star.price.toFixed(2) : "N/A";
+  const price = typeof star.price === "string" ? Number.parseFloat(star.price) : star.price;
 
   return (
-    <div className="bg-secondary text-text rounded-lg shadow-lg overflow-hidden">
+    <div className="bg-secondary text-text rounded-lg shadow-lg overflow-hidden flex flex-col h-full">
       <img
         src={`/assets/images/stars/${star.name.toLowerCase().replace(/\s+/g, "")}.jpg`}
         alt={star.name}
         className="w-full h-48 object-cover"
       />
-      <div className="p-4">
+      <div className="p-4 flex flex-col flex-grow">
         <h2 className="text-xl font-serif mb-2">{star.name}</h2>
-        <p className="text-sm mb-4">{star.description}</p>
-        <div className="flex justify-between items-center">
-          <span className="text-lg font-semibold">{price} €</span>
-          <a href="/" className="text-primary hover:underline">
+        <p className="text-sm mb-4 flex-grow">{star.description}</p>
+        <div className="mt-auto">
+          <span className="text-lg font-semibold block">
+            {price ? `${price.toFixed(2)} €` : "N/A"}
+          </span>
+          <Link to={`/star/${star.id}`} className="btn text-center mt-2 block">
             Découvrir
-          </a>
+          </Link>
         </div>
       </div>
     </div>

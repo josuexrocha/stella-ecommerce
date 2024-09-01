@@ -6,7 +6,6 @@ const Header: React.FC = () => {
   const [searchValue, setSearchValue] = useState("");
   const isLoggedIn = true; // Remplacer par une vérification réelle de l'état de connexion
 
-  // Timer pour masquer la barre de recherche après un délai d'inactivité
   useEffect(() => {
     let timeout: NodeJS.Timeout;
 
@@ -19,7 +18,7 @@ const Header: React.FC = () => {
     return () => {
       clearTimeout(timeout);
     };
-  }, [isSearchVisible, searchValue]);
+  }, [isSearchVisible]);
 
   const toggleSearch = () => {
     setIsSearchVisible(true);
@@ -33,29 +32,29 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-primary text-text fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-8 shadow-lg h-12">
-      <div className="flex items-center space-x-4">
-        <a href="/" className="text-xl text-text hover:text-white">
-          <FaHome className="text-2xl text-text" />
+    <header className="bg-primary text-text fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 shadow-lg h-10">
+      <div className="flex items-center space-x-3">
+        <a href="/" className="text-lg text-text hover:text-white">
+          <FaHome className="text-xl text-text" />
         </a>
       </div>
 
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-3">
         {!isSearchVisible && (
           <button
             type="button"
             onClick={toggleSearch}
             className="text-text hover:text-white focus:outline-none"
           >
-            <FaSearch className="text-2xl" />
+            <FaSearch className="text-xl" />
           </button>
         )}
         {isSearchVisible && (
           <div className="relative">
-            <FaSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-text" />
+            <FaSearch className="absolute top-1/2 left-2 transform -translate-y-1/2 text-text" />
             <input
               type="text"
-              className="w-48 p-2 pl-10 pr-4 rounded-full bg-secondary text-secondary focus:outline-none h-8"
+              className="w-36 p-2 pl-8 pr-3 rounded-full bg-secondary text-secondary focus:outline-none h-6"
               placeholder="Rechercher"
               value={searchValue}
               onChange={handleSearchChange}
@@ -64,15 +63,15 @@ const Header: React.FC = () => {
         )}
         {isLoggedIn && (
           <>
-            <a href="/cart" className="text-xl text-text hover:text-white">
+            <a href="/cart" className="text-lg text-text hover:text-white">
               <FaShoppingCart />
             </a>
-            <a href="/wishlist" className="text-xl text-text hover:text-white">
+            <a href="/wishlist" className="text-lg text-text hover:text-white">
               <FaHeart />
             </a>
           </>
         )}
-        <a href="/auth" className="text-xl text-text hover:text-white">
+        <a href="/auth" className="text-lg text-text hover:text-white">
           <FaUser />
         </a>
       </div>

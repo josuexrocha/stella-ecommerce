@@ -14,6 +14,7 @@ export const useLatestStars = (limit = 6) => {
       try {
         setLoading(true);
         const response = await fetchStars();
+
         if (Array.isArray(response.data)) {
           setStars(response.data.slice(0, limit));
         } else if (Array.isArray(response)) {
