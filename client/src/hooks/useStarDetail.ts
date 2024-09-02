@@ -1,5 +1,6 @@
+// client/src/hooks/useStarDetail.ts
 import { useState, useEffect } from "react";
-import { fetchStarById, fetchStars } from "../services/api"; 
+import { fetchStarById, fetchStars } from "../services/api";
 import type { Star } from "../types";
 
 export const useStarDetail = (id: string | undefined) => {
@@ -19,7 +20,7 @@ export const useStarDetail = (id: string | undefined) => {
       try {
         setLoading(true);
 
-        // Récupérer les détails de l'étoile
+        // Récupérer les détails de l'étoile par ID
         const starResponse = await fetchStarById(id);
         if (starResponse?.data) {
           setStar(starResponse.data);

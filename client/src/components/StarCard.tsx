@@ -1,6 +1,7 @@
+// client/src/components/StarCard.tsx
 import type React from "react";
-import type { Star } from "../types";
 import { Link } from "react-router-dom";
+import type { Star } from "../types";
 
 interface StarCardProps {
   star: Star;

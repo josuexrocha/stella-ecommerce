@@ -18,6 +18,9 @@ const ProductDetail: React.FC = () => {
     );
   }
 
+  // Assurez-vous que `price` est bien un nombre avant de l'utiliser
+  const price = typeof star.price === "string" ? Number.parseFloat(star.price) : star.price;
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row items-start">
@@ -51,7 +54,9 @@ const ProductDetail: React.FC = () => {
               <strong>Masse :</strong> {star.mass} M
             </li>
           </ul>
-          <p className="text-2xl font-bold mb-4">{star.price.toFixed(2)} €</p>
+          <p className="text-2xl font-bold mb-4">
+            {price ? `${price.toFixed(2)} €` : "Prix non disponible"}
+          </p>
 
           <div className="flex items-center space-x-4">
             <button type="button" className="btn">

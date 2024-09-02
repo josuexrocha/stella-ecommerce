@@ -15,6 +15,7 @@ import type {
   ApiResponse,
 } from "../types";
 
+// Configuration de l'instance Axios
 const api: AxiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL || "http://localhost:3000/api",
   headers: {
@@ -31,17 +32,24 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Stars
+// Fonction pour récupérer toutes les étoiles
 export const fetchStars = async (): Promise<ApiResponse<Star[]>> => {
   const response = await api.get<ApiResponse<Star[]>>("/stars");
   return response.data;
 };
 
-export const fetchStarById = async (id: string): Promise<ApiResponse<Star>> => {
-  const response = await api.get<ApiResponse<Star>>(`/stars/${id}`);
-  return response.data;
+// Fonction pour récupérer une étoile par ID
+export const fetchStarById = async (id: string) => {
+  try {
+    const response = await api.get(`/stars/${id}`);
+    return response;
+  } catch (error) {
+    console.error("Erreur lors de la récupération de l'étoile par ID:", error);
+    throw error;
+  }
 };
 
+// Fonction pour filtrer les étoiles
 export const filterStars = async (params: {
   constellation?: string;
   minMagnitude?: number;
