@@ -2,7 +2,7 @@ import type React from "react";
 
 const Contact: React.FC = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto pt-20 px-4">
       <h1 className="text-4xl font-display mb-6 text-center">Contactez-nous</h1>
       <div className="bg-secondary text-text p-6 rounded-md shadow-lg mb-8">
         <p className="text-lg font-serif mb-4">
@@ -43,7 +43,7 @@ const Contact: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="btn bg-primary text-white py-3 px-6 rounded-md hover:bg-secondary transition-colors"
+            className="btn"
           >
             Envoyer
           </button>

@@ -8,15 +8,15 @@ const Auth: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-md">
-      <h1 className="text-4xl font-display mb-6 text-center">
+    <div className="container mx-auto pt-20 px-4 max-w-md">
+      <h1 className="text-4xl font-display mb-8 text-center">
         {isLogin ? "Connexion" : "Inscription"}
       </h1>
       <form className="space-y-4 bg-secondary text-text p-6 rounded-md shadow-lg">
         {!isLogin && (
           <>
             <div>
-              <label className="block text-sm font-medium mb-2">Nom</label>
+              <label className="block text-sm font-serif mb-2">Nom :</label>
               <input
                 type="text"
                 placeholder="Nom"
@@ -24,7 +24,7 @@ const Auth: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Prénom</label>
+              <label className="block text-sm font-serif mb-2">Prénom :</label>
               <input
                 type="text"
                 placeholder="Prénom"
@@ -34,7 +34,7 @@ const Auth: React.FC = () => {
           </>
         )}
         <div>
-          <label className="block text-sm font-medium mb-2">Email</label>
+          <label className="block text-sm font-serif mb-2">Email :</label>
           <input
             type="email"
             placeholder="Email"
@@ -42,7 +42,7 @@ const Auth: React.FC = () => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-2">Mot de passe</label>
+          <label className="block text-sm font-serif mb-2">Mot de passe :</label>
           <input
             type="password"
             placeholder="Mot de passe"
@@ -51,7 +51,7 @@ const Auth: React.FC = () => {
         </div>
         <button
           type="submit"
-          className="btn bg-primary text-white py-3 px-6 rounded-md hover:bg-secondary transition-colors w-full"
+          className="btn"
         >
           {isLogin ? "Se connecter" : "S'inscrire"}
         </button>
@@ -62,7 +62,7 @@ const Auth: React.FC = () => {
           <button
             type="button"
             onClick={toggleAuthMode}
-            className="text-primary ml-2 hover:underline focus:outline-none"
+            className="btn ml-4"
           >
             {isLogin ? "S'inscrire" : "Se connecter"}
           </button>

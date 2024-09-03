@@ -6,6 +6,7 @@ module.exports = {
         primary: "#3D2A54",
         secondary: "#1E1326",
         text: "#AEC9FF",
+        special: "#FFB347",
       },
       backgroundImage: {
         'background-default': 'linear-gradient(90deg, #3D2A54 0%, #1E1326 100%)',
@@ -16,6 +17,7 @@ module.exports = {
         sans: ["Roboto", "sans-serif"],
         serif: ['"Roboto Slab"', "serif"],
         display: ['"Playwrite FR Moderne"', "serif"],
+        action: ['"Bebas Neue"', "cursive"],
       },
       height: {
         header: '60px',

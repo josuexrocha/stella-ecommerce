@@ -1,3 +1,5 @@
+// client/src/components/Header.tsx
+
 import { useState, useEffect } from "react";
 import { FaHome, FaSearch, FaUser, FaShoppingCart, FaHeart } from "react-icons/fa";
 import { searchStars } from "../services/api";

@@ -2,8 +2,8 @@ import type React from "react";
 
 const About: React.FC = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-display mb-6 text-center">À propos de Stella</h1>
+    <div className="container mx-auto pt-20 px-4">
+      <h1 className="text-4xl font-display mb-8 text-center">À propos de Stella</h1>
       <div className="bg-secondary text-text p-6 rounded-md shadow-lg">
         <p className="text-lg font-serif mb-4">
           Bienvenue chez Stella, votre portail vers les étoiles. Fondée en 2024, notre mission est

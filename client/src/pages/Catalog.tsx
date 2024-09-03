@@ -23,6 +23,7 @@ const Catalogue: React.FC = () => {
     loadAllStars();
   }, []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     applyFiltersAndSorting();
   }, [

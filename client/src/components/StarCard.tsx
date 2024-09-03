@@ -1,5 +1,4 @@
-// client/src/components/StarCard.tsx
-import type React from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import type { Star } from "../types";
 
@@ -11,7 +10,7 @@ const StarCard: React.FC<StarCardProps> = ({ star }) => {
   const price = typeof star.price === "string" ? Number.parseFloat(star.price) : star.price;
 
   return (
-    <div className="bg-secondary text-text rounded-lg shadow-lg overflow-hidden flex flex-col h-full">
+    <div className="bg-secondary text-text rounded-lg shadow-lg overflow-hidden flex flex-col h-full transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl">
       <img
         src={`/assets/images/stars/${star.name.toLowerCase().replace(/\s+/g, "")}.jpg`}
         alt={star.name}

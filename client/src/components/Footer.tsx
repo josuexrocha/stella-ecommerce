@@ -1,3 +1,5 @@
+// client/src/components/Footer.tsx
+
 import type React from "react";
 
 const Footer: React.FC = () => {

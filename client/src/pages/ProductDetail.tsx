@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useStarDetail } from "../hooks/useStarDetail";
 import StarCard from "../components/StarCard";
 import type { Star } from "../types";
+import { FaHeart, FaStar } from "react-icons/fa";
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Récupère l'ID de l'étoile à partir de l'URL
@@ -24,7 +25,7 @@ const ProductDetail: React.FC = () => {
   const price = typeof star.price === "string" ? Number.parseFloat(star.price) : star.price;
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto pt-20 px-4">
       <div className="flex flex-col md:flex-row items-start">
         {/* Image principale de l'étoile */}
         <div className="md:w-1/2">
@@ -62,12 +63,12 @@ const ProductDetail: React.FC = () => {
 
           <div className="flex items-center space-x-4">
             <button type="button" className="btn">
-              AJOUTER AU PANIER
+              Ajouter au panier
             </button>
-            <button type="button" className="text-primary">
+            <button type="button" className="text-special">
               <i className="far fa-heart" />
             </button>
-            <button type="button" className="text-primary">
+            <button type="button" className="text-special">
               <i className="far fa-star" />
             </button>
           </div>
