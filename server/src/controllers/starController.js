@@ -18,9 +18,7 @@ exports.getAllStars = async (_, res, next) => {
 
 exports.getStarById = async (req, res, next) => {
   try {
-    console.log("Fetching star with ID:", req.params.id);
     const star = await Star.findByPk(req.params.id);
-    console.log("Star found:", star);
     if (star) {
       res.json(star);
     } else {
@@ -29,6 +27,30 @@ exports.getStarById = async (req, res, next) => {
   } catch (error) {
     console.error("Error in getStarById:", error);
     next(new AppError(`Error retrieving star: ${error.message}`, 500));
+  }
+};
+
+exports.searchStars = async (req, res, next) => {
+  try {
+    const { q } = req.query;
+
+    if (!q) {
+      return res.status(400).json({ error: "Query parameter 'q' is required" });
+    }
+
+    const stars = await Star.findAll({
+      where: {
+        name: {
+          [Op.iLike]: `%${q}%`, // Utilise iLIKE pour des recherches insensibles à la casse avec une seule lettre
+        },
+      },
+      limit: 10, // Ajustez la limite de résultats si nécessaire
+    });
+
+    res.json(stars);
+  } catch (error) {
+    console.error("Error in searchStars:", error);
+    next(new AppError(`Error searching for stars: ${error.message}`, 500));
   }
 };
 

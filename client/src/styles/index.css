@@ -1,20 +1,46 @@
-/* client/src/styles/index.css */
+/* Importations des styles slick-carousel */
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
 
+/* Configuration Tailwind */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Définition des composants */
 @layer components {
+  /* Styles des boutons */
   .btn {
-    @apply bg-primary text-text py-2 px-4 rounded-md font-serif hover:bg-secondary transition-colors;
+    @apply bg-background-transparent text-white py-2 px-4 rounded-md font-serif transition-transform duration-300 ease-in-out;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+  }
+
+  /* Styles des boutons de filtre */
+  .btn-filter {
+    @apply text-primary bg-text border border-primary px-2 font-serif transition-colors duration-300 ease-in-out;
+  }
+
+  .btn-filter:hover {
+    @apply bg-primary text-text;
+  }
+
+  .active-filter {
+    @apply bg-primary text-text;
   }
 }
 
+/* Styles de base */
 @layer base {
+  /* Styles du body */
   body {
     @apply bg-gradient-to-r from-primary to-secondary text-text font-sans;
   }
 
+  /* Styles pour les titres */
   h1 {
     @apply font-display;
   }
@@ -28,3 +54,18 @@
   }
 }
 
+/* Animations */
+@keyframes softNeon {
+  0%, 100% {
+    text-shadow: 0 0 5px #fff, 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 0, 255, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 5px #fff, 0 0 15px rgba(255, 0, 255, 0.5), 0 0 30px rgba(255, 0, 255, 0.3);
+  }
+}
+
+/* Classe pour l'effet néon */
+.h1-neon:hover {
+  animation: softNeon 2s ease-in-out infinite alternate;
+  color: #fff;
+}

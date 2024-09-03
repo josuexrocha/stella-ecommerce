@@ -1,3 +1,5 @@
+// client/src/pages/ProductDetail.tsx
+
 import type React from "react";
 import { useParams } from "react-router-dom";
 import { useStarDetail } from "../hooks/useStarDetail";

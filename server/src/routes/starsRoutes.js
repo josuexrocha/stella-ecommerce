@@ -54,6 +54,32 @@ router.get("/", starController.getAllStars);
  */
 router.get("/filter", validate(filterSchema, "query"), starController.filterStars);
 
+
+/**
+ * @swagger
+ * /stars/search:
+ *   get:
+ *     summary: Search stars by name
+ *     tags: [Stars]
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The search query
+ *     responses:
+ *       200:
+ *         description: List of stars matching the search query
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Star'
+ */
+router.get("/search", starController.searchStars);
+
 /**
  * @swagger
  * /stars/{id}:
@@ -77,5 +103,6 @@ router.get("/filter", validate(filterSchema, "query"), starController.filterStar
  *         description: Star not found
  */
 router.get("/:id", validate(idSchema, "params"), starController.getStarById);
+
 
 module.exports = router;

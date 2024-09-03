@@ -59,6 +59,14 @@ export const filterStars = async (params: {
   return response.data;
 };
 
+// Focntion pour la recherche d'étoiles
+export const searchStars = async (query: string): Promise<Star[]> => {
+  const response = await api.get<Star[]>("/stars/search", {
+    params: { q: query },
+  });
+  return response.data;
+};
+
 // Users
 export const registerUser = async (userData: {
   username: string;

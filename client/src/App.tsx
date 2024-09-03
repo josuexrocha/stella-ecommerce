@@ -21,13 +21,13 @@ const App: React.FC = () => {
       <ErrorBoundary>
         <div className="flex flex-col min-h-screen">
           <Header />
-          <main className="flex-grow container mx-auto px-1 py-6">
+          <main className="flex-grow">
             <Suspense fallback={<div className="text-center text-white">Chargement...</div>}>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/catalog" element={<Catalog />} />
                 <Route path="/star/:id" element={<ProductDetail />} />
-                <Route path="/auth" element={<Auth />} /> {/* Nouvelle route pour Auth */}
+                <Route path="/auth" element={<Auth />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/faq" element={<FAQ />} />
