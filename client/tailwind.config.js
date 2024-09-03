@@ -11,7 +11,6 @@ module.exports = {
       backgroundImage: {
         'background-default': 'linear-gradient(90deg, #3D2A54 0%, #1E1326 100%)',
         'background-inverse': 'linear-gradient(90deg, #1E1326 0%, #3D2A54 100%)',
-        'background-transparent': 'linear-gradient(90deg, rgba(61, 42, 84, 0.7) 0%, rgba(30, 19, 38, 0.7) 100%)',
       },
       fontFamily: {
         sans: ["Roboto", "sans-serif"],

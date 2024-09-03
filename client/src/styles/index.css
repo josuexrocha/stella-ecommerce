@@ -12,9 +12,12 @@
   /* Styles des boutons */
   .btn {
     @apply bg-special text-primary font-action tracking-wider py-2 px-4 transition-transform duration-500 ease-in-out;
-    @apply hover:bg-primary hover:text-text hover:transform hover:translate-y-[-2px] hover:shadow-lg;
+    @apply hover:bg-primary hover:text-text hover:transform hover:scale-105 hover:shadow-lg;
   }
 
+  .btn:hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
   /* Styles des boutons de filtre */
   .btn-filter {
     @apply text-primary bg-text border border-primary px-2 font-serif transition-colors duration-300 ease-in-out;
@@ -33,7 +36,7 @@
 @layer base {
   /* Styles du body */
   body {
-    @apply bg-gradient-to-r from-primary to-secondary text-text font-sans;
+    @apply bg-background-default text-text font-sans;
   }
 
   /* Styles pour les titres */
@@ -80,3 +83,4 @@
   animation: subtleZoom 15s ease-in-out infinite;
   filter: brightness(50%);
 }
+

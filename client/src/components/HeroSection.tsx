@@ -10,7 +10,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ children }) => {
     dots: true,
     infinite: true,
     speed: 500,
-    fade: true,  // Activation du mode fade
+    fade: true,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
@@ -19,7 +19,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ children }) => {
   };
 
   return (
-    <section className="w-full h-[85vh] overflow-hidden relative">
+    <section className="w-full h-full overflow-hidden relative">
       <Slider {...settings}>
         <div className="relative w-full h-screen flex items-center justify-center overflow-hidden">
           <img
