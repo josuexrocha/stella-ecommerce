@@ -24,7 +24,7 @@ export interface Star {
   magnitude: number;
   price: number;
   createdAt: string;
-  distance: number;
+  distanceFromEarth: number;
   luminosity: number;
   mass: number;
 }

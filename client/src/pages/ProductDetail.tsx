@@ -44,7 +44,7 @@ const ProductDetail: React.FC = () => {
               <strong>Constellation :</strong> {star.constellation}
             </li>
             <li>
-              <strong>Distance de la Terre :</strong> {star.distance} al
+              <strong>Distance de la Terre :</strong> {star.distanceFromEarth} al
             </li>
             <li>
               <strong>Luminosité :</strong> {star.luminosity} L
