@@ -2,7 +2,7 @@ import type React from "react";
 
 const Contact: React.FC = () => {
   return (
-    <div className="container mx-auto pt-20 px-4">
+    <div className="container mx-auto pt-20 px-4 max-w-xl">
       <h1 className="text-4xl font-display mb-6 text-center">Contactez-nous</h1>
       <div className="bg-secondary text-text p-6 rounded-md shadow-lg mb-8">
         <p className="text-lg font-serif mb-4">

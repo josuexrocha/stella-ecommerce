@@ -52,7 +52,7 @@ const Home: React.FC = () => {
       </FadeInSection>
       {/* Section Qui sommes-nous ? */}
       <FadeInSection>
-        <section className="bg-primary mx-auto text-text py-8 text-center">
+        <section className="mx-auto text-text py-8 text-center">
           <h2 className="text-3xl font-display mb-8">Qui sommes-nous ?</h2>
           <div className="flex flex-col md:flex-row items-center px-8">
             {" "}
@@ -61,7 +61,7 @@ const Home: React.FC = () => {
               <img
                 src="/assets/images/astro.png"
                 alt="Astronaute"
-                className="w-2/3 md:w-full object-contain h-[200px] md:h-[300px]"
+                className="w-2/3 md:w-full object-contain md:h-[300px]"
               />
             </div>
             <div className="md:w-2/3 md:pl-8 text-center md:text-left">
@@ -93,7 +93,7 @@ const Home: React.FC = () => {
       </FadeInSection>
       {/* Section Rejoignez-nous */}
       <FadeInSection>
-        <section className="my-12 text-text py-8 text-center">
+        <section className="bg-primary my-12 text-text py-8 text-center">
           {" "}
           {/* Cohérence dans les marges */}
           <h2 className="text-3xl font-display mb-6">Rejoignez-nous</h2>

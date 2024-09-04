@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import StarCard from "../components/StarCard";
 import { fetchStars } from "../services/api";
 import type { Star } from "../types";
+import { FaArrowUp, FaArrowDown, FaEquals } from "react-icons/fa";
 
 const Catalogue: React.FC = () => {
   const [stars, setStars] = useState<Star[]>([]);
@@ -124,7 +125,9 @@ const Catalogue: React.FC = () => {
           </span>
         </div>
 
+        {/* Filtres */}
         <div className="flex justify-center space-x-4 mb-8">
+          {/* Filtre par ordre alphabetique */}
           <button
             type="button"
             className={`btn-filter ${isAlphabetical !== null ? "active-filter" : ""}`}
@@ -132,13 +135,20 @@ const Catalogue: React.FC = () => {
           >
             {isAlphabetical === null ? "A-Z" : isAlphabetical ? "A-Z" : "Z-A"}
           </button>
+          {/* Filtre par prix */}
           <button
             type="button"
             className={`btn-filter ${priceOrder ? "active-filter" : ""}`}
             onClick={togglePriceOrder}
           >
-            {priceOrder === "asc" ? "Prix ⬆" : priceOrder === "desc" ? "Prix ⬇" : "Prix"}
+            <span>Prix</span>
+            {priceOrder === "asc" ? (
+              <FaArrowUp className="ml-2" />
+            ) : priceOrder === "desc" ? (
+              <FaArrowDown className="ml-2" />
+            ) : null}
           </button>
+          {/* Filtre par constellation */}
           <button
             type="button"
             className={`btn-filter ${selectedConstellations.length > 0 ? "active-filter" : ""}`}
@@ -146,34 +156,44 @@ const Catalogue: React.FC = () => {
           >
             Constellations
           </button>
+          {/* Filtre par Distance */}
           <button
             type="button"
             className={`btn-filter ${distanceOrder ? "active-filter" : ""}`}
             onClick={toggleDistanceOrder}
           >
-            {distanceOrder === "asc"
-              ? "Distance ⬆"
-              : distanceOrder === "desc"
-                ? "Distance ⬇"
-                : "Distance"}
+            <span>Distance</span>
+            {distanceOrder === "asc" ? (
+              <FaArrowUp className="ml-2" />
+            ) : distanceOrder === "desc" ? (
+              <FaArrowDown className="ml-2" />
+            ) : null}
           </button>
+          {/* Filtre par Luminosité */}
           <button
             type="button"
             className={`btn-filter ${luminosityOrder ? "active-filter" : ""}`}
             onClick={toggleLuminosityOrder}
           >
-            {luminosityOrder === "asc"
-              ? "Luminosité ⬆"
-              : luminosityOrder === "desc"
-                ? "Luminosité ⬇"
-                : "Luminosité"}
+            <span>Luminosité</span>
+            {luminosityOrder === "asc" ? (
+              <FaArrowUp className="ml-2" />
+            ) : luminosityOrder === "desc" ? (
+              <FaArrowDown className="ml-2" />
+            ) : null}
           </button>
+          {/* Filtre par Masse */}
           <button
             type="button"
             className={`btn-filter ${massOrder ? "active-filter" : ""}`}
             onClick={toggleMassOrder}
           >
-            {massOrder === "asc" ? "Taille ⬆" : massOrder === "desc" ? "Taille ⬇" : "Taille"}
+            <span>Masse</span>
+            {massOrder === "asc" ? (
+              <FaArrowUp className="ml-2" />
+            ) : massOrder === "desc" ? (
+              <FaArrowDown className="ml-2" />
+            ) : null}
           </button>
         </div>
 

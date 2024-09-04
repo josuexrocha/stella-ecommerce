@@ -15,16 +15,16 @@ exports.register = async (req, res, next) => {
       return next(new AppError("Email already in use", 400));
     }
 
+    // Hacher le mot de passe avant de le sauvegarder
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = await User.create({
       firstName,
       lastName,
       email,
-      password: hashedPassword,
-      // Le rôle "client" sera automatiquement attribué par défaut
+      password: hashedPassword, // Enregistre le mot de passe haché
     });
 
-    // Générer un token JWT pour le nouvel utilisateur
     const token = jwt.sign({ userId: newUser.id, role: newUser.role }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
@@ -35,7 +35,6 @@ exports.register = async (req, res, next) => {
       token,
     });
   } catch (error) {
-    console.error("Detailed error in register function:", error);
     next(new AppError(`Error registering user: ${error.message}`, 400));
   }
 };
@@ -44,7 +43,13 @@ exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ where: { email } });
-    if (!user || user.password !== password) {
+    if (!user) {
+      return next(new AppError("Invalid email or password", 401));
+    }
+
+    // Comparer le mot de passe fourni avec celui haché dans la base de données
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return next(new AppError("Invalid email or password", 401));
     }
 
@@ -110,7 +115,7 @@ exports.updateProfile = async (req, res, next) => {
 };
 
 // Nouvelle fonction pour la déconnexion
-exports.logout = async (res ) => {
+exports.logout = async (res) => {
   // Dans une implémentation JWT, la déconnexion se fait côté client
   // en supprimant le token. Côté serveur, nous pouvons simplement
   // envoyer une réponse de succès.

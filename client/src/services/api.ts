@@ -72,19 +72,15 @@ export const registerUser = async (userData: {
   username: string;
   email: string;
   password: string;
+  firstName: string;
+  lastName: string;
 }): Promise<ApiResponse<User>> => {
   const response = await api.post<ApiResponse<User>>("/users/register", userData);
   return response.data;
 };
 
-export const loginUser = async (credentials: { email: string; password: string }): Promise<
-  ApiResponse<{ token: string; user: User }>
-> => {
-  const response = await api.post<ApiResponse<{ token: string; user: User }>>(
-    "/users/login",
-    credentials,
-  );
-  return response.data;
+export const loginUser = async (loginData: { email: string, password: string }) => {
+  return api.post("/users/login", loginData);
 };
 
 export const getUserProfile = async (): Promise<ApiResponse<User>> => {

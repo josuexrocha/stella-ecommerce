@@ -20,15 +20,15 @@
   }
   /* Styles des boutons de filtre */
   .btn-filter {
-    @apply text-primary bg-text border border-primary px-2 font-serif transition-colors duration-300 ease-in-out;
+    @apply text-primary bg-text border border-primary px-3 py-1 font-serif transition-colors duration-300 ease-in-out flex items-center;
   }
 
   .btn-filter:hover {
-    @apply bg-primary text-text;
+    @apply bg-primary text-white border-primary;
   }
 
   .active-filter {
-    @apply bg-primary text-text;
+    @apply bg-special text-secondary border-primary; /* Assurez-vous que cela corresponde à votre thème */
   }
 }
 

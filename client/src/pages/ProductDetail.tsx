@@ -6,6 +6,7 @@ import { useStarDetail } from "../hooks/useStarDetail";
 import StarCard from "../components/StarCard";
 import type { Star } from "../types";
 import { FaHeart, FaStar } from "react-icons/fa";
+import FadeInSection from "../components/FadeInSection";
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Récupère l'ID de l'étoile à partir de l'URL
@@ -25,59 +26,64 @@ const ProductDetail: React.FC = () => {
   const price = typeof star.price === "string" ? Number.parseFloat(star.price) : star.price;
 
   return (
+    <FadeInSection>
+
     <div className="container mx-auto pt-20 px-4">
-      <div className="flex flex-col md:flex-row items-start">
-        {/* Image principale de l'étoile */}
-        <div className="md:w-1/2">
-          <img
-            src={`/assets/images/stars/${star.name.toLowerCase().replace(/\s+/g, "")}.jpg`}
-            alt={star.name}
-            className="w-full h-auto object-cover rounded-md"
-          />
-        </div>
+        <div className="flex flex-col md:flex-row items-start">
+          {/* Image principale de l'étoile */}
 
-        {/* Détails de l'étoile */}
-        <div className="md:w-1/2 md:pl-8 mt-4 md:mt-0">
-          <h1 className="text-4xl font-display mb-4">{star.name}</h1>
-          <p className="text-lg font-serif mb-6">{star.description}</p>
-          <ul className="text-lg font-serif mb-6">
-            <li>
-              <strong>Constellation :</strong> {star.constellation}
-            </li>
-            <li>
-              <strong>Distance de la Terre :</strong> {star.distanceFromEarth} al
-            </li>
-            <li>
-              <strong>Luminosité :</strong> {star.luminosity} L
-            </li>
-            <li>
-              <strong>Magnitude :</strong> {star.magnitude}
-            </li>
-            <li>
-              <strong>Masse :</strong> {star.mass} M
-            </li>
-          </ul>
-          <p className="text-2xl font-bold mb-4">
-            {price ? `${price.toFixed(2)} €` : "Prix non disponible"}
-          </p>
+          <div className="md:w-1/2">
+            <img
+              src={`/assets/images/stars/${star.name.toLowerCase().replace(/\s+/g, "")}.jpg`}
+              alt={star.name}
+              className="w-full h-auto object-cover rounded-md"
+            />
+          </div>
 
-          <div className="flex items-center space-x-4">
-            <button type="button" className="btn">
-              Ajouter au panier
-            </button>
-            <button type="button" className="text-special">
-              <i className="far fa-heart" />
-            </button>
-            <button type="button" className="text-special">
-              <i className="far fa-star" />
-            </button>
+          {/* Détails de l'étoile */}
+          <div className="md:w-1/2 md:pl-8 mt-4 md:mt-0">
+            <h1 className="text-4xl font-display mb-4">{star.name}</h1>
+            <p className="text-lg font-serif mb-6">{star.description}</p>
+            <ul className="text-lg font-serif mb-6">
+              <li>
+                <strong>Constellation :</strong> {star.constellation}
+              </li>
+              <li>
+                <strong>Distance de la Terre :</strong> {star.distanceFromEarth} al
+              </li>
+              <li>
+                <strong>Luminosité :</strong> {star.luminosity} L
+              </li>
+              <li>
+                <strong>Magnitude :</strong> {star.magnitude}
+              </li>
+              <li>
+                <strong>Masse :</strong> {star.mass} M
+              </li>
+            </ul>
+            <p className="text-2xl font-bold mb-4">
+              {price ? `${price.toFixed(2)} €` : "Prix non disponible"}
+            </p>
+
+            <div className="flex items-center space-x-4">
+              <button type="button" className="btn">
+                Ajouter au panier
+              </button>
+              <button type="button" className="text-special">
+                <i className="far fa-heart" />
+              </button>
+              <button type="button" className="text-special">
+                <i className="far fa-star" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
       {/* Section "Vous pouvez aimer aussi" */}
+
       <section className="mt-12">
-        <h2 className="text-3xl font-display mb-6">Vous pouvez aimer aussi :</h2>
+          <h2 className="text-3xl font-display mb-6">Vous pouvez aimer aussi :</h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {relatedStars.map((relatedStar: Star) => (
             <StarCard key={relatedStar.id} star={relatedStar} />
@@ -85,6 +91,8 @@ const ProductDetail: React.FC = () => {
         </div>
       </section>
     </div>
+    </FadeInSection>
+
   );
 };
 
