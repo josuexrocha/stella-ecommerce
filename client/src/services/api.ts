@@ -98,6 +98,10 @@ export const logoutUser = async (): Promise<ApiResponse<null>> => {
   return response.data;
 };
 
+export const deleteUserAccount = async (): Promise<ApiResponse<null>> => {
+  return api.delete("/users/me");
+};
+
 // Cart
 export const getCart = async (): Promise<ApiResponse<Cart>> => {
   const response = await api.get<ApiResponse<Cart>>("/cart");

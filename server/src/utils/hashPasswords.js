@@ -11,11 +11,9 @@ const hashPasswords = async () => {
         const hashedPassword = await bcrypt.hash(user.password, 10); // Hachage du mot de passe
         user.password = hashedPassword;
         await user.save(); // Met à jour l'utilisateur dans la base de données
-        console.log(`Mot de passe haché pour l'utilisateur : ${user.email}`);
       }
     }
 
-    console.log("Tous les mots de passe ont été hachés.");
   } catch (error) {
     console.error("Erreur lors du hachage des mots de passe:", error);
   }

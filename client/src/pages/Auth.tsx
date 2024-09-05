@@ -1,8 +1,8 @@
-// client/src/pages/Auth.tsx
-
 import { useState, useEffect } from "react";
-import { loginUser, registerUser } from "../services/api";
+import { loginUser, registerUser, getUserProfile, getCart, getWishlist, deleteUserAccount } from "../services/api";
+import type { CartItem, WishlistItem, ApiResponse, User, Cart } from "../types";  // Importer 'Cart'
 import { useNavigate } from "react-router-dom";
+
 
 const Auth: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -10,8 +10,10 @@ const Auth: React.FC = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
 
   const navigate = useNavigate();
 
@@ -19,9 +21,41 @@ const Auth: React.FC = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      setIsAuthenticated(true); // Si un token est présent, l'utilisateur est considéré comme connecté
+      setIsAuthenticated(true);
+      fetchUserProfile();
+      fetchCartItems();
+      fetchWishlistItems();
     }
   }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const response: ApiResponse<User> = await getUserProfile();
+      setFirstName(response.data.firstName);
+      setLastName(response.data.lastName);
+      setEmail(response.data.email);
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    }
+  };
+
+  const fetchCartItems = async () => {
+    try {
+      const response: ApiResponse<Cart> = await getCart();  // Typage correct pour ApiResponse<Cart>
+      setCartItems(response.data.cartItems);  // Accéder à cartItems dans l'objet Cart
+    } catch (error) {
+      console.error("Error fetching cart items:", error);
+    }
+  };
+
+  const fetchWishlistItems = async () => {
+    try {
+      const response: ApiResponse<WishlistItem[]> = await getWishlist();
+      setWishlistItems(response.data);
+    } catch (error) {
+      console.error("Error fetching wishlist items:", error);
+    }
+  };
 
   const toggleAuthMode = () => {
     setIsLogin(!isLogin);
@@ -34,15 +68,14 @@ const Auth: React.FC = () => {
 
     try {
       if (isLogin) {
-        // Connexion
         const response = await loginUser({ email, password });
-        localStorage.setItem("token", response.data.token); // Stocker le token JWT
-        setIsAuthenticated(true); // Mettre à jour l'état de connexion
+        const data: { token: string } = response.data; // Typage correct de la donnée renvoyée
+        localStorage.setItem("token", data.token);
+        setIsAuthenticated(true);
         alert("Connexion réussie !");
-        navigate("/"); // Redirection vers la page d'accueil
+        navigate("/");
       } else {
-        // Inscription
-        const response = await registerUser({
+        await registerUser({
           username: email.split("@")[0],
           email,
           password,
@@ -50,34 +83,88 @@ const Auth: React.FC = () => {
           lastName,
         });
         alert("Inscription réussie !");
-        navigate("/"); // Redirection vers la page d'accueil
+        navigate("/");
       }
-    } catch (error: any) {
-      const message = error?.response?.data?.message || "Une erreur est survenue.";
-      if (message.includes("Email already in use")) {
-        setErrorMessage("Cet email est déjà utilisé. Veuillez en choisir un autre.");
+    } catch (error: unknown) {
+      if (error instanceof Error && error?.message) {
+        setErrorMessage(
+          error.message.includes("Email already in use")
+            ? "Cet email est déjà utilisé."
+            : "Une erreur est survenue.",
+        );
       } else {
-        setErrorMessage(message);
+        setErrorMessage("Une erreur est survenue.");
       }
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setIsAuthenticated(false); // Mettre à jour l'état de connexion
+    setIsAuthenticated(false);
     navigate("/login");
+  };
+
+  const handleDeleteAccount = async () => {
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer votre compte ?")) {
+      try {
+        await deleteUserAccount();
+        localStorage.removeItem("token");
+        setIsAuthenticated(false);
+        navigate("/");
+      } catch (error) {
+        console.error("Error deleting account:", error);
+      }
+    }
   };
 
   if (isAuthenticated) {
     return (
       <div className="container mx-auto pt-20 px-4 max-w-md">
-        <h1 className="text-4xl font-display mb-8 text-center">Bienvenue sur votre profil</h1>
+        <h1 className="text-4xl font-display mb-8 text-center">Votre profil</h1>
         <div className="space-y-4 bg-secondary text-text p-6 rounded-md shadow-lg">
           <p className="text-lg font-serif">Email : {email}</p>
-          <p className="text-lg font-serif">Nom : {firstName} {lastName}</p>
-          <button className="btn" onClick={handleLogout}>
+          <p className="text-lg font-serif">
+            Nom : {firstName} {lastName}
+          </p>
+
+          <button type="button" className="btn" onClick={handleLogout}>
             Se déconnecter
           </button>
+          <button
+            type="button"
+            className="btn bg-red-500 text-white mt-4"
+            onClick={handleDeleteAccount}
+          >
+            Supprimer le compte
+          </button>
+
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold">Votre Panier</h2>
+            {cartItems.length > 0 ? (
+              <ul>
+                {cartItems.map((item) => (
+                  <li key={item.id}>
+                    {item.star.name} - {item.quantity}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Votre panier est vide.</p>
+            )}
+          </div>
+
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold">Votre Liste d'envies</h2>
+            {wishlistItems.length > 0 ? (
+              <ul>
+                {wishlistItems.map((item) => (
+                  <li key={item.id}>{item.star.name}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>Votre liste d'envies est vide.</p>
+            )}
+          </div>
         </div>
       </div>
     );
