@@ -258,16 +258,16 @@ const orders = [
 ];
 
 const _orderStars = [
-  { OrderId: 1, StarId: 1, quantity: 1 },
-  { OrderId: 2, StarId: 2, quantity: 1 },
-  { OrderId: 3, StarId: 3, quantity: 1 },
-  { OrderId: 4, StarId: 4, quantity: 1 },
-  { OrderId: 5, StarId: 5, quantity: 1 },
-  { OrderId: 1, StarId: 6, quantity: 2 },
-  { OrderId: 2, StarId: 7, quantity: 1 },
-  { OrderId: 3, StarId: 8, quantity: 3 },
-  { OrderId: 4, StarId: 9, quantity: 1 },
-  { OrderId: 5, StarId: 10, quantity: 2 },
+  { orderid: 1, starid: 1, quantity: 1 },
+  { orderid: 2, starid: 2, quantity: 1 },
+  { orderid: 3, starid: 3, quantity: 1 },
+  { orderid: 4, starid: 4, quantity: 1 },
+  { orderid: 5, starid: 5, quantity: 1 },
+  { orderid: 1, starid: 6, quantity: 2 },
+  { orderid: 2, starid: 7, quantity: 1 },
+  { orderid: 3, starid: 8, quantity: 3 },
+  { orderid: 4, starid: 9, quantity: 1 },
+  { orderid: 5, starid: 10, quantity: 2 },
 ];
 
 async function generateSampleData() {

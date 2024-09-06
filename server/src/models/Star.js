@@ -1,58 +1,50 @@
 // src/models/Star.js
-
 module.exports = (sequelize, DataTypes) => {
-  const Star = sequelize.define(
-    "Star",
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
-      name: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-      },
-      description: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      constellation: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-      },
-      distanceFromEarth: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
-      luminosity: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
-      mass: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
-      magnitude: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
-      price: {
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
-      },
+  const Star = sequelize.define("Star", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    {
-      tableName: "stars",
-      timestamps: true,
+    name: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
     },
-  );
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    constellation: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+    },
+    distanceFromEarth: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    luminosity: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    mass: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    magnitude: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    price: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+    }
+  }, {
+    tableName: "stars",
+    timestamps: true,
+  });
 
   Star.associate = (models) => {
     Star.belongsToMany(models.Order, { through: models.OrderStar, foreignKey: "starId" });
-    Star.hasMany(models.Review, { foreignKey: "starId" });
-    Star.hasMany(models.Wishlist, { foreignKey: "starId" });
-    Star.hasMany(models.CartItem, { foreignKey: "starId" });
   };
 
   return Star;
