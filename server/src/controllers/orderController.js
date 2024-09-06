@@ -6,8 +6,16 @@ const { AppError } = require("../middlewares/errorHandler");
 exports.createOrder = async (req, res, next) => {
   try {
     const { items, shippingAddress, paymentMethod } = req.body;
+
+    // Vérifie que l'utilisateur existe bien dans la base de données
+    const user = await User.findByPk(req.user.userId);
+    if (!user) {
+      throw new AppError(`User with id ${req.user.userId} not found`, 404);
+    }
+
+    // Création de la commande
     const order = await Order.create({
-      UserId: req.user.userId,
+      UserId: req.user.userId,  // Associer l'ID de l'utilisateur
       date: new Date(),
       status: "pending",
       totalAmount: 0,
@@ -21,14 +29,26 @@ exports.createOrder = async (req, res, next) => {
       if (!star) {
         throw new AppError(`Star with id ${item.starId} not found`, 404);
       }
+
+      // Vérification de l'ID de la commande
+      if (!order.id) {
+        throw new AppError("Order ID is null", 500);
+      }
+
+      console.log("Order created with ID:", order.id);
+
+
+      // Création des éléments dans OrderStar
       await OrderStar.create({
-        OrderId: order.id,
-        StarId: star.id,
+        OrderId: order.id,  // Utilise "OrderId" avec la bonne casse
+        StarId: star.id,    // Utilise "StarId" avec la bonne casse
         quantity: item.quantity,
       });
+
       totalAmount += star.price * item.quantity;
     }
 
+    // Mise à jour du montant total de la commande
     order.totalAmount = totalAmount;
     await order.save();
 

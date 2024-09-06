@@ -2,9 +2,11 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
-const {requireAuth } = require("../middlewares/authMiddleware");
+const { authenticateUser, requireAuth } = require("../middlewares/authMiddleware");
 const validate = require("../middlewares/validate");
 const { registerSchema, loginSchema } = require("../validations/userValidation");
+
+router.use(authenticateUser);
 
 /**
  * @swagger
@@ -120,5 +122,23 @@ router.put("/profile", requireAuth, userController.updateProfile);
  *         description: Unauthorized
  */
 router.post("/logout", requireAuth, userController.logout);
+
+/**
+ * @swagger
+ * /users/me:
+ *   delete:
+ *     summary: Delete user account
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Account deleted successfully
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+router.delete("/me", requireAuth, userController.deleteAccount);
 
 module.exports = router;

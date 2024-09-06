@@ -1,5 +1,3 @@
-// src/routes/index.js
-
 const express = require("express");
 const router = express.Router();
 const { authenticateUser } = require("../middlewares/authMiddleware");
@@ -13,12 +11,14 @@ const reviewRoutes = require("./reviewRoutes");
 
 // Routes publiques
 router.use("/stars", starsRoutes);
-router.use("/users", usersRoutes);
 
-// Middleware d'authentification pour toutes les routes suivantes
+// Middleware d'authentification appliqué à toutes les routes nécessitant une authentification
 router.use(authenticateUser);
 
-// Routes nécessitant une authentification
+// Routes utilisateur nécessitant authentification
+router.use("/users", usersRoutes);
+
+// Routes nécessitant authentification
 router.use("/orders", ordersRoutes);
 router.use("/cart", cartRoutes);
 router.use("/wishlist", wishlistRoutes);

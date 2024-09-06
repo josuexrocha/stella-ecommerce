@@ -5,6 +5,7 @@ import StarCard from "../components/StarCard";
 import { useLatestStars } from "../hooks/useLatestStars";
 import { useFunFacts } from "../hooks/useFunFacts";
 import FadeInSection from "../components/FadeInSection";
+import { Link } from "react-router-dom";
 
 const Home: React.FC = () => {
   const { stars, loading, error } = useLatestStars(6);
@@ -91,21 +92,16 @@ const Home: React.FC = () => {
           <h2 className="text-xl font-display my-6">Le saviez-vous ?</h2>
         </section>
       </FadeInSection>
-      {/* Section Rejoignez-nous */}
       <FadeInSection>
         <section className="bg-primary my-12 text-text py-8 text-center">
-          {" "}
-          {/* Cohérence dans les marges */}
           <h2 className="text-3xl font-display mb-6">Rejoignez-nous</h2>
           <p className="text-lg font-serif mx-auto max-w-2xl mb-6">
-            {" "}
-            {/* Alignement du texte et largeur maximale */}
             Rejoignez la communauté Stella pour être au courant des dernières nouveautés et
             événements autour des étoiles. Inscrivez-vous à notre newsletter et faites partie de
             notre univers.
           </p>
           <button type="button" className="btn">
-            <a href="/auth">S'inscrire</a>
+            <Link to="/auth">S'inscrire</Link>
           </button>
         </section>
       </FadeInSection>

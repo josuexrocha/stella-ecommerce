@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaHome, FaSearch, FaUser, FaShoppingCart, FaHeart } from "react-icons/fa";
 import { searchStars } from "../services/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import type { Star } from "../types";
 
 const Header: React.FC = () => {
@@ -9,8 +9,14 @@ const Header: React.FC = () => {
   const [searchValue, setSearchValue] = useState("");
   const [suggestions, setSuggestions] = useState<Star[]>([]);
   const [scrolled, setScrolled] = useState(false);
-  const isLoggedIn = true; // Remplacer par une vérification réelle de l'état de connexion
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const navigate = useNavigate();
+
+  // Vérification et mise à jour de l'état d'authentification
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token); // Mettre à jour l'état de connexion
+  }, [localStorage.getItem("token")]); // Le hook s'exécute à chaque changement du token dans localStorage
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,19 +57,12 @@ const Header: React.FC = () => {
     navigate(`/star/${id}`);
   };
 
-  // Réinitialiser l'état si la barre de recherche est vide
-  const handleBlur = () => {
-    if (!searchValue) {
-      setIsSearchVisible(false);
-    }
-  };
-
   return (
     <header className="bg-background-inverse text-text fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 shadow-lg h-12 transition-all duration-300 ease-in-out">
       <div className="flex items-center space-x-3">
-        <a href="/" className="text-lg text-text hover:text-white">
+        <Link to="/" className="text-lg text-text hover:text-white">
           <FaHome className="text-xl text-text" />
-        </a>
+        </Link>
       </div>
 
       <div className="flex items-center space-x-3 relative">
@@ -78,7 +77,7 @@ const Header: React.FC = () => {
               placeholder="Rechercher"
               value={searchValue}
               onChange={handleSearchChange}
-              onBlur={handleBlur} // Cacher la barre de recherche si elle est vide
+              onBlur={() => setIsSearchVisible(false)}
             />
 
             {/* Conteneur pour suggestions, positionné sous la barre de recherche */}
@@ -116,20 +115,43 @@ const Header: React.FC = () => {
           </button>
         )}
 
-        {/* Liens pour le panier, les favoris et le compte */}
-        {isLoggedIn && (
+        {isLoggedIn ? (
           <>
-            <a href="/cart" className="text-lg text-text hover:text-white">
+            <Link to="/cart" className="text-lg text-text hover:text-white">
               <FaShoppingCart />
-            </a>
-            <a href="/wishlist" className="text-lg text-text hover:text-white">
+            </Link>
+            <Link to="/wishlist" className="text-lg text-text hover:text-white">
               <FaHeart />
-            </a>
+            </Link>
+            <Link to="/profile" className="text-lg text-text hover:text-white">
+              <FaUser />
+            </Link>
+          </>
+        ) : (
+          <>
+            <button
+              type="button"
+              className="text-lg text-text hover:text-white"
+              onClick={() => navigate("/auth")}
+            >
+              <FaShoppingCart />
+            </button>
+            <button
+              type="button"
+              className="text-lg text-text hover:text-white"
+              onClick={() => navigate("/auth")}
+            >
+              <FaHeart />
+            </button>
+            <button
+              type="button"
+              className="text-lg text-text hover:text-white"
+              onClick={() => navigate("/auth")}
+            >
+              <FaUser />
+            </button>
           </>
         )}
-        <a href="/auth" className="text-lg text-text hover:text-white">
-          <FaUser />
-        </a>
       </div>
     </header>
   );

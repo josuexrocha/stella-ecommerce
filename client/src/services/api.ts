@@ -23,7 +23,7 @@ const api: AxiosInstance = axios.create({
   },
 });
 
-// Intercepteur pour ajouter le token d'authentification
+// Intercepteur pour ajouter le token d'authentification dans chaque requête
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -67,26 +67,29 @@ export const searchStars = async (query: string): Promise<Star[]> => {
   return response.data;
 };
 
-// Users
+// Fonction pour inscrire un utilisateur
 export const registerUser = async (userData: {
   username: string;
   email: string;
   password: string;
   firstName: string;
   lastName: string;
-}): Promise<ApiResponse<User>> => {
-  const response = await api.post<ApiResponse<User>>("/users/register", userData);
-  return response.data;
+}): Promise<{ token: string; userId: number }> => {
+  const response = await api.post<{ token: string; userId: number }>("/users/register", userData);
+  return response.data; // On retourne directement le token et l'ID de l'utilisateur
 };
+
+// Fonction pour connecter un utilisateur
 
 export const loginUser = async (loginData: { email: string, password: string }) => {
-  return api.post("/users/login", loginData);
+  return api.post<{ token: string }>("/users/login", loginData);
 };
 
-export const getUserProfile = async (): Promise<ApiResponse<User>> => {
-  const response = await api.get<ApiResponse<User>>("/users/profile");
+export const getUserProfile = async (): Promise<User> => {
+  const response = await api.get<User>("/users/profile");
   return response.data;
 };
+
 
 export const updateUserProfile = async (userData: UserProfileData): Promise<ApiResponse<User>> => {
   const response = await api.put<ApiResponse<User>>("/users/profile", userData);

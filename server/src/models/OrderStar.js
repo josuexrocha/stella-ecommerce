@@ -6,11 +6,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 1,
     },
-    orderId: {
+    OrderId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    starId: {
+    StarId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     }
@@ -20,8 +20,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   OrderStar.associate = (models) => {
-    OrderStar.belongsTo(models.Order, { foreignKey: 'orderId' });
-    OrderStar.belongsTo(models.Star, { foreignKey: 'starId' });
+    OrderStar.belongsTo(models.Order, { foreignKey: 'OrderId' });
+    OrderStar.belongsTo(models.Star, { foreignKey: 'StarId' });
   };
 
   return OrderStar;
