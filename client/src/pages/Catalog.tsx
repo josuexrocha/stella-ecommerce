@@ -126,7 +126,7 @@ const Catalogue: React.FC = () => {
         </div>
 
         {/* Filtres */}
-        <div className="flex justify-center space-x-4 mb-8">
+        <div className="flex flex-wrap justify-center gap-4 mb-8">
           {/* Filtre par ordre alphabetique */}
           <button
             type="button"
@@ -221,7 +221,9 @@ const Catalogue: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredStars.length > 0 ? (
-            filteredStars.map((star: Star) => <StarCard key={star.id} star={star} />)
+            filteredStars
+              .filter((star: Star) => star.starid) // Filtre les étoiles sans starid
+              .map((star: Star) => <StarCard key={star.starid} star={star} />) // Assure que chaque étoile a un starid
           ) : (
             <p className="text-center text-text">Aucune étoile trouvée selon ces critères...</p>
           )}

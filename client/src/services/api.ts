@@ -26,9 +26,12 @@ const api: AxiosInstance = axios.create({
 // Intercepteur pour ajouter le token d'authentification dans chaque requête
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
+
+  // Si un token existe, on l'ajoute aux en-têtes
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
 
@@ -39,9 +42,13 @@ export const fetchStars = async (): Promise<ApiResponse<Star[]>> => {
 };
 
 // Fonction pour récupérer une étoile par ID
-export const fetchStarById = async (id: string) => {
+export const fetchStarById = async (starid: string) => {
   try {
-    const response = await api.get(`/stars/${id}`);
+    const response = await api.get(`/stars/${starid}`);
+    // Conversion en chaîne si nécessaire
+    if (response?.data?.starid) {
+      response.data.starid = String(response.data.starid);
+    }
     return response;
   } catch (error) {
     console.error("Erreur lors de la récupération de l'étoile par ID:", error);
@@ -81,7 +88,7 @@ export const registerUser = async (userData: {
 
 // Fonction pour connecter un utilisateur
 
-export const loginUser = async (loginData: { email: string, password: string }) => {
+export const loginUser = async (loginData: { email: string; password: string }) => {
   return api.post<{ token: string }>("/users/login", loginData);
 };
 
@@ -89,7 +96,6 @@ export const getUserProfile = async (): Promise<User> => {
   const response = await api.get<User>("/users/profile");
   return response.data;
 };
-
 
 export const updateUserProfile = async (userData: UserProfileData): Promise<ApiResponse<User>> => {
   const response = await api.put<ApiResponse<User>>("/users/profile", userData);

@@ -33,7 +33,7 @@ export const useStarDetail = (id: string | undefined) => {
         if (relatedStarsResponse?.data) {
           // Filtrer pour exclure l'étoile actuelle des étoiles similaires
           const filteredStars = relatedStarsResponse.data.filter(
-            (relatedStar: Star) => relatedStar.id !== id
+            (relatedStar: Star) => String(relatedStar.starid) !== String(id) // Convertir pour comparer correctement
           );
           setRelatedStars(filteredStars);
         } else {

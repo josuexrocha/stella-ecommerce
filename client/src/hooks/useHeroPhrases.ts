@@ -9,20 +9,19 @@ const heroPhrases = [
   "Adoptez une étoile voisine : votre coin de ciel personnalisé !",
 ];
 
-export const useHeroPhrases = (interval = 7000) => {
-  // Interval augmenté pour plus de temps à l'écran
+export const useHeroPhrases = (interval = 10000) => {
   const [currentPhrase, setCurrentPhrase] = useState(heroPhrases[0]);
-  const [fade, setFade] = useState(true); // Etat pour gérer l'opacité et les transitions
+  const [fade, setFade] = useState(true); // Contrôle le fade in/fade out
 
   useEffect(() => {
     let currentIndex = 0;
     const updatePhrase = () => {
-      setFade(false); // Commence la transition de disparition
+      setFade(false);
       setTimeout(() => {
         currentIndex = (currentIndex + 1) % heroPhrases.length;
         setCurrentPhrase(heroPhrases[currentIndex]);
-        setFade(true); // Fait apparaître la nouvelle phrase
-      }, 500); // Temps de transition
+        setFade(true);
+      }, 200);
     };
 
     const timer = setInterval(updatePhrase, interval);

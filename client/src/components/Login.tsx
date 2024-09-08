@@ -1,3 +1,5 @@
+// client/src/components/Login.tsx
+
 import { useState } from "react";
 import { loginUser } from "../services/api";
 import { useNavigate } from "react-router-dom";
@@ -15,14 +17,20 @@ const Login: React.FC = () => {
     try {
       const response = await loginUser({ email, password });
       const data: { token: string } = response.data;
-      localStorage.setItem("token", data.token);
-      alert("Connexion réussie !");
-      navigate("/"); // Redirection vers la page d'accueil après connexion
+
+      // Stockage du token dans le localStorage
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        alert("Connexion réussie !");
+        navigate("/"); // Redirection vers la page d'accueil après connexion
+      } else {
+        setErrorMessage("Le token d'authentification est manquant.");
+      }
     } catch (error: unknown) {
       if (error instanceof Error && error?.message) {
         setErrorMessage(
-          error.message.includes("Email already in use")
-            ? "Cet email est déjà utilisé."
+          error.message.includes("Unauthorized")
+            ? "Email ou mot de passe incorrect."
             : "Une erreur est survenue.",
         );
       } else {

@@ -1,10 +1,10 @@
-// src/models/Star.js
 module.exports = (sequelize, DataTypes) => {
   const Star = sequelize.define("Star", {
-    id: {
+    starid: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+      field: 'starid',
     },
     name: {
       type: DataTypes.STRING(100),
@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     price: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
-    }
+    },
   }, {
     tableName: "stars",
     timestamps: true,

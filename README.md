@@ -4,7 +4,7 @@ Stella est une application e-commerce permettant d'acheter des étoiles. Ce proj
 
 ## Technologies utilisées
 
-- Conception : Excalidraw, MoCoDo, MVC
+- Conception : Excalidraw, MoCoDo, MVC, Canva
 - Backend : Node.js, Express, Sequelize
 - Frontend : React, Semantic UI, TypeScript
 - Base de données : PostgreSQL
@@ -28,7 +28,12 @@ stella-ecommerce/
    cd client && npm install
    cd ../server && npm install
    ```
-3. Configurez les variables d'environnement (voir `.env.example`)
+3. Configurez les variables d'environnement
+- Copiez les fichiers .env.example dans les dossiers client/src/ et server/
+- Renommez-les en .env
+- Remplissez les variables nécessaires :
+  - Dans client/src/.env, modifiez l'URL de l'API si nécessaire
+  - Dans server/.env, configurez la base de données et la clé JWT
 
 ## Utilisation
 
@@ -44,7 +49,32 @@ stella-ecommerce/
 
 ## Contribuer
 
-[Instructions pour contribuer à venir]
+Les contributions sont les bienvenues ! Pour contribuer au projet, voici les étapes :
+
+1. **Fork** le dépôt
+2. Créez une **branche** pour la fonctionnalité (`git checkout -b feature/AmazingFeature`)
+3. **Commitez** les modifications (`git commit -m 'Ajout d'une fonctionnalité incroyable'`)
+4. **Poussez** vers la branche (`git push origin feature/AmazingFeature`)
+5. **Pull Request**
+
+### Issues
+Si il y a des problèmes ou des idées d'amélioration, go issues sur le dépôt. J'apprecie tous les retours et suggestions.
+
+## Exemples d'utilisation
+
+[Informations à venir]
+
+## Roadmap
+
+Voici quelques fonctionnalités que je prévois d'ajouter :
+
+- [ ] Fonctionalité panier
+- [ ] Fonctionalité liste d'envies
+- [ ] Intégration d'un système de paiement
+- [ ] Notifications par email pour les commandes
+- [ ] Améliorations de l'interface utilisateur
+- [ ] Système de recommandation de produits
+- [ ] Tests
 
 ## Licence
 

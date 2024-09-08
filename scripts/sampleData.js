@@ -3,6 +3,7 @@ const { Star, User, Order, OrderStar } = require("../server/src/models");
 
 const stars = [
   {
+    starid: 1,
     name: "Sirius",
     description: "L'étoile la plus brillante du ciel nocturne",
     constellation: "Canis Major",
@@ -13,6 +14,7 @@ const stars = [
     price: 9999.99,
   },
   {
+    starid: 2,
     name: "Canopus",
     description: "La deuxième étoile la plus brillante du ciel nocturne",
     constellation: "Carina",
@@ -23,6 +25,7 @@ const stars = [
     price: 15000,
   },
   {
+    starid: 3,
     name: "Alpha Centauri A",
     description: "L'étoile la plus proche de notre système solaire",
     constellation: "Centaurus",
@@ -33,6 +36,7 @@ const stars = [
     price: 20000,
   },
   {
+    starid: 4,
     name: "Arcturus",
     description: "L'étoile la plus brillante de l'hémisphère nord",
     constellation: "Boötes",
@@ -43,6 +47,7 @@ const stars = [
     price: 12000,
   },
   {
+    starid: 5,
     name: "Vega",
     description: "Ancienne étoile polaire",
     constellation: "Lyra",
@@ -53,6 +58,7 @@ const stars = [
     price: 11000,
   },
   {
+    starid: 6,
     name: "Capella",
     description: "La sixième étoile la plus brillante du ciel nocturne",
     constellation: "Auriga",
@@ -63,6 +69,7 @@ const stars = [
     price: 13000,
   },
   {
+    starid: 7,
     name: "Rigel",
     description: "Supergéante bleue dans Orion",
     constellation: "Orion",
@@ -73,6 +80,7 @@ const stars = [
     price: 18000,
   },
   {
+    starid: 8,
     name: "Procyon",
     description: "Étoile binaire proche",
     constellation: "Canis Minor",
@@ -83,6 +91,7 @@ const stars = [
     price: 9000,
   },
   {
+    starid: 9,
     name: "Betelgeuse",
     description: "Supergéante rouge dans Orion",
     constellation: "Orion",
@@ -93,6 +102,7 @@ const stars = [
     price: 17000,
   },
   {
+    starid: 10,
     name: "Achernar",
     description: "Étoile la plus brillante de la constellation de l'Éridan",
     constellation: "Eridanus",
@@ -103,6 +113,7 @@ const stars = [
     price: 14000,
   },
   {
+    starid: 11,
     name: "Hadar",
     description: "Deuxième étoile la plus brillante de la constellation du Centaure",
     constellation: "Centaurus",
@@ -113,6 +124,7 @@ const stars = [
     price: 16000,
   },
   {
+    starid: 12,
     name: "Altair",
     description: "L'étoile la plus brillante de la constellation de l'Aigle",
     constellation: "Aquila",
@@ -123,6 +135,7 @@ const stars = [
     price: 10000,
   },
   {
+    starid: 13,
     name: "Aldebaran",
     description: "L'œil du Taureau",
     constellation: "Taurus",
@@ -133,6 +146,7 @@ const stars = [
     price: 11500,
   },
   {
+    starid: 14,
     name: "Spica",
     description: "L'étoile la plus brillante de la constellation de la Vierge",
     constellation: "Virgo",
@@ -143,6 +157,7 @@ const stars = [
     price: 13500,
   },
   {
+    starid: 15,
     name: "Antares",
     description: "Le cœur du Scorpion",
     constellation: "Scorpius",
@@ -153,6 +168,7 @@ const stars = [
     price: 15500,
   },
   {
+    starid: 16,
     name: "Pollux",
     description: "L'étoile la plus brillante de la constellation des Gémeaux",
     constellation: "Gemini",
@@ -163,6 +179,7 @@ const stars = [
     price: 9500,
   },
   {
+    starid: 17,
     name: "Fomalhaut",
     description: "L'étoile la plus brillante de la constellation du Poisson austral",
     constellation: "Piscis Austrinus",
@@ -173,6 +190,7 @@ const stars = [
     price: 10500,
   },
   {
+    starid: 18,
     name: "Deneb",
     description: "La queue du Cygne",
     constellation: "Cygnus",
@@ -183,6 +201,7 @@ const stars = [
     price: 19000,
   },
   {
+    starid: 19,
     name: "Regulus",
     description: "Le cœur du Lion",
     constellation: "Leo",
@@ -193,6 +212,7 @@ const stars = [
     price: 12500,
   },
   {
+    starid: 20,
     name: "Castor",
     description: "L'une des étoiles principales des Gémeaux",
     constellation: "Gemini",
@@ -272,28 +292,25 @@ const _orderStars = [
 
 async function generateSampleData() {
   try {
+    // Crée les étoiles avec un starid unique
     await Star.bulkCreate(stars);
-    console.log("Stars inserted successfully");
 
+    // Crée les utilisateurs
     await User.bulkCreate(users);
-    console.log("Users generated successfully");
 
+    // Crée les commandes
     const createdOrders = await Order.bulkCreate(orders);
-    console.log("Orders generated successfully");
 
-    const orderStarsData = [];
-    for (let i = 0; i < createdOrders.length; i++) {
-      orderStarsData.push({
-        orderId: createdOrders[i].id,
-        starId: i + 1,  // Assurez-vous que ces IDs correspondent à vos étoiles
-        quantity: Math.floor(Math.random() * 3) + 1  // Quantité aléatoire entre 1 et 3
-      });
-    }
+    // Utilise createdOrders pour créer les relations avec OrderStar
+    const orderStarsData = _orderStars.map((orderStar) => {
+      return {
+        orderId: createdOrders[orderStar.orderid - 1].id, // Référence correcte aux commandes créées
+        starId: orderStar.starid,
+        quantity: orderStar.quantity,
+      };
+    });
 
     await OrderStar.bulkCreate(orderStarsData);
-    console.log("OrderStars generated successfully");
-
-    console.log("All sample data generated successfully");
   } catch (error) {
     console.error("Error generating sample data:", error);
     throw error;

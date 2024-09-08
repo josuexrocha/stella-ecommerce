@@ -25,7 +25,7 @@ const StarCard: React.FC<StarCardProps> = ({ star }) => {
             <span className="text-lg font-semibold block">
               {price ? `${price.toFixed(2)} €` : "N/A"}
             </span>
-            <Link to={`/star/${star.id}`} className="btn text-center mt-2 block">
+            <Link to={`/star/${star.starid}`} className="btn text-center mt-2 block">
               Découvrir
             </Link>
           </div>

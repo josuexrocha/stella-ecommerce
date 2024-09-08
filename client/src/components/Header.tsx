@@ -1,37 +1,39 @@
 import { useState, useEffect } from "react";
 import { FaHome, FaSearch, FaUser, FaShoppingCart, FaHeart } from "react-icons/fa";
 import { searchStars } from "../services/api";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import type { Star } from "../types";
+import { usePageTitleOnScroll } from "../hooks/usePageTitleOnScroll";
 
 const Header: React.FC = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [suggestions, setSuggestions] = useState<Star[]>([]);
-  const [scrolled, setScrolled] = useState(false);
+  const { isTitleVisible, pageTitle } = usePageTitleOnScroll();
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  const [currentTitle, setCurrentTitle] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Vérification et mise à jour de l'état d'authentification
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token); // Mettre à jour l'état de connexion
-  }, [localStorage.getItem("token")]); // Le hook s'exécute à chaque changement du token dans localStorage
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, []);
+
+  // Réinitialiser le titre quand la route change
+  useEffect(() => {
+    setCurrentTitle(""); // Réinitialise le titre lors du changement de page
+  }, [location]);
+
+  // Mise à jour du titre selon le scroll
+  useEffect(() => {
+    if (!isTitleVisible) {
+      setCurrentTitle(pageTitle); // Afficher le titre dans le header lorsque l'utilisateur a scrollé
+    } else {
+      setCurrentTitle(""); // Cacher le titre lorsque l'utilisateur n'a pas scrollé
+    }
+  }, [isTitleVisible, pageTitle]);
 
   // Mise à jour des suggestions en temps réel lors de la frappe dans le champ de recherche
   useEffect(() => {
@@ -66,7 +68,7 @@ const Header: React.FC = () => {
       </div>
 
       <div className="flex items-center space-x-3 relative">
-        {scrolled && <span className="text-lg font-serif">Stella</span>}
+        {currentTitle && <span className="text-lg font-serif">{currentTitle}</span>}
 
         {/* Barre de recherche avec transition */}
         {isSearchVisible && (
@@ -86,12 +88,12 @@ const Header: React.FC = () => {
                 <ul className="bg-secondary text-text rounded-lg shadow-lg border border-primary max-h-60 overflow-y-auto">
                   {suggestions.map((star) => (
                     <li
-                      key={star.id}
+                      key={star.starid}
                       className="px-4 py-2 hover:bg-primary hover:text-white transition-colors duration-300 ease-in-out"
                     >
                       <button
                         type="button"
-                        onClick={() => handleSelectSuggestion(star.id)}
+                        onClick={() => handleSelectSuggestion(star.starid)}
                         className="w-full text-left cursor-pointer focus:outline-none"
                       >
                         {star.name}

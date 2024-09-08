@@ -9,8 +9,8 @@ import { FaHeart, FaStar } from "react-icons/fa";
 import FadeInSection from "../components/FadeInSection";
 
 const ProductDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // Récupère l'ID de l'étoile à partir de l'URL
-  const { star, relatedStars, loading, error } = useStarDetail(id); // Hook personnalisé pour récupérer les détails d'une étoile
+  const { starid } = useParams<{ starid: string }>(); // Assurez-vous que starid est bien un string
+  const { star, relatedStars, loading, error } = useStarDetail(starid); // Hook personnalisé pour récupérer les détails d'une étoile
 
   if (loading) {
     return <p className="text-center text-text">Chargement des détails de l'étoile...</p>;
@@ -86,7 +86,7 @@ const ProductDetail: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {relatedStars.map((relatedStar: Star) => (
-            <StarCard key={relatedStar.id} star={relatedStar} />
+            <StarCard key={relatedStar.starid} star={relatedStar} />
           ))}
         </div>
       </section>

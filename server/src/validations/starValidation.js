@@ -2,7 +2,7 @@
 const Joi = require("joi");
 
 const idSchema = Joi.object({
-  id: Joi.number().integer().positive().required(),
+  starid: Joi.number().integer().positive().required(),
 });
 
 const filterSchema = Joi.object({

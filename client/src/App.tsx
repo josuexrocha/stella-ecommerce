@@ -27,15 +27,21 @@ const App: React.FC = () => {
           <main className="flex-grow">
             <Suspense fallback={<div className="text-center text-white">Chargement...</div>}>
               <Routes>
-                <Route path="/" element={<Home />} />  {/* Page d'accueil */}
-                <Route path="/auth" element={<AuthContainer />} />  {/* Connexion/Inscription */}
-                <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/auth" />} />  {/* Profil */}
+                <Route path="/" element={<Home />} /> {/* Page d'accueil */}
+                <Route path="/auth" element={<AuthContainer />} /> {/* Connexion/Inscription */}
+                <Route
+                  path="/profile"
+                  element={isAuthenticated ? <Profile /> : <Navigate to="/auth" />}
+                />{" "}
+                {/* Profil */}
                 <Route path="/catalog" element={<Catalog />} /> {/* Catalogue */}
-                <Route path="/product/:id" element={<ProductDetail />} /> {/* Détail d'un produit */}
+                <Route path="/star/:starid" element={<ProductDetail />} />{" "}
+                {/* Détail d'une etoile */}
                 <Route path="/about" element={<About />} /> {/* À propos */}
                 <Route path="/contact" element={<Contact />} /> {/* Contact */}
                 <Route path="/faq" element={<FAQ />} /> {/* FAQ */}
-                <Route path="*" element={<Navigate to="/" />} />  {/* Redirection par défaut vers la page d'accueil */}
+                <Route path="*" element={<Navigate to="/" />} />{" "}
+                {/* Redirection par défaut vers la page d'accueil */}
               </Routes>
             </Suspense>
           </main>

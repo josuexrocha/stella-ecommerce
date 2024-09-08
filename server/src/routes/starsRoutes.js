@@ -54,7 +54,6 @@ router.get("/", starController.getAllStars);
  */
 router.get("/filter", validate(filterSchema, "query"), starController.filterStars);
 
-
 /**
  * @swagger
  * /stars/search:
@@ -102,7 +101,6 @@ router.get("/search", starController.searchStars);
  *       404:
  *         description: Star not found
  */
-router.get("/:id", validate(idSchema, "params"), starController.getStarById);
-
+router.get("/:starid", validate(idSchema, "params"), starController.getStarById);
 
 module.exports = router;

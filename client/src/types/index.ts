@@ -17,7 +17,7 @@ export interface UserProfileData {
 
 // Star related types
 export interface Star {
-  id: string;
+  starid: string;
   name: string;
   constellation: string;
   description: string;

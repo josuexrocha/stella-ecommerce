@@ -20,7 +20,7 @@
   }
   /* Styles des boutons de filtre */
   .btn-filter {
-    @apply text-primary bg-text border border-primary px-3 py-1 font-serif transition-colors duration-300 ease-in-out flex items-center;
+    @apply text-primary text-sm bg-text border border-primary px-3 py-1 font-serif transition-colors duration-300 ease-in-out flex items-center;
   }
 
   .btn-filter:hover {
@@ -84,3 +84,10 @@
   filter: brightness(50%);
 }
 
+header span {
+  transition: opacity 0.3s ease-in-out;
+}
+
+header span.hidden {
+  opacity: 0;
+}

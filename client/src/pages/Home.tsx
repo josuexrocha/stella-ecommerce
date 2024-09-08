@@ -5,29 +5,35 @@ import StarCard from "../components/StarCard";
 import { useLatestStars } from "../hooks/useLatestStars";
 import { useFunFacts } from "../hooks/useFunFacts";
 import FadeInSection from "../components/FadeInSection";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Home: React.FC = () => {
   const { stars, loading, error } = useLatestStars(6);
   const currentFact = useFunFacts();
   const { currentPhrase, fade } = useHeroPhrases(7000);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   return (
     <div className="space-y-12">
       {" "}
       {/* Ajout d'un espace global entre les sections */}
       <HeroSection>
-        <div
-          className={`absolute inset-0 flex flex-col justify-center items-center text-center transition-opacity duration-700 ${
-            fade ? "opacity-100" : "opacity-0"
-          }`}
+        <h1 className="text-5xl md:text-6xl font-display mb-4 text-text h1-neon">Stella</h1>
+        <p
+          className={`text-lg md:text-2xl font-serif text-text transition-opacity duration-800 ease-in-out ${fade ? "opacity-100" : "opacity-0"}`}
         >
-          <h1 className="text-5xl md:text-6xl font-display mb-4 text-text h1-neon">Stella</h1>
-          <p className="text-lg md:text-2xl font-serif text-text">{currentPhrase}</p>
-          <a href="/catalog" className="btn mt-4">
-            Voir notre catalogue
-          </a>
-        </div>
+          {currentPhrase}
+        </p>
+        <a href="/catalog" className="btn mt-4">
+          Voir notre catalogue
+        </a>
       </HeroSection>
       {/* Section Nouveautés */}
       <FadeInSection>
@@ -42,7 +48,7 @@ const Home: React.FC = () => {
               {/* Ajustement du padding pour aligner le contenu */}
               <div className="flex overflow-y-auto pb-6 space-x-6 scrollbar-thumb-rounded scrollbar-thin scrollbar-thumb-gray-400">
                 {stars.slice(0, 10).map((star) => (
-                  <div key={star.id} className="min-w-[200px] flex justify-evenly">
+                  <div key={star.starid} className="min-w-[200px] flex justify-evenly">
                     <StarCard star={star} />
                   </div>
                 ))}
@@ -92,19 +98,21 @@ const Home: React.FC = () => {
           <h2 className="text-xl font-display my-6">Le saviez-vous ?</h2>
         </section>
       </FadeInSection>
-      <FadeInSection>
-        <section className="bg-primary my-12 text-text py-8 text-center">
-          <h2 className="text-3xl font-display mb-6">Rejoignez-nous</h2>
-          <p className="text-lg font-serif mx-auto max-w-2xl mb-6">
-            Rejoignez la communauté Stella pour être au courant des dernières nouveautés et
-            événements autour des étoiles. Inscrivez-vous à notre newsletter et faites partie de
-            notre univers.
-          </p>
-          <button type="button" className="btn">
-            <Link to="/auth">S'inscrire</Link>
-          </button>
-        </section>
-      </FadeInSection>
+      {!isAuthenticated && (
+        <FadeInSection>
+          <section className="bg-primary my-12 text-text py-8 text-center">
+            <h2 className="text-3xl font-display mb-6">Rejoignez-nous</h2>
+            <p className="text-lg font-serif mx-auto max-w-2xl mb-6">
+              Rejoignez la communauté Stella pour être au courant des dernières nouveautés et
+              événements autour des étoiles. Inscrivez-vous à notre newsletter et faites partie de
+              notre univers.
+            </p>
+            <button type="button" className="btn" onClick={() => { window.location.href = "/auth"; }}>
+              S'inscrire
+            </button>
+          </section>
+        </FadeInSection>
+      )}
     </div>
   );
 };
