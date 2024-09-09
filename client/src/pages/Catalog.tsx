@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import StarCard from "../components/StarCard";
 import { fetchStars } from "../services/api";
 import type { Star } from "../types";
-import { FaArrowUp, FaArrowDown, FaEquals } from "react-icons/fa";
+import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 
 const Catalogue: React.FC = () => {
   const [stars, setStars] = useState<Star[]>([]);
@@ -16,15 +16,18 @@ const Catalogue: React.FC = () => {
   const [massOrder, setMassOrder] = useState<"asc" | "desc" | null>(null);
 
   const [showConstellationFilter, setShowConstellationFilter] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
+  const [filterHeight, setFilterHeight] = useState<number>(0); // Ajout pour la hauteur dynamique
 
   // Obtenir les constellations uniques à partir des étoiles
-  const uniqueConstellations = Array.from(new Set(stars.map((star) => star.constellation)));
+  const uniqueConstellations: string[] = Array.from(
+    new Set(stars.map((star: Star) => star.constellation)),
+  );
 
   useEffect(() => {
     loadAllStars();
   }, []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     applyFiltersAndSorting();
   }, [
@@ -44,25 +47,17 @@ const Catalogue: React.FC = () => {
 
   const applyFiltersAndSorting = () => {
     let filtered = [...stars];
-
-    // Tri alphabétique
     if (isAlphabetical !== null) {
       filtered.sort((a, b) =>
         isAlphabetical ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name),
       );
     }
-
-    // Filtrage par constellations
     if (selectedConstellations.length > 0) {
       filtered = filtered.filter((star) => selectedConstellations.includes(star.constellation));
     }
-
-    // Tri par prix
     if (priceOrder !== null) {
       filtered.sort((a, b) => (priceOrder === "asc" ? a.price - b.price : b.price - a.price));
     }
-
-    // Tri par distance
     if (distanceOrder !== null) {
       filtered.sort((a, b) =>
         distanceOrder === "asc"
@@ -70,23 +65,17 @@ const Catalogue: React.FC = () => {
           : b.distanceFromEarth - a.distanceFromEarth,
       );
     }
-
-    // Tri par luminosité
     if (luminosityOrder !== null) {
       filtered.sort((a, b) =>
         luminosityOrder === "asc" ? a.luminosity - b.luminosity : b.luminosity - a.luminosity,
       );
     }
-
-    // Tri par masse
     if (massOrder !== null) {
       filtered.sort((a, b) => (massOrder === "asc" ? a.mass - b.mass : b.mass - a.mass));
     }
-
     setFilteredStars(filtered);
   };
 
-  // Gestion du basculement des filtres
   const toggleAlphabeticalOrder = () => {
     setIsAlphabetical((prev) => (prev === true ? false : prev === false ? null : true));
   };
@@ -115,6 +104,28 @@ const Catalogue: React.FC = () => {
     setShowConstellationFilter((prev) => !prev);
   };
 
+// Gestion de la barre sticky
+useEffect(() => {
+  const filterSection = document.querySelector("#filter-section") as HTMLElement | null;
+
+  const handleScroll = () => {
+    if (!filterSection) return; // Ajoute cette ligne pour gérer le cas où filterSection est null
+
+    const topPosition = filterSection.getBoundingClientRect().top || 0;
+    if (topPosition <= 0 && !isSticky) {
+      setIsSticky(true);
+      setFilterHeight(filterSection.offsetHeight); // Stocke la hauteur de la section sticky
+    } else if (window.scrollY < (filterSection.offsetTop || 0)) {
+      setIsSticky(false);
+    }
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, [isSticky]);
+
   return (
     <div className="container mx-auto pt-12 px-4">
       <section className="my-8">
@@ -126,7 +137,12 @@ const Catalogue: React.FC = () => {
         </div>
 
         {/* Filtres */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
+        <div
+          id="filter-section"
+          className={`flex flex-wrap justify-center gap-4 mb-8 transition-all duration-300 ${
+            isSticky ? "fixed top-12 left-0 w-full bg-background-inverse z-40 shadow-md py-2" : ""
+          }`}
+        >
           {/* Filtre par ordre alphabetique */}
           <button
             type="button"
@@ -135,6 +151,7 @@ const Catalogue: React.FC = () => {
           >
             {isAlphabetical === null ? "A-Z" : isAlphabetical ? "A-Z" : "Z-A"}
           </button>
+
           {/* Filtre par prix */}
           <button
             type="button"
@@ -148,6 +165,7 @@ const Catalogue: React.FC = () => {
               <FaArrowDown className="ml-2" />
             ) : null}
           </button>
+
           {/* Filtre par constellation */}
           <button
             type="button"
@@ -156,6 +174,7 @@ const Catalogue: React.FC = () => {
           >
             Constellations
           </button>
+
           {/* Filtre par Distance */}
           <button
             type="button"
@@ -169,6 +188,7 @@ const Catalogue: React.FC = () => {
               <FaArrowDown className="ml-2" />
             ) : null}
           </button>
+
           {/* Filtre par Luminosité */}
           <button
             type="button"
@@ -182,6 +202,7 @@ const Catalogue: React.FC = () => {
               <FaArrowDown className="ml-2" />
             ) : null}
           </button>
+
           {/* Filtre par Masse */}
           <button
             type="button"
@@ -197,10 +218,17 @@ const Catalogue: React.FC = () => {
           </button>
         </div>
 
-        {showConstellationFilter && (
-          <div className="bg-background-inverse border border-primary rounded-lg shadow-lg p-4 mb-4">
-            <h4 className="text-md font-serif mb-3 text-text">Sélectionnez les constellations :</h4>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                {/* Section pour les constellations */}
+                {showConstellationFilter && (
+          <div
+            id="constellation-filter"
+            className="bg-primary rounded-lg shadow-lg p-2 mb-4 transition-all duration-300"
+            style={{
+              marginTop: isSticky ? `${filterHeight}px` : "0", // Pousse le contenu en dessous de la section sticky
+            }}
+          >
+            <h4 className="text-md font-serif mb-2 text-text">Sélectionnez les constellations :</h4>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1">
               {uniqueConstellations.map((constellation) => (
                 <div key={constellation} className="flex items-center">
                   <input
@@ -222,8 +250,8 @@ const Catalogue: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredStars.length > 0 ? (
             filteredStars
-              .filter((star: Star) => star.starid) // Filtre les étoiles sans starid
-              .map((star: Star) => <StarCard key={star.starid} star={star} />) // Assure que chaque étoile a un starid
+              .filter((star: Star) => star.starid)
+              .map((star: Star) => <StarCard key={star.starid} star={star} />)
           ) : (
             <p className="text-center text-text">Aucune étoile trouvée selon ces critères...</p>
           )}

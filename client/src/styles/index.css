@@ -7,32 +7,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Définition des composants */
-@layer components {
-  /* Styles des boutons */
-  .btn {
-    @apply bg-special text-primary font-action tracking-wider py-2 px-4 transition-transform duration-500 ease-in-out;
-    @apply hover:bg-primary hover:text-text hover:transform hover:scale-105 hover:shadow-lg;
-  }
-
-  .btn:hover {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  /* Styles des boutons de filtre */
-  .btn-filter {
-    @apply text-primary text-sm bg-text border border-primary px-3 py-1 font-serif transition-colors duration-300 ease-in-out flex items-center;
-  }
-
-  .btn-filter:hover {
-    @apply bg-primary text-white border-primary;
-  }
-
-  .active-filter {
-    @apply bg-special text-secondary border-primary; /* Assurez-vous que cela corresponde à votre thème */
-  }
-}
-
-/* Styles de base */
+/* Base styles */
 @layer base {
   /* Styles du body */
   body {
@@ -49,45 +24,85 @@
   }
 }
 
-/* Animations */
-@keyframes softNeon {
-  0%, 100% {
-    text-shadow: 0 0 5px #fff, 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 0, 255, 0.2);
+/* Styles pour les composants */
+@layer components {
+  /* Bouton général */
+  .btn {
+    @apply bg-special text-primary font-action tracking-wider py-2 px-4;
+    @apply transition-transform duration-500 ease-in-out;
+    @apply hover:bg-primary hover:text-text hover:transform hover:scale-105 hover:shadow-lg;
   }
-  50% {
-    text-shadow: 0 0 5px #fff, 0 0 15px rgba(255, 0, 255, 0.5), 0 0 30px rgba(255, 0, 255, 0.3);
-  }
-}
 
-/* Classe pour l'effet néon */
-.h1-neon:hover {
-  animation: softNeon 2s ease-in-out infinite alternate;
-  color: #fff;
-}
+  /* Filtre des boutons */
+  .btn-filter {
+    @apply text-primary text-sm bg-text border border-primary px-3 py-1 font-serif;
+    @apply transition-colors duration-300 ease-in-out flex items-center;
+  }
 
-/* Animation de zoom et déplacement lent */
-@keyframes subtleZoom {
-  0% {
-    transform: scale(1) translateY(0);
+  /* Styles actifs pour les boutons de filtre */
+  .btn-filter:hover {
+    @apply bg-primary text-white border-primary;
   }
-  50% {
-    transform: scale(1.25) translateY(-10px);
-  }
-  100% {
-    transform: scale(1) translateY(0);
+
+  .active-filter {
+    @apply bg-special text-secondary border-primary;
   }
 }
 
-.hero-img-animate {
-  position: relative;
-  animation: subtleZoom 15s ease-in-out infinite;
-  filter: brightness(50%);
+/* Styles pour les animations */
+@layer utilities {
+  /* Effet néon doux pour le texte */
+  @keyframes softNeon {
+    0%, 100% {
+      text-shadow: 0 0 5px #fff, 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 0, 255, 0.2);
+    }
+    50% {
+      text-shadow: 0 0 5px #fff, 0 0 15px rgba(255, 0, 255, 0.5), 0 0 30px rgba(255, 0, 255, 0.3);
+    }
+  }
+
+  /* Appliquer l'animation de néon au survol du h1 */
+  .h1-neon:hover {
+    animation: softNeon 2s ease-in-out infinite alternate;
+    color: #fff;
+  }
+
+  /* Zoom subtil pour l'image d'arrière-plan du héros */
+  @keyframes subtleZoom {
+    0% {
+      transform: scale(1) translateY(0);
+    }
+    50% {
+      transform: scale(1.25) translateY(-10px);
+    }
+    100% {
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  /* Animation de l'image de la section héroïque */
+  .hero-img-animate {
+    @apply relative;
+    animation: subtleZoom 15s ease-in-out infinite;
+    filter: brightness(50%);
+  }
+
+  /* Transition pour l'apparition et la disparition des éléments dans le header */
+  header span {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  /* Classe pour cacher le texte */
+  header span.hidden {
+    opacity: 0;
+  }
 }
 
-header span {
-  transition: opacity 0.3s ease-in-out;
+/* Sticky filters styles */
+.sticky-filters {
+  @apply fixed top-0 left-0 w-full bg-background-inverse z-40 shadow-md py-2 transition-all duration-300;
 }
 
-header span.hidden {
-  opacity: 0;
+.compact-filter {
+  @apply h-10 text-xs px-2 py-1;
 }

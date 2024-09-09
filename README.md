@@ -70,11 +70,13 @@ Voici quelques fonctionnalités que je prévois d'ajouter :
 
 - [ ] Fonctionalité panier
 - [ ] Fonctionalité liste d'envies
+- [ ] Terminer le formulaire de contact
+- [ ] Améliorer le design
+- [ ] Améliorer le filtrage des etoiles
 - [ ] Intégration d'un système de paiement
 - [ ] Notifications par email pour les commandes
-- [ ] Améliorations de l'interface utilisateur
 - [ ] Système de recommandation de produits
-- [ ] Tests
+- [ ] Tests Jest et etc
 
 ## Licence
 
