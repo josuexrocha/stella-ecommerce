@@ -5,6 +5,7 @@ import { Route, BrowserRouter as Router, Routes, Navigate } from "react-router-d
 import ErrorBoundary from "./components/ErrorBoundary";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import ShoppingCart from "./components/Cart";
 
 // Lazy loading des pages
 const Home = React.lazy(() => import("./pages/Home"));
@@ -25,7 +26,7 @@ const App: React.FC = () => {
         <div className="flex flex-col min-h-screen">
           <Header />
           <main className="flex-grow">
-            <Suspense fallback={<div className="text-center text-white">Chargement...</div>}>
+            <Suspense fallback={<div className="text-center text-text">Chargement...</div>}>
               <Routes>
                 <Route path="/" element={<Home />} /> {/* Page d'accueil */}
                 <Route path="/auth" element={<AuthContainer />} /> {/* Connexion/Inscription */}
@@ -40,6 +41,7 @@ const App: React.FC = () => {
                 <Route path="/about" element={<About />} /> {/* À propos */}
                 <Route path="/contact" element={<Contact />} /> {/* Contact */}
                 <Route path="/faq" element={<FAQ />} /> {/* FAQ */}
+                <Route path="/cart" element={<ShoppingCart />} /> {/* Panier */}
                 <Route path="*" element={<Navigate to="/" />} />{" "}
                 {/* Redirection par défaut vers la page d'accueil */}
               </Routes>

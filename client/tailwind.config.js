@@ -15,7 +15,7 @@ module.exports = {
       fontFamily: {
         sans: ["Roboto", "sans-serif"],
         serif: ['"Roboto Slab"', "serif"],
-        display: ['"Playwrite FR Moderne"', "serif"],
+        display: ['"Dela Gothic One"', "serif"],
         action: ['"Bebas Neue"', "cursive"],
       },
       height: {

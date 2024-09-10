@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { FaHome, FaSearch, FaUser, FaShoppingCart, FaHeart } from "react-icons/fa";
-import { searchStars } from "../services/api";
+import { searchStars, getCart } from "../services/api";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import type { Star } from "../types";
+import type { Star, CartItem } from "../types";
 import { usePageTitleOnScroll } from "../hooks/usePageTitleOnScroll";
 
 const Header: React.FC = () => {
@@ -12,6 +12,7 @@ const Header: React.FC = () => {
   const { isTitleVisible, pageTitle } = usePageTitleOnScroll();
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const [currentTitle, setCurrentTitle] = useState("");
+  const [cartItemCount, setCartItemCount] = useState(0); // Nouvel état pour surveiller le nombre d'articles dans le panier
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -44,6 +45,22 @@ const Header: React.FC = () => {
     }
   }, [searchValue]);
 
+  // Récupérer les articles du panier et mettre à jour le compteur
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const response = await getCart();
+        setCartItemCount(response.data.cartItems.length); // Met à jour le nombre d'articles dans le panier
+      } catch (error) {
+        console.error("Erreur lors de la récupération du panier:", error);
+      }
+    };
+
+    if (isLoggedIn) {
+      fetchCart();
+    }
+  }, [isLoggedIn]); // Mettre à jour lorsqu'un utilisateur est connecté
+
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
     setSearchValue(""); // Réinitialiser la valeur de la recherche lorsque la barre est cachée
@@ -60,7 +77,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-background-inverse text-text fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 shadow-lg h-12 transition-all duration-300 ease-in-out">
+    <header className="bg-background-inverse text-text fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-20 shadow-lg h-12 transition-all duration-300 ease-in-out">
       <div className="flex items-center space-x-3">
         <Link to="/" className="text-lg text-text hover:text-white">
           <FaHome className="text-xl text-text" />
@@ -119,8 +136,13 @@ const Header: React.FC = () => {
 
         {isLoggedIn ? (
           <>
-            <Link to="/cart" className="text-lg text-text hover:text-white">
+            <Link to="/cart" className="relative text-lg text-text hover:text-white">
               <FaShoppingCart />
+              {cartItemCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                  {cartItemCount}
+                </span>
+              )}
             </Link>
             <Link to="/wishlist" className="text-lg text-text hover:text-white">
               <FaHeart />
@@ -131,27 +153,15 @@ const Header: React.FC = () => {
           </>
         ) : (
           <>
-            <button
-              type="button"
-              className="text-lg text-text hover:text-white"
-              onClick={() => navigate("/auth")}
-            >
+            <Link to="/auth" className="text-lg text-text hover:text-white">
               <FaShoppingCart />
-            </button>
-            <button
-              type="button"
-              className="text-lg text-text hover:text-white"
-              onClick={() => navigate("/auth")}
-            >
+            </Link>
+            <Link to="/auth" className="text-lg text-text hover:text-white">
               <FaHeart />
-            </button>
-            <button
-              type="button"
-              className="text-lg text-text hover:text-white"
-              onClick={() => navigate("/auth")}
-            >
+            </Link>
+            <Link to="/auth" className="text-lg text-text hover:text-white">
               <FaUser />
-            </button>
+            </Link>
           </>
         )}
       </div>

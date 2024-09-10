@@ -35,28 +35,6 @@ const Home: React.FC = () => {
           Voir notre catalogue
         </a>
       </HeroSection>
-      {/* Section Nouveautés */}
-      <FadeInSection>
-        <section className="mb-12 text-text py-8 text-center">
-          <h2 className="text-3xl font-display my-6">Nouveautés</h2>
-          {loading && <p className="text-center text-text">Chargement des étoiles...</p>}
-          {error && <p className="text-center text-red-600">{error}</p>}
-
-          {!loading && !error && (
-            <div className="relative px-8">
-              {" "}
-              {/* Ajustement du padding pour aligner le contenu */}
-              <div className="flex overflow-y-auto pb-6 space-x-6 scrollbar-thumb-rounded scrollbar-thin scrollbar-thumb-gray-400">
-                {stars.slice(0, 10).map((star) => (
-                  <div key={star.starid} className="min-w-[200px] flex justify-evenly">
-                    <StarCard star={star} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </section>
-      </FadeInSection>
       {/* Section Qui sommes-nous ? */}
       <FadeInSection>
         <section className="mx-auto text-text py-8 text-center">
@@ -87,6 +65,28 @@ const Home: React.FC = () => {
           </div>
         </section>
       </FadeInSection>
+      {/* Section Nouveautés */}
+      <FadeInSection>
+        <section className="mb-12 text-text py-8 text-center">
+          <h2 className="text-3xl font-display my-6">Nouveautés</h2>
+          {loading && <p className="text-center text-text">Chargement des étoiles...</p>}
+          {error && <p className="text-center text-red-600">{error}</p>}
+
+          {!loading && !error && (
+            <div className="relative px-8">
+              {" "}
+              {/* Ajustement du padding pour aligner le contenu */}
+              <div className="flex overflow-y-auto pb-6 space-x-6 scrollbar-thumb-rounded scrollbar-thin scrollbar-thumb-gray-400">
+                {stars.slice(0, 10).map((star) => (
+                  <div key={star.starid} className="min-w-[200px] flex justify-evenly">
+                    <StarCard star={star} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      </FadeInSection>
       {/* Section Le saviez-vous */}
       <FadeInSection>
         <section className="my-12 text-text py-8 text-center">
@@ -107,7 +107,13 @@ const Home: React.FC = () => {
               événements autour des étoiles. Inscrivez-vous à notre newsletter et faites partie de
               notre univers.
             </p>
-            <button type="button" className="btn" onClick={() => { window.location.href = "/auth"; }}>
+            <button
+              type="button"
+              className="btn"
+              onClick={() => {
+                window.location.href = "/auth";
+              }}
+            >
               S'inscrire
             </button>
           </section>
