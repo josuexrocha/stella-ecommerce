@@ -1,3 +1,5 @@
+// client/src/components/Header.tsx
+
 import { useState, useEffect } from "react";
 import { FaHome, FaSearch, FaUser, FaShoppingCart, FaHeart } from "react-icons/fa";
 import { searchStars, getCart } from "../services/api";
@@ -19,8 +21,20 @@ const Header: React.FC = () => {
   // Vérification et mise à jour de l'état d'authentification
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token); // Mettre à jour l'état de connexion
-  }, []);
+    setIsLoggedIn(!!token); // Vérifier à chaque chargement de la page
+
+    if (token) {
+      const fetchCartItemCount = async () => {
+        try {
+          const cart = await getCart();
+          setCartItemCount(cart.cartItems.length);
+        } catch (error) {
+          console.error("Erreur lors de la récupération du panier:", error);
+        }
+      };
+      fetchCartItemCount();
+    }
+  }, [location]);
 
   // Réinitialiser le titre quand la route change
   useEffect(() => {

@@ -1,3 +1,5 @@
+// client/src/components/StarCard.tsx
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { addToCart, getCart } from "../services/api";
@@ -15,16 +17,19 @@ const StarCard: React.FC<StarCardProps> = ({ star }) => {
 
   useEffect(() => {
     const checkCart = async () => {
-      try {
-        const cart: Cart = await getCart(); // `getCart` retourne un `Cart`
-        console.log("Réponse du panier:", cart);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        // Ne fais rien si l'utilisateur n'est pas connecté
+        return;
+      }
 
-        // Utilisation de l'optional chaining pour accéder à `cartItems`
+      try {
+        const cart: Cart = await getCart();
+        console.log("Réponse du panier:", cart);
         const isInCart = cart?.cartItems?.some((item: CartItem) => item.starId === star.starid);
         setInCart(!!isInCart);
       } catch (error) {
         console.error("Erreur lors de la vérification du panier:", error);
-        setError("Une erreur est survenue lors de la vérification du panier.");
       }
     };
 

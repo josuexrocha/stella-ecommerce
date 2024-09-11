@@ -1,3 +1,5 @@
+// client/src/pages/Home.tsx
+
 import type React from "react";
 import HeroSection from "../components/HeroSection";
 import { useHeroPhrases } from "../hooks/useHeroPhrases";

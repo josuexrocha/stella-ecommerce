@@ -1,3 +1,5 @@
+// client/src/pages/ProductDetail.tsx
+
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useStarDetail } from "../hooks/useStarDetail";
@@ -15,27 +17,37 @@ const ProductDetail: React.FC = () => {
   const [cartError, setCartError] = useState<string | null>(null);
   const [inCart, setInCart] = useState(false);
 
-  // Vérification si l'étoile est déjà dans le panier
-  useEffect(() => {
-    const checkIfInCart = async () => {
-      try {
-        const cart = await getCart(); // `getCart` retourne un `Cart`
-        const isInCart = cart.cartItems.some((item: CartItem) => item.starId === starid);
-        setInCart(isInCart);
-      } catch (error) {
-        console.error("Erreur lors de la récupération du panier:", error);
-      }
-    };
+  // Fonction de vérification si l'étoile est déjà dans le panier
+  const checkIfInCart = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setInCart(false); // Si pas connecté, on ne peut pas être dans le panier
+      return;
+    }
 
-    checkIfInCart();
+    try {
+      const cart = await getCart();
+      const isInCart = cart?.cartItems?.some((item: CartItem) => item.starId === starid);
+      setInCart(!!isInCart); // Mettre à jour `inCart` en fonction de la présence de l'étoile
+    } catch (error) {
+      console.error("Erreur lors de la récupération du panier:", error);
+    }
+  };
+
+  // Vérification lors du montage et changement de produit
+  useEffect(() => {
+    setInCart(false); // Réinitialiser l'état lors du montage ou changement de produit
+    checkIfInCart(); // Vérifier si l'étoile est dans le panier
   }, [starid]);
 
   const handleAddToCart = async () => {
     try {
       setCartLoading(true);
       await addToCart(starid || "", 1);
-      setInCart(true); // Marquer l'article comme ajouté
-      alert("Étoile ajoutée au panier !");
+      setInCart(true); // Marquer l'étoile comme ajoutée
+
+      // Après l'ajout, revérifier si l'étoile est dans le panier
+      checkIfInCart();
     } catch (err) {
       setCartError(`Erreur lors de l'ajout au panier: ${(err as Error).message}`);
       console.error(err);

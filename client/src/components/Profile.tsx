@@ -1,3 +1,5 @@
+// client/src/components/Profile.tsx
+
 import { useState, useEffect } from "react";
 import {
   getUserProfile,

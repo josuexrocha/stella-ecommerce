@@ -1,3 +1,5 @@
+// client/src/pages/Catalog.tsx
+
 import { useState, useEffect } from "react";
 import StarCard from "../components/StarCard";
 import { fetchStars } from "../services/api";

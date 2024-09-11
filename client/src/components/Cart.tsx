@@ -1,3 +1,5 @@
+// client/src/components/Cart.tsx
+
 import { useState, useEffect } from "react";
 import { getCart } from "../services/api";
 import type { CartItem } from "../types";
