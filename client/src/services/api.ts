@@ -24,16 +24,21 @@ const api: AxiosInstance = axios.create({
 });
 
 // Intercepteur pour ajouter le token d'authentification dans chaque requête
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    console.log("Token dans l'intercepteur:", token); // Vérification du token
 
-  // Si un token existe, on l'ajoute aux en-têtes
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
 
-  return config;
-});
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 
 // Fonction pour récupérer toutes les étoiles
 export const fetchStars = async (): Promise<ApiResponse<Star[]>> => {
@@ -112,9 +117,18 @@ export const deleteUserAccount = async (): Promise<ApiResponse<null>> => {
 };
 
 // Cart
-export const getCart = async (): Promise<ApiResponse<Cart>> => {
-  const response = await api.get<ApiResponse<Cart>>("/cart");
-  return response.data;
+export const getCart = async (): Promise<Cart> => {
+  try {
+    const response = await api.get("/cart");
+    console.log("Réponse de l'API pour le panier:", response.data); // Vérifie ce qui est retourné
+
+    // Effectue un casting explicite vers le type Cart
+    const cart: Cart = response.data as Cart;
+    return cart; // Retourne l'objet Cart
+  } catch (error) {
+    console.error("Erreur lors de la récupération du panier:", error);
+    throw error;
+  }
 };
 
 export const addToCart = async (starId: string, quantity: number): Promise<ApiResponse<Cart>> => {

@@ -17,18 +17,17 @@ const ProductDetail: React.FC = () => {
 
   // Vérification si l'étoile est déjà dans le panier
   useEffect(() => {
-    const checkCart = async () => {
+    const checkIfInCart = async () => {
       try {
-        const response = await getCart();
-        const isInCart = response.data.cartItems.some(
-          (item: CartItem) => item.starId === starid
-        );
+        const cart = await getCart(); // `getCart` retourne un `Cart`
+        const isInCart = cart.cartItems.some((item: CartItem) => item.starId === starid);
         setInCart(isInCart);
       } catch (error) {
-        console.error("Erreur lors de la vérification du panier:", error);
+        console.error("Erreur lors de la récupération du panier:", error);
       }
     };
-    checkCart();
+
+    checkIfInCart();
   }, [starid]);
 
   const handleAddToCart = async () => {

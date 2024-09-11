@@ -60,17 +60,21 @@ export interface Order {
 }
 
 // Cart related types
-export interface CartItem {
-  id: string;
-  starId: string;
-  quantity: number;
-  star: Star;
-}
-
 export interface Cart {
   id: string;
   userId: string;
   cartItems: CartItem[];
+  createdAt: string;
+  updatedAt: string;
+}
+export interface CartItem {
+  id: string;
+  starId: string;
+  quantity: number;
+  Star: Star;
+  createdAt: string;
+  updatedAt: string;
+  cartId: number;
 }
 
 // Review related types
@@ -97,5 +101,5 @@ export interface WishlistItem {
 export interface ApiResponse<T> {
   message: string;
   data: T;
-  status: string;
+  status: number;
 }

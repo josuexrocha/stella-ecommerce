@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { addToCart, getCart } from "../services/api";
-import type { Star, CartItem } from "../types";
+import type { Star, CartItem, Cart, ApiResponse } from "../types";
 import FadeInSection from "./FadeInSection";
 
 interface StarCardProps {
@@ -10,21 +10,24 @@ interface StarCardProps {
 
 const StarCard: React.FC<StarCardProps> = ({ star }) => {
   const [loading, setLoading] = useState(false);
-  const [error] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [inCart, setInCart] = useState(false);
 
   useEffect(() => {
     const checkCart = async () => {
       try {
-        const response = await getCart();
-        const isInCart = response.data.cartItems.some(
-          (item: CartItem) => item.starId === star.starid,
-        );
-        setInCart(isInCart);
+        const cart: Cart = await getCart(); // `getCart` retourne un `Cart`
+        console.log("Réponse du panier:", cart);
+
+        // Utilisation de l'optional chaining pour accéder à `cartItems`
+        const isInCart = cart?.cartItems?.some((item: CartItem) => item.starId === star.starid);
+        setInCart(!!isInCart);
       } catch (error) {
         console.error("Erreur lors de la vérification du panier:", error);
+        setError("Une erreur est survenue lors de la vérification du panier.");
       }
     };
+
     checkCart();
   }, [star.starid]);
 
@@ -35,6 +38,7 @@ const StarCard: React.FC<StarCardProps> = ({ star }) => {
       setInCart(true);
     } catch (error) {
       console.error("Erreur lors de l'ajout au panier.", error);
+      setError("Une erreur est survenue lors de l'ajout au panier.");
     } finally {
       setLoading(false);
     }

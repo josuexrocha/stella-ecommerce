@@ -47,19 +47,17 @@ const Header: React.FC = () => {
 
   // Récupérer les articles du panier et mettre à jour le compteur
   useEffect(() => {
-    const fetchCart = async () => {
+    const fetchCartItemCount = async () => {
       try {
-        const response = await getCart();
-        setCartItemCount(response.data.cartItems.length); // Met à jour le nombre d'articles dans le panier
+        const cart = await getCart(); // `getCart` retourne un `Cart`
+        setCartItemCount(cart.cartItems.length); // Accès direct à `cartItems`
       } catch (error) {
         console.error("Erreur lors de la récupération du panier:", error);
       }
     };
 
-    if (isLoggedIn) {
-      fetchCart();
-    }
-  }, [isLoggedIn]); // Mettre à jour lorsqu'un utilisateur est connecté
+    fetchCartItemCount();
+  }, []);
 
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
