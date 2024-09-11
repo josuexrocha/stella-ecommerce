@@ -1,29 +1,24 @@
-// client/src/components/Header.tsx
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { FaHome, FaSearch, FaUser, FaShoppingCart, FaHeart } from "react-icons/fa";
 import { searchStars, getCart } from "../services/api";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import type { Star, CartItem } from "../types";
 import { usePageTitleOnScroll } from "../hooks/usePageTitleOnScroll";
+import { useAuth } from "../context/AuthContext"; // Import du contexte Auth
 
 const Header: React.FC = () => {
+  const { isAuthenticated } = useAuth(); // Utilisation du contexte pour vérifier l'authentification
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [suggestions, setSuggestions] = useState<Star[]>([]);
-  const { isTitleVisible, pageTitle } = usePageTitleOnScroll();
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
-  const [currentTitle, setCurrentTitle] = useState("");
-  const [cartItemCount, setCartItemCount] = useState(0); // Nouvel état pour surveiller le nombre d'articles dans le panier
+  const { isTitleVisible, pageTitle } = usePageTitleOnScroll(); // Utilisation du hook pour le titre de la page
+  const [cartItemCount, setCartItemCount] = useState(0); // Compteur d'articles du panier
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Vérification et mise à jour de l'état d'authentification
+  // Charger les articles du panier lorsque l'utilisateur est connecté
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token); // Vérifier à chaque chargement de la page
-
-    if (token) {
+    if (isAuthenticated) {
       const fetchCartItemCount = async () => {
         try {
           const cart = await getCart();
@@ -34,23 +29,9 @@ const Header: React.FC = () => {
       };
       fetchCartItemCount();
     }
-  }, [location]);
+  }, [isAuthenticated, location]);
 
-  // Réinitialiser le titre quand la route change
-  useEffect(() => {
-    setCurrentTitle(""); // Réinitialise le titre lors du changement de page
-  }, [location]);
-
-  // Mise à jour du titre selon le scroll
-  useEffect(() => {
-    if (!isTitleVisible) {
-      setCurrentTitle(pageTitle); // Afficher le titre dans le header lorsque l'utilisateur a scrollé
-    } else {
-      setCurrentTitle(""); // Cacher le titre lorsque l'utilisateur n'a pas scrollé
-    }
-  }, [isTitleVisible, pageTitle]);
-
-  // Mise à jour des suggestions en temps réel lors de la frappe dans le champ de recherche
+  // Mise à jour des suggestions lors de la frappe dans la barre de recherche
   useEffect(() => {
     if (searchValue) {
       searchStars(searchValue).then((results) => setSuggestions(results));
@@ -59,23 +40,9 @@ const Header: React.FC = () => {
     }
   }, [searchValue]);
 
-  // Récupérer les articles du panier et mettre à jour le compteur
-  useEffect(() => {
-    const fetchCartItemCount = async () => {
-      try {
-        const cart = await getCart(); // `getCart` retourne un `Cart`
-        setCartItemCount(cart.cartItems.length); // Accès direct à `cartItems`
-      } catch (error) {
-        console.error("Erreur lors de la récupération du panier:", error);
-      }
-    };
-
-    fetchCartItemCount();
-  }, []);
-
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
-    setSearchValue(""); // Réinitialiser la valeur de la recherche lorsque la barre est cachée
+    setSearchValue(""); // Réinitialiser la recherche lorsque la barre est cachée
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,9 +64,10 @@ const Header: React.FC = () => {
       </div>
 
       <div className="flex items-center space-x-3 relative">
-        {currentTitle && <span className="text-lg font-serif">{currentTitle}</span>}
+        {/* Affiche le titre de la page seulement quand il n'est plus visible */}
+        {!isTitleVisible && <span className="text-lg font-serif">{pageTitle}</span>}
 
-        {/* Barre de recherche avec transition */}
+        {/* Barre de recherche */}
         {isSearchVisible && (
           <div className="relative transition-opacity duration-300 ease-in-out">
             <input
@@ -109,9 +77,11 @@ const Header: React.FC = () => {
               value={searchValue}
               onChange={handleSearchChange}
               onBlur={() => setIsSearchVisible(false)}
+              aria-label="Rechercher une étoile"
+              aria-expanded={isSearchVisible}
             />
 
-            {/* Conteneur pour suggestions, positionné sous la barre de recherche */}
+            {/* Suggestions de recherche */}
             {suggestions.length > 0 && (
               <div className="absolute w-full mt-1 z-20">
                 <ul className="bg-secondary text-text rounded-lg shadow-lg border border-primary max-h-60 overflow-y-auto">
@@ -135,18 +105,20 @@ const Header: React.FC = () => {
           </div>
         )}
 
-        {/* Bouton pour afficher ou masquer la recherche */}
+        {/* Bouton pour afficher/masquer la recherche */}
         {!isSearchVisible && (
           <button
             type="button"
             onClick={toggleSearch}
+            aria-expanded={isSearchVisible}
             className="text-text hover:text-white focus:outline-none"
           >
             <FaSearch className="text-xl" />
           </button>
         )}
 
-        {isLoggedIn ? (
+        {/* Icônes selon l'état d'authentification */}
+        {isAuthenticated ? (
           <>
             <Link to="/cart" className="relative text-lg text-text hover:text-white">
               <FaShoppingCart />
@@ -181,4 +153,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default memo(Header);

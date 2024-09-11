@@ -1,29 +1,31 @@
-import { useState, useEffect } from "react";
-import { getWishlist } from "../services/api"; // Fetch wishlist items from API
-import type { WishlistItem } from "../types";
+// client/src/components/Wishlist.tsx
+import { useEffect, memo } from 'react';
+import { useWishlistStore } from '../stores/useWishlistStore'; // Importation du store Zustand
 
 const Wishlist: React.FC = () => {
-  const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
+  const { wishlistItems, loading, error, fetchWishlist } = useWishlistStore();
 
+  // Charger les articles de la liste d'envies au montage du composant
   useEffect(() => {
-    const getWishlistItems = async () => {
-      try {
-        const response = await getWishlist(); // API call to fetch wishlist items
-        setWishlistItems(response.data);
-      } catch (error) {
-        console.error("Error fetching wishlist items:", error);
-      }
-    };
+    fetchWishlist(); // Charge les articles de la wishlist depuis Zustand
+  }, [fetchWishlist]);
 
-    getWishlistItems();
-  }, []);
+  if (loading) {
+    return <p>Chargement de la liste d'envies...</p>;
+  }
 
-  if (wishlistItems.length === 0) return <p>Votre liste d'envies est vide.</p>;
+  if (error) {
+    return <p className="text-red-600">{error}</p>;
+  }
+
+  if (wishlistItems.length === 0) {
+    return <p>Votre liste d'envies est vide.</p>;
+  }
 
   return (
     <div>
       <ul>
-        {wishlistItems.map(item => (
+        {wishlistItems.map((item) => (
           <li key={item.id} className="border p-4 mb-2">
             {item.star.name} - {item.star.price}€
           </li>
@@ -33,4 +35,4 @@ const Wishlist: React.FC = () => {
   );
 };
 
-export default Wishlist;
+export default memo(Wishlist);

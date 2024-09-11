@@ -7,7 +7,7 @@ import StarCard from "../components/StarCard";
 import { useLatestStars } from "../hooks/useLatestStars";
 import { useFunFacts } from "../hooks/useFunFacts";
 import FadeInSection from "../components/FadeInSection";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 
 const Home: React.FC = () => {
   const { stars, loading, error } = useLatestStars(6);
@@ -26,6 +26,7 @@ const Home: React.FC = () => {
     <div className="space-y-12">
       {" "}
       {/* Ajout d'un espace global entre les sections */}
+      <FadeInSection>
       <HeroSection>
         <h1 className="text-5xl md:text-6xl font-display mb-4 text-text h1-neon">Stella</h1>
         <p
@@ -37,6 +38,8 @@ const Home: React.FC = () => {
           Voir notre catalogue
         </a>
       </HeroSection>
+      </FadeInSection>
+
       {/* Section Qui sommes-nous ? */}
       <FadeInSection>
         <section className="mx-auto text-text py-8 text-center">
@@ -125,4 +128,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default memo(Home);

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import FadeInSection from "../components/FadeInSection";
 
 const faqItems = [
   {
@@ -43,24 +44,28 @@ const FAQ: React.FC = () => {
   return (
     <div className="container mx-auto pt-20 px-4">
       <h1 className="text-4xl font-display mb-6 text-center">Foire aux questions</h1>
-      <div className="space-y-4">
-        {faqItems.map((item, index) => (
-          <div key={item.key} className="border-b border-secondary">
-            <button
-              type="button"
-              onClick={() => handleToggle(index)}
-              className="w-full text-left py-4 px-2 font-serif text-lg text-text focus:outline-none"
-            >
-              {item.title}
-            </button>
-            {activeIndex === index && (
-              <div className="px-4 pb-4 text-text">
-                <p>{item.content}</p>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      <FadeInSection>
+        <div className="space-y-4">
+          {faqItems.map((item, index) => (
+            <div key={item.key} className="border-b border-secondary">
+              <button
+                type="button"
+                onClick={() => handleToggle(index)}
+                className="w-full text-left py-4 px-2 font-serif text-lg text-text focus:outline-none"
+                aria-expanded={activeIndex === index}
+                aria-controls={`faq-content-${index}`}
+              >
+                {item.title}
+              </button>
+              {activeIndex === index && (
+                <div className="px-4 pb-4 text-text">
+                  <p>{item.content}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </FadeInSection>
     </div>
   );
 };

@@ -1,27 +1,15 @@
 // client/src/components/Cart.tsx
-
-import { useState, useEffect } from "react";
-import { getCart } from "../services/api";
-import type { CartItem } from "../types";
+import { useEffect, memo } from "react"; // Ajoute useEffect
+import { useCartStore } from "../stores/useCartStore";
+import FadeInSection from "./FadeInSection";
 
 const ShoppingCart: React.FC = () => {
-  // Renommer ici
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [loading, _setLoading] = useState(true);
-  const [error] = useState<string | null>(null);
+  const { cartItems, loading, error, fetchCart } = useCartStore();
 
+  // Charger les articles du panier à l'ouverture du composant
   useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        const cart = await getCart(); // `getCart` retourne un `Cart`
-        setCartItems(cart.cartItems); // Accès direct à `cartItems`
-      } catch (error) {
-        console.error("Erreur lors de la récupération du panier.", error);
-      }
-    };
-
-    fetchCartItems();
-  }, []);
+    fetchCart(); // Charge les articles du panier depuis Zustand
+  }, [fetchCart]);
 
   if (loading) {
     return <p>Chargement du panier...</p>;
@@ -36,21 +24,24 @@ const ShoppingCart: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div role="listitem" className="container mx-auto pt-20 px-4 py-8">
       <h1 className="text-3xl font-bold mb-4">Votre Panier</h1>
-      <ul>
-        {cartItems.map((item) => (
-          <li key={item.id} className="border p-4 mb-2">
-            {item.Star.name} - {item.quantity} x {item.Star.price} €
-          </li>
-        ))}
-      </ul>
-      <p className="text-xl font-bold mt-6">
-        Total:{" "}
-        {cartItems.reduce((total, item) => total + item.quantity * item.Star.price, 0).toFixed(2)} €
-      </p>
+      <FadeInSection>
+        <ul>
+          {cartItems.map((item) => (
+            <li key={item.id} className="border p-4 mb-2">
+              {item.Star.name} - {item.quantity} x {item.Star.price} €
+            </li>
+          ))}
+        </ul>
+        <p className="text-xl font-bold mt-6">
+          Total:{" "}
+          {cartItems.reduce((total, item) => total + item.quantity * item.Star.price, 0).toFixed(2)}{" "}
+          €
+        </p>
+      </FadeInSection>
     </div>
   );
 };
 
-export default ShoppingCart;
+export default memo(ShoppingCart);

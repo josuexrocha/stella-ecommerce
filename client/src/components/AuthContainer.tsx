@@ -1,35 +1,17 @@
 // client/src/components/AuthContainer.tsx
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"; // Import du contexte
 import Login from "./Login";
 import Register from "./Register";
-import { getCart } from "../services/api";
 
 const AuthContainer: React.FC = () => {
+  const { isAuthenticated } = useAuth(); // Utilisation du contexte
   const [isLogin, setIsLogin] = useState(true);
-  const [_isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
-  const [_cartItemCount, setCartItemCount] = useState(0); // Nouvel état pour surveiller le nombre d'articles dans le panier
 
-  const toggleAuthMode = () => {
-    setIsLogin(!isLogin);
-  };
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token); // Vérifier à chaque chargement de la page
-
-    if (token) {
-      const fetchCartItemCount = async () => {
-        try {
-          const cart = await getCart();
-          setCartItemCount(cart.cartItems.length);
-        } catch (error) {
-          console.error("Erreur lors de la récupération du panier:", error);
-        }
-      };
-      fetchCartItemCount();
-    }
-  }, [location]); // Ajout de la location pour réagir au changement de page
+  if (isAuthenticated) {
+    return <Navigate to="/profile" />; // Redirection si connecté
+  }
 
   return (
     <div className="container mx-auto pt-20 px-4 max-w-md">
@@ -37,14 +19,9 @@ const AuthContainer: React.FC = () => {
         {isLogin ? "Connexion" : "Inscription"}
       </h1>
       {isLogin ? <Login /> : <Register />}
-      <div className="mt-6 text-center">
-        <p className="text-sm font-serif text-text">
-          {isLogin ? "Pas encore de compte ?" : "Vous avez déjà un compte ?"}
-          <button type="button" onClick={toggleAuthMode} className="btn ml-4">
-            {isLogin ? "S'inscrire" : "Se connecter"}
-          </button>
-        </p>
-      </div>
+      <button type="button" onClick={() => setIsLogin(!isLogin)} className="btn mt-6">
+        {isLogin ? "S'inscrire" : "Se connecter"}
+      </button>
     </div>
   );
 };
