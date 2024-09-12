@@ -11,6 +11,7 @@ const Header: React.FC = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [suggestions, setSuggestions] = useState<Star[]>([]);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const { isTitleVisible, pageTitle } = usePageTitleOnScroll(); // Utilisation du hook pour le titre de la page
   const [cartItemCount, setCartItemCount] = useState(0); // Compteur d'articles du panier
   const navigate = useNavigate();
@@ -40,19 +41,30 @@ const Header: React.FC = () => {
     }
   }, [searchValue]);
 
+  const handleSearchFocus = () => {
+    setIsSearchFocused(true);
+  };
+
+  const handleSearchBlur = () => {
+    setTimeout(() => {
+      setIsSearchFocused(false);
+    }, 100); // Petit délai pour permettre le clic sur la suggestion avant de cacher
+  };
+
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
     setSearchValue(""); // Réinitialiser la recherche lorsque la barre est cachée
+    setSuggestions([]); // Réinitialiser les suggestions aussi
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
 
-  const handleSelectSuggestion = (id: string) => {
+  const handleSelectSuggestion = (starid: string) => {
     setSearchValue("");
     setSuggestions([]);
-    navigate(`/star/${id}`);
+    navigate(`/star/${starid}`);
   };
 
   return (
@@ -76,13 +88,14 @@ const Header: React.FC = () => {
               placeholder="Rechercher"
               value={searchValue}
               onChange={handleSearchChange}
-              onBlur={() => setIsSearchVisible(false)}
+              onFocus={handleSearchFocus}
+              onBlur={handleSearchBlur} // Utilisation du onBlur avec timeout
               aria-label="Rechercher une étoile"
               aria-expanded={isSearchVisible}
             />
 
             {/* Suggestions de recherche */}
-            {suggestions.length > 0 && (
+            {isSearchFocused && suggestions.length > 0 && (
               <div className="absolute w-full mt-1 z-20">
                 <ul className="bg-secondary text-text rounded-lg shadow-lg border border-primary max-h-60 overflow-y-auto">
                   {suggestions.map((star) => (

@@ -9,8 +9,8 @@ module.exports = {
         special: "#FFB347",
       },
       backgroundImage: {
-        'background-default': 'linear-gradient(90deg, #3D2A54 0%, #1E1326 100%)',
-        'background-inverse': 'linear-gradient(90deg, #1E1326 0%, #3D2A54 100%)',
+        "background-default": "linear-gradient(90deg, #3D2A54 0%, #1E1326 100%)",
+        "background-inverse": "linear-gradient(90deg, #1E1326 0%, #3D2A54 100%)",
       },
       fontFamily: {
         sans: ["Roboto", "sans-serif"],
@@ -19,8 +19,8 @@ module.exports = {
         action: ['"Bebas Neue"', "cursive"],
       },
       height: {
-        header: '60px',
-        footer: '60px',
+        header: "60px",
+        footer: "60px",
       },
     },
   },

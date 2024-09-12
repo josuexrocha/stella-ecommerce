@@ -1,16 +1,16 @@
 // client/src/components/AuthContainer.tsx
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // Import du contexte
+import { useAuth } from "../context/AuthContext";
 import Login from "./Login";
 import Register from "./Register";
 
 const AuthContainer: React.FC = () => {
-  const { isAuthenticated } = useAuth(); // Utilisation du contexte
+  const { isAuthenticated } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
 
   if (isAuthenticated) {
-    return <Navigate to="/profile" />; // Redirection si connecté
+    return <Navigate to="/profile" />;
   }
 
   return (

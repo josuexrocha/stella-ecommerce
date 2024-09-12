@@ -1,45 +1,40 @@
 // client/src/pages/Home.tsx
 
-import type React from "react";
+import { useEffect, memo } from "react";
 import HeroSection from "../components/HeroSection";
 import { useHeroPhrases } from "../hooks/useHeroPhrases";
 import StarCard from "../components/StarCard";
 import { useLatestStars } from "../hooks/useLatestStars";
 import { useFunFacts } from "../hooks/useFunFacts";
 import FadeInSection from "../components/FadeInSection";
-import { useEffect, useState, memo } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const Home: React.FC = () => {
   const { stars, loading, error } = useLatestStars(6);
   const currentFact = useFunFacts();
   const { currentPhrase, fade } = useHeroPhrases(7000);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className="space-y-12">
       {" "}
       {/* Ajout d'un espace global entre les sections */}
       <FadeInSection>
-      <HeroSection>
-        <h1 className="text-5xl md:text-6xl font-display mb-4 text-text h1-neon">Stella</h1>
-        <p
-          className={`text-lg md:text-2xl font-serif text-text transition-opacity duration-800 ease-in-out ${fade ? "opacity-100" : "opacity-0"}`}
-        >
-          {currentPhrase}
-        </p>
-        <a href="/catalog" className="btn mt-4">
-          Voir notre catalogue
-        </a>
-      </HeroSection>
+        <HeroSection>
+          <h1 className="text-5xl md:text-6xl font-display mb-4 text-text h1-neon">Stella</h1>
+          <p
+            className={`text-lg md:text-2xl font-serif text-text transition-opacity duration-800 ease-in-out ${
+              fade ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            {currentPhrase}
+          </p>
+          <a href="/catalog" className="btn mt-4">
+            Voir notre catalogue
+          </a>
+        </HeroSection>
       </FadeInSection>
-
       {/* Section Qui sommes-nous ? */}
       <FadeInSection>
         <section className="mx-auto text-text py-8 text-center">
@@ -103,6 +98,7 @@ const Home: React.FC = () => {
           <h2 className="text-xl font-display my-6">Le saviez-vous ?</h2>
         </section>
       </FadeInSection>
+      {/* Afficher la section "Rejoignez-nous" seulement si l'utilisateur n'est pas connecté */}
       {!isAuthenticated && (
         <FadeInSection>
           <section className="bg-primary my-12 text-text py-8 text-center">

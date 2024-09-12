@@ -1,6 +1,6 @@
 // client/src/components/Wishlist.tsx
-import { useEffect, memo } from 'react';
-import { useWishlistStore } from '../stores/useWishlistStore'; // Importation du store Zustand
+import { useEffect, memo } from "react";
+import { useWishlistStore } from "../stores/useWishlistStore"; // Importation du store Zustand
 
 const Wishlist: React.FC = () => {
   const { wishlistItems, loading, error, fetchWishlist } = useWishlistStore();

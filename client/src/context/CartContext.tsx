@@ -1,8 +1,9 @@
 // client/src/context/CartContext.tsx
 
-import { createContext, useState, useEffect, useContext } from 'react';
-import { getCart, addToCart, removeFromCart } from '../services/api';
-import type { CartItem } from '../types';
+import { createContext, useState, useEffect, useContext } from "react";
+import { getCart, addToCart, removeFromCart } from "../services/api";
+import { useAuth } from "./AuthContext"; // Utilise ton AuthContext ici
+import type { CartItem } from "../types";
 
 interface CartContextType {
   cartItems: CartItem[];
@@ -15,24 +16,32 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const { isAuthenticated } = useAuth(); // Récupère l'état d'authentification
 
   useEffect(() => {
     const fetchCartItems = async () => {
+      if (!isAuthenticated) {
+        return;
+      }
+
       try {
         const cart = await getCart();
         setCartItems(cart.cartItems);
       } catch (error) {
-        console.error('Erreur lors de la récupération du panier:', error);
+        console.error("Erreur lors de la récupération du panier:", error);
       }
     };
 
     fetchCartItems();
-  }, []);
+  }, [isAuthenticated]);
 
   const addItemToCart = async (starId: string, quantity: number) => {
+    if (!isAuthenticated) {
+      return;
+    }
+
     try {
       await addToCart(starId, quantity);
-      // Mettre à jour le panier après l'ajout
       const cart = await getCart();
       setCartItems(cart.cartItems);
     } catch (error) {
@@ -41,9 +50,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const removeItemFromCart = async (cartItemId: string) => {
+    if (!isAuthenticated) {
+      return;
+    }
+
     try {
       await removeFromCart(cartItemId);
-      // Mettre à jour le panier après la suppression
       const cart = await getCart();
       setCartItems(cart.cartItems);
     } catch (error) {

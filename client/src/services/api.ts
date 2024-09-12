@@ -27,7 +27,6 @@ const api: AxiosInstance = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
-    console.log("Token dans l'intercepteur:", token); // Vérification du token
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -92,7 +91,6 @@ export const registerUser = async (userData: {
 };
 
 // Fonction pour connecter un utilisateur
-
 export const loginUser = async (loginData: { email: string; password: string }) => {
   return api.post<{ token: string }>("/users/login", loginData);
 };
@@ -120,7 +118,6 @@ export const deleteUserAccount = async (): Promise<ApiResponse<null>> => {
 export const getCart = async (): Promise<Cart> => {
   try {
     const response = await api.get("/cart");
-    console.log("Réponse de l'API pour le panier:", response.data); // Vérifie ce qui est retourné
 
     // Effectue un casting explicite vers le type Cart
     const cart: Cart = response.data as Cart;

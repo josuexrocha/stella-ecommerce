@@ -1,8 +1,10 @@
+// client/src/components/StarCard.tsx
 import { memo } from "react";
 import { Link } from "react-router-dom";
 import type { Star } from "../types";
 import FadeInSection from "./FadeInSection";
 import AddToCartButton from "../components/AddToCartButton";
+import AddToWishlistButton from "../components/AddToWishlistButton"; // Import du bouton wishlist
 
 interface StarCardProps {
   star: Star;
@@ -18,7 +20,9 @@ const StarCard: React.FC<StarCardProps> = ({
   return (
     <FadeInSection>
       <div
-        className={`bg-secondary text-text rounded-lg shadow-lg flex ${isDetailedView ? "md:flex-row" : "flex-col"} h-full`}
+        className={`bg-secondary text-text rounded-lg shadow-lg flex ${
+          isDetailedView ? "md:flex-row" : "flex-col"
+        } h-full`}
       >
         <img
           src={`/assets/images/stars/${star.name.toLowerCase().replace(/\s+/g, "")}.jpg`}
@@ -58,7 +62,9 @@ const StarCard: React.FC<StarCardProps> = ({
             {isDetailedView ? "Retour au catalogue" : "Découvrir"}
           </Link>
 
+          {/* Boutons d'ajout au panier et à la wishlist */}
           {showAddToCartButton && <AddToCartButton starId={star.starid} />}
+          <AddToWishlistButton starId={star.starid} />
         </div>
       </div>
     </FadeInSection>
