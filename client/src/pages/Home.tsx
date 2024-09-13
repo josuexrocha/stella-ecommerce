@@ -9,6 +9,7 @@ import { useFunFacts } from "../hooks/useFunFacts";
 import FadeInSection from "../components/FadeInSection";
 import { useAuth } from "../context/AuthContext";
 
+
 const Home: React.FC = () => {
   const { stars, loading, error } = useLatestStars(6);
   const currentFact = useFunFacts();
@@ -98,7 +99,8 @@ const Home: React.FC = () => {
           <h2 className="text-xl font-display my-6">Le saviez-vous ?</h2>
         </section>
       </FadeInSection>
-      {/* Afficher la section "Rejoignez-nous" seulement si l'utilisateur n'est pas connecté */}
+            {/* Afficher la section "Rejoignez-nous" seulement si l'utilisateur n'est pas connecté */}
+
       {!isAuthenticated && (
         <FadeInSection>
           <section className="bg-primary my-12 text-text py-8 text-center">

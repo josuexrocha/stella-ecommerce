@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import ShoppingCart from "./components/Cart";
+import Wishlist from "./components/Wishlist";
 
 // Lazy loading des pages
 const Home = React.lazy(() => import("./pages/Home"));
@@ -42,6 +43,7 @@ const App: React.FC = () => {
                 <Route path="/contact" element={<Contact />} /> {/* Contact */}
                 <Route path="/faq" element={<FAQ />} /> {/* FAQ */}
                 <Route path="/cart" element={<ShoppingCart />} /> {/* Panier */}
+                <Route path="/wishlist" element={<Wishlist />} />{" "}
                 <Route path="*" element={<Navigate to="/" />} />{" "}
                 {/* Redirection par défaut vers la page d'accueil */}
               </Routes>

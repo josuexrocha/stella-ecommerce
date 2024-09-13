@@ -14,8 +14,8 @@ interface CartState {
 
 export const useCartStore = create<CartState>((set) => ({
   cartItems: [],
-  loading: true,
-  error: null, // Initialisation de l'état d'erreur
+  loading: false, // Initialiser à false
+  error: null,
 
   fetchCart: async () => {
     set({ loading: true, error: null });

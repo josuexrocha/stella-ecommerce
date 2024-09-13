@@ -1,7 +1,6 @@
-// client/src/components/Login.tsx
 import { useState } from "react";
-import { useLocation, Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // Import du contexte
+import { useLocation, useNavigate, Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { loginUser } from "../services/api";
 import FadeInSection from "./FadeInSection";
 
@@ -10,13 +9,14 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
 
-  // Vérifie si l'utilisateur est redirigé après avoir cliqué sur le panier ou la liste de souhaits
-  const from = location.state?.from || "/";
+  // Récupère la page d'origine pour la redirection
+  const from = location.state?.from || "/profile";
   const message = location.state?.message || "Connectez-vous pour accéder à votre compte.";
 
   if (isAuthenticated) {
-    return <Navigate to={from} />; // Redirection vers la page d'origine après connexion
+    return <Navigate to={from} />;
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,8 +26,8 @@ const Login: React.FC = () => {
       const token = response.data.token;
 
       if (token) {
-        login(token); // Mise à jour via le contexte
-        // Redirection automatique via le hook useAuth
+        login(token);
+        navigate(from); // Redirige vers la page d'origine
       }
     } catch (error) {
       console.error("Erreur de connexion :", error);

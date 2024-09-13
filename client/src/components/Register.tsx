@@ -1,16 +1,19 @@
-import { useState, memo } from "react";
-import { useAuth } from "../context/AuthContext"; // Import du contexte
+import { useState, memo} from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { registerUser } from "../services/api";
-import { useNavigate } from "react-router-dom";
 import FadeInSection from "./FadeInSection";
 
 const Register: React.FC = () => {
-  const [firstName, setFirstName] = useState<string>(""); // Assure-toi que le type est bien string
+  const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const { login } = useAuth(); // Utilisation du contexte pour gérer l'inscription
+  const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from || "/profile";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,8 +28,8 @@ const Register: React.FC = () => {
       const token = response.token;
 
       if (token) {
-        login(token); // Mise à jour via le contexte
-        navigate("/profile"); // Redirection après inscription
+        login(token);
+        navigate(from); // Redirige vers la page d'origine
       }
     } catch (error) {
       console.error("Erreur d'inscription :", error);

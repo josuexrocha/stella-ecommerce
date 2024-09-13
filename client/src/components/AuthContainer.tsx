@@ -1,12 +1,18 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Login from "./Login";
 import Register from "./Register";
 
 const AuthContainer: React.FC = () => {
   const { isAuthenticated } = useAuth();
-  const [isLogin, setIsLogin] = useState(true);
+  const location = useLocation();
+
+  // Récupère le mode depuis l'état de navigation ou utilise 'login' par défaut
+  const mode = location.state?.mode || 'login';
+
+  // Initialise isLogin en fonction du mode
+  const [isLogin, setIsLogin] = useState(mode === 'login');
 
   if (isAuthenticated) {
     return <Navigate to="/profile" />;
@@ -22,14 +28,22 @@ const AuthContainer: React.FC = () => {
         {isLogin ? (
           <div className="text-lg font-serif flex flex-col items-center">
             <p>Pas encore de compte ?</p>
-            <button type="button" onClick={() => setIsLogin(false)} className="btn mt-2">
+            <button
+              type="button"
+              onClick={() => setIsLogin(false)}
+              className="btn mt-2"
+            >
               Inscrivez-vous ici
             </button>
           </div>
         ) : (
           <div className="text-lg font-serif flex flex-col items-center">
             <p>Vous avez déjà un compte ?</p>
-            <button type="button" onClick={() => setIsLogin(true)} className="btn mt-2">
+            <button
+              type="button"
+              onClick={() => setIsLogin(true)}
+              className="btn mt-2"
+            >
               Connectez-vous ici
             </button>
           </div>

@@ -1,19 +1,19 @@
 import { useState, useEffect, memo } from "react";
-import { FaHome, FaSearch, FaUser, FaShoppingCart, FaHeart } from "react-icons/fa";
+import { FaHome, FaSearch, FaUser, FaShoppingCart, FaHeart, FaStore } from "react-icons/fa";
 import { searchStars, getCart } from "../services/api";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import type { Star, CartItem } from "../types";
+import type { Star } from "../types";
 import { usePageTitleOnScroll } from "../hooks/usePageTitleOnScroll";
-import { useAuth } from "../context/AuthContext"; // Import du contexte Auth
+import { useAuth } from "../context/AuthContext";
 
 const Header: React.FC = () => {
-  const { isAuthenticated } = useAuth(); // Utilisation du contexte pour vérifier l'authentification
+  const { isAuthenticated } = useAuth();
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [suggestions, setSuggestions] = useState<Star[]>([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const { isTitleVisible, pageTitle } = usePageTitleOnScroll(); // Utilisation du hook pour le titre de la page
-  const [cartItemCount, setCartItemCount] = useState(0); // Compteur d'articles du panier
+  const { isTitleVisible, pageTitle } = usePageTitleOnScroll();
+  const [cartItemCount, setCartItemCount] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -48,13 +48,13 @@ const Header: React.FC = () => {
   const handleSearchBlur = () => {
     setTimeout(() => {
       setIsSearchFocused(false);
-    }, 100); // Petit délai pour permettre le clic sur la suggestion avant de cacher
+    }, 100);
   };
 
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
-    setSearchValue(""); // Réinitialiser la recherche lorsque la barre est cachée
-    setSuggestions([]); // Réinitialiser les suggestions aussi
+    setSearchValue("");
+    setSuggestions([]);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +89,7 @@ const Header: React.FC = () => {
               value={searchValue}
               onChange={handleSearchChange}
               onFocus={handleSearchFocus}
-              onBlur={handleSearchBlur} // Utilisation du onBlur avec timeout
+              onBlur={handleSearchBlur}
               aria-label="Rechercher une étoile"
               aria-expanded={isSearchVisible}
             />
@@ -105,7 +105,7 @@ const Header: React.FC = () => {
                     >
                       <button
                         type="button"
-                        onClick={() => handleSelectSuggestion(star.starid)}
+                        onMouseDown={() => handleSelectSuggestion(star.starid)}
                         className="w-full text-left cursor-pointer focus:outline-none"
                       >
                         {star.name}
@@ -130,6 +130,11 @@ const Header: React.FC = () => {
           </button>
         )}
 
+        {/* Icône du catalogue */}
+        <Link to="/catalog" className="text-lg text-text hover:text-white" aria-label="Catalogue">
+          <FaStore className="text-xl" />
+        </Link>
+
         {/* Icônes selon l'état d'authentification */}
         {isAuthenticated ? (
           <>
@@ -150,10 +155,10 @@ const Header: React.FC = () => {
           </>
         ) : (
           <>
-            <Link to="/auth" className="text-lg text-text hover:text-white">
+            <Link to="/cart" className="text-lg text-text hover:text-white">
               <FaShoppingCart />
             </Link>
-            <Link to="/auth" className="text-lg text-text hover:text-white">
+            <Link to="/wishlist" className="text-lg text-text hover:text-white">
               <FaHeart />
             </Link>
             <Link to="/auth" className="text-lg text-text hover:text-white">
