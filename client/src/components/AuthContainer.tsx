@@ -1,4 +1,3 @@
-// client/src/components/AuthContainer.tsx
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -19,9 +18,23 @@ const AuthContainer: React.FC = () => {
         {isLogin ? "Connexion" : "Inscription"}
       </h1>
       {isLogin ? <Login /> : <Register />}
-      <button type="button" onClick={() => setIsLogin(!isLogin)} className="btn mt-6">
-        {isLogin ? "S'inscrire" : "Se connecter"}
-      </button>
+      <div className="text-center mt-6">
+        {isLogin ? (
+          <div className="text-lg font-serif flex flex-col items-center">
+            <p>Pas encore de compte ?</p>
+            <button type="button" onClick={() => setIsLogin(false)} className="btn mt-2">
+              Inscrivez-vous ici
+            </button>
+          </div>
+        ) : (
+          <div className="text-lg font-serif flex flex-col items-center">
+            <p>Vous avez déjà un compte ?</p>
+            <button type="button" onClick={() => setIsLogin(true)} className="btn mt-2">
+              Connectez-vous ici
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

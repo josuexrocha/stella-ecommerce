@@ -83,9 +83,11 @@ const Register: React.FC = () => {
             aria-label="Mot de passe"
           />
         </div>
-        <button type="submit" className="btn">
-          S'inscrire
-        </button>
+        <div className="text-center">
+          <button type="submit" className="btn">
+            S'inscrire
+          </button>
+        </div>
       </form>
     </FadeInSection>
   );

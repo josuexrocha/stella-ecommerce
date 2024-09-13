@@ -1,10 +1,11 @@
 // client/src/components/StarCard.tsx
 import { memo } from "react";
-import { Link } from "react-router-dom";
-import type { Star } from "../types";
-import FadeInSection from "./FadeInSection";
+import { Link, useNavigate } from "react-router-dom";
+import { FaEye, FaArrowLeft } from "react-icons/fa"; // Import des icônes supplémentaires
 import AddToCartButton from "../components/AddToCartButton";
-import AddToWishlistButton from "../components/AddToWishlistButton"; // Import du bouton wishlist
+import AddToWishlistButton from "../components/AddToWishlistButton";
+import FadeInSection from "./FadeInSection";
+import type { Star } from "../types";
 
 interface StarCardProps {
   star: Star;
@@ -17,6 +18,12 @@ const StarCard: React.FC<StarCardProps> = ({
   showAddToCartButton = true,
   isDetailedView = false,
 }) => {
+  const navigate = useNavigate();
+
+  const handleBackClick = () => {
+    navigate(-1); // Cela fait revenir l'utilisateur à la page précédente
+  };
+
   return (
     <FadeInSection>
       <div
@@ -58,13 +65,24 @@ const StarCard: React.FC<StarCardProps> = ({
           )}
 
           <span className="text-lg font-semibold">{star.price} €</span>
-          <Link to={`/star/${star.starid}`} className="btn mt-2 block">
-            {isDetailedView ? "Retour au catalogue" : "Découvrir"}
-          </Link>
 
-          {/* Boutons d'ajout au panier et à la wishlist */}
-          {showAddToCartButton && <AddToCartButton starId={star.starid} />}
-          <AddToWishlistButton starId={star.starid} />
+          {/* Barre de boutons */}
+          <div className="flex mt-4">
+            {isDetailedView ? (
+              <button type="button" onClick={handleBackClick} className="btn mt-2">
+                <FaArrowLeft className="text-xl" />
+                <span className="sr-only">Retour</span>
+              </button>
+            ) : (
+              <Link to={`/star/${star.starid}`} className="btn mt-2">
+                <FaEye className="text-xl" />
+                <span className="sr-only">Découvrir</span>
+              </Link>
+            )}
+
+            {showAddToCartButton && <AddToCartButton starId={star.starid} />}
+            <AddToWishlistButton starId={star.starid} />
+          </div>
         </div>
       </div>
     </FadeInSection>

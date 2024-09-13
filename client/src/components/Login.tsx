@@ -36,8 +36,7 @@ const Login: React.FC = () => {
 
   return (
     <FadeInSection>
-      <div className="container mx-auto pt-20 px-4 max-w-md">
-        <h1 className="text-4xl font-display mb-8 text-center">Connexion</h1>
+      <div className="container mx-auto px-4 max-w-md">
         {/* Message personnalisé */}
         <p className="text-center text-lg mb-6">{message}</p>
         <form
@@ -66,9 +65,11 @@ const Login: React.FC = () => {
               aria-label="Mot de passe"
             />
           </div>
-          <button type="submit" className="btn">
-            Se connecter
-          </button>
+          <div className="text-center">
+            <button type="submit" className="btn">
+              Se connecter
+            </button>
+          </div>
         </form>
       </div>
     </FadeInSection>

@@ -6,7 +6,7 @@ Stella est une application e-commerce permettant d'acheter des étoiles. Ce proj
 
 - Conception : Excalidraw, MoCoDo, MVC, Canva
 - Backend : Node.js, Express, Sequelize
-- Frontend : React, Semantic UI, TypeScript
+- Frontend : React, TypeScript
 - Base de données : PostgreSQL
 - Outils : Jest (tests), Biome (linting/formatting), Tailwind CSS
 
