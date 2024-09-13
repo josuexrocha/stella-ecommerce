@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { fetchStarById, fetchStars } from "../services/api";
 import type { Star } from "../types";
 
-export const useStarDetail = (id: string | undefined) => {
+export const useStarDetail = (id: number | undefined) => {
   const [star, setStar] = useState<Star | null>(null);
   const [relatedStars, setRelatedStars] = useState<Star[]>([]);
   const [loading, setLoading] = useState(true);

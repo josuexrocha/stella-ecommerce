@@ -41,8 +41,8 @@ const Profile: React.FC = () => {
 
   const fetchWishlistItems = async () => {
     try {
-      const response = await getWishlist();
-      setWishlistItems(response.data || []); // Assurez-vous que 'data' est défini ou attribuez un tableau vide
+      const response = await getWishlist(); // response est de type GetWishlistResponse
+      setWishlistItems(response.wishlist || []); // Utilisez response.wishlist
     } catch (error) {
       console.error("Erreur lors de la récupération de la liste d'envies", error);
     }
@@ -183,7 +183,7 @@ const Profile: React.FC = () => {
           <div className="mt-8">
             <h2 className="text-2xl font-bold">Votre liste d'envies</h2>
             {wishlistItems && wishlistItems.length > 0 ? (
-              wishlistItems.map((item) => <div key={item.id}>{item.star.name}</div>)
+              wishlistItems.map((item) => <div key={item.id}>{item.Star.name}</div>)
             ) : (
               <p>Votre liste d'envies est vide.</p>
             )}

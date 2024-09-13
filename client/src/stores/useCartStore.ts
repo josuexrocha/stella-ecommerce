@@ -8,8 +8,8 @@ interface CartState {
   loading: boolean;
   error: string | null; // Ajout de l'état d'erreur
   fetchCart: () => Promise<void>;
-  addItem: (starId: string, quantity: number) => Promise<void>;
-  removeItem: (cartItemId: string) => Promise<void>;
+  addItem: (starId: number, quantity: number) => Promise<void>;
+  removeItem: (cartItemId: number) => Promise<void>;
 }
 
 export const useCartStore = create<CartState>((set) => ({
@@ -28,7 +28,7 @@ export const useCartStore = create<CartState>((set) => ({
     }
   },
 
-  addItem: async (starId: string, quantity: number) => {
+  addItem: async (starId: number, quantity: number) => {
     try {
       await addToCart(starId, quantity);
       const cart = await getCart();
@@ -38,7 +38,7 @@ export const useCartStore = create<CartState>((set) => ({
     }
   },
 
-  removeItem: async (cartItemId: string) => {
+  removeItem: async (cartItemId: number) => {
     try {
       await removeFromCart(cartItemId);
       const cart = await getCart();

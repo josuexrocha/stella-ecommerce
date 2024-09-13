@@ -8,8 +8,8 @@ import type { CartItem } from "../types";
 interface CartContextType {
   cartItems: CartItem[];
   setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
-  addItemToCart: (starId: string, quantity: number) => Promise<void>;
-  removeItemFromCart: (cartItemId: string) => Promise<void>;
+  addItemToCart: (starId: number, quantity: number) => Promise<void>;
+  removeItemFromCart: (cartItemId: number) => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -35,7 +35,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     fetchCartItems();
   }, [isAuthenticated]);
 
-  const addItemToCart = async (starId: string, quantity: number) => {
+  const addItemToCart = async (starId: number, quantity: number) => {
     if (!isAuthenticated) {
       return;
     }
@@ -49,7 +49,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const removeItemFromCart = async (cartItemId: string) => {
+  const removeItemFromCart = async (cartItemId: number) => {
     if (!isAuthenticated) {
       return;
     }

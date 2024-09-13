@@ -1,7 +1,6 @@
-// client/src/components/StarCard.tsx
 import { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaArrowLeft } from "react-icons/fa"; // Import des icônes supplémentaires
+import { FaEye, FaArrowLeft, FaTrash } from "react-icons/fa"; // Import de l'icône de suppression
 import AddToCartButton from "../components/AddToCartButton";
 import AddToWishlistButton from "../components/AddToWishlistButton";
 import FadeInSection from "./FadeInSection";
@@ -9,19 +8,30 @@ import type { Star } from "../types";
 
 interface StarCardProps {
   star: Star;
-  showAddToCartButton?: boolean;
+  context?: 'catalog' | 'cart' | 'wishlist';
+  quantity?: number;
+  onRemove?: (starId: number) => void;
   isDetailedView?: boolean;
+  showAddToCartButton?: boolean; // Ajoutez cette ligne
 }
 
 const StarCard: React.FC<StarCardProps> = ({
   star,
-  showAddToCartButton = true,
+  context = 'catalog',
+  quantity,
+  onRemove,
   isDetailedView = false,
 }) => {
   const navigate = useNavigate();
 
   const handleBackClick = () => {
-    navigate(-1); // Cela fait revenir l'utilisateur à la page précédente
+    navigate(-1); // Retour à la page précédente
+  };
+
+  const handleRemoveClick = () => {
+    if (onRemove) {
+      onRemove(star.starid);
+    }
   };
 
   return (
@@ -29,7 +39,7 @@ const StarCard: React.FC<StarCardProps> = ({
       <div
         className={`bg-secondary text-text rounded-lg shadow-lg flex ${
           isDetailedView ? "md:flex-row" : "flex-col"
-        } h-full`}
+        } h-full mb-4`}
       >
         <img
           src={`/assets/images/stars/${star.name.toLowerCase().replace(/\s+/g, "")}.jpg`}
@@ -64,10 +74,15 @@ const StarCard: React.FC<StarCardProps> = ({
             <p className="text-sm mb-4">{star.description}</p>
           )}
 
-          <span className="text-lg font-semibold">{star.price} €</span>
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-semibold">{star.price} €</span>
+            {quantity !== undefined && (
+              <span className="text-sm">Quantité : {quantity}</span>
+            )}
+          </div>
 
           {/* Barre de boutons */}
-          <div className="flex mt-4">
+          <div className="flex mt-4 space-x-2">
             {isDetailedView ? (
               <button type="button" onClick={handleBackClick} className="btn mt-2">
                 <FaArrowLeft className="text-xl" />
@@ -80,8 +95,31 @@ const StarCard: React.FC<StarCardProps> = ({
               </Link>
             )}
 
-            {showAddToCartButton && <AddToCartButton starId={star.starid} />}
-            <AddToWishlistButton starId={star.starid} />
+            {context === 'catalog' && (
+              <>
+                <AddToCartButton starId={star.starid} />
+                <AddToWishlistButton starId={star.starid} />
+              </>
+            )}
+
+            {context === 'cart' && (
+              <>
+                <button type="button" onClick={handleRemoveClick} className="btn mt-2">
+                  <FaTrash className="text-xl" />
+                  <span className="sr-only">Retirer du panier</span>
+                </button>
+              </>
+            )}
+
+            {context === 'wishlist' && (
+              <>
+                <AddToCartButton starId={star.starid} />
+                <button type="button" onClick={handleRemoveClick} className="btn mt-2">
+                  <FaTrash className="text-xl" />
+                  <span className="sr-only">Retirer de la liste d'envies</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

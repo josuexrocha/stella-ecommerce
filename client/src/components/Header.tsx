@@ -61,7 +61,7 @@ const Header: React.FC = () => {
     setSearchValue(e.target.value);
   };
 
-  const handleSelectSuggestion = (starid: string) => {
+  const handleSelectSuggestion = (starid: number) => {
     setSearchValue("");
     setSuggestions([]);
     navigate(`/star/${starid}`);

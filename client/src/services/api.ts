@@ -12,6 +12,8 @@ import type {
   Cart,
   Review,
   WishlistItem,
+  GetWishlistResponse,
+  AddToWishlistResponse,
   ApiResponse,
 } from "../types";
 
@@ -46,7 +48,7 @@ export const fetchStars = async (): Promise<ApiResponse<Star[]>> => {
 };
 
 // Fonction pour récupérer une étoile par ID
-export const fetchStarById = async (starid: string) => {
+export const fetchStarById = async (starid: number) => {
   try {
     const response = await api.get(`/stars/${starid}`);
     // Conversion en chaîne si nécessaire
@@ -128,37 +130,37 @@ export const getCart = async (): Promise<Cart> => {
   }
 };
 
-export const addToCart = async (starId: string, quantity: number): Promise<ApiResponse<Cart>> => {
+export const addToCart = async (starId: number, quantity: number): Promise<ApiResponse<Cart>> => {
   const response = await api.post<ApiResponse<Cart>>("/cart/add", { starId, quantity });
   return response.data;
 };
 
 export const updateCartItem = async (
-  cartItemId: string,
+  cartItemId: number,
   quantity: number,
 ): Promise<ApiResponse<Cart>> => {
   const response = await api.put<ApiResponse<Cart>>("/cart/update", { cartItemId, quantity });
   return response.data;
 };
 
-export const removeFromCart = async (cartItemId: string): Promise<ApiResponse<Cart>> => {
+export const removeFromCart = async (cartItemId: number): Promise<ApiResponse<Cart>> => {
   const response = await api.delete<ApiResponse<Cart>>(`/cart/remove/${cartItemId}`);
   return response.data;
 };
 
 // Wishlist
-export const getWishlist = async (): Promise<ApiResponse<WishlistItem[]>> => {
-  const response = await api.get<ApiResponse<WishlistItem[]>>("/wishlist");
+export const getWishlist = async (): Promise<GetWishlistResponse> => {
+  const response = await api.get<GetWishlistResponse>("/wishlist");
   return response.data;
 };
 
-export const addToWishlist = async (starId: string): Promise<ApiResponse<WishlistItem[]>> => {
-  const response = await api.post<ApiResponse<WishlistItem[]>>("/wishlist/add", { starId });
+export const addToWishlist = async (starId: number): Promise<AddToWishlistResponse> => {
+  const response = await api.post<AddToWishlistResponse>("/wishlist/add", { starId });
   return response.data;
 };
 
-export const removeFromWishlist = async (starId: string): Promise<ApiResponse<WishlistItem[]>> => {
-  const response = await api.delete<ApiResponse<WishlistItem[]>>(`/wishlist/remove/${starId}`);
+export const removeFromWishlist = async (starId: number): Promise<{ message: string }> => {
+  const response = await api.delete<{ message: string }>(`/wishlist/remove/${starId}`);
   return response.data;
 };
 
@@ -179,7 +181,7 @@ export const getOrderDetails = async (orderId: string): Promise<ApiResponse<Orde
 };
 
 export const updateOrderStatus = async (
-  orderId: string,
+  orderId: number,
   status: OrderStatus,
 ): Promise<ApiResponse<Order>> => {
   const response = await api.put<ApiResponse<Order>>(`/orders/${orderId}/update-status`, {
@@ -189,13 +191,13 @@ export const updateOrderStatus = async (
 };
 
 // Reviews
-export const getReviewsForStar = async (starId: string): Promise<ApiResponse<Review[]>> => {
+export const getReviewsForStar = async (starId: number): Promise<ApiResponse<Review[]>> => {
   const response = await api.get<ApiResponse<Review[]>>("/reviews", { params: { starId } });
   return response.data;
 };
 
 export const addReview = async (reviewData: {
-  starId: string;
+  starId: number;
   rating: number;
   comment: string;
 }): Promise<ApiResponse<Review>> => {
@@ -204,14 +206,14 @@ export const addReview = async (reviewData: {
 };
 
 export const updateReview = async (
-  reviewId: string,
+  reviewId: number,
   reviewData: { rating?: number; comment?: string },
 ): Promise<ApiResponse<Review>> => {
   const response = await api.put<ApiResponse<Review>>(`/reviews/${reviewId}`, reviewData);
   return response.data;
 };
 
-export const deleteReview = async (reviewId: string): Promise<ApiResponse<null>> => {
+export const deleteReview = async (reviewId: number): Promise<ApiResponse<null>> => {
   const response = await api.delete<ApiResponse<null>>(`/reviews/${reviewId}`);
   return response.data;
 };

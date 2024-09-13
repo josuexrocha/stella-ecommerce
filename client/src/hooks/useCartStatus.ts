@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getCart, addToCart } from "../services/api";
 import { CartItem } from "../types";
 
-export const useCartStatus = (starid: string | undefined) => {
+export const useCartStatus = (starid: number) => {
   const [inCart, setInCart] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,7 +29,11 @@ export const useCartStatus = (starid: string | undefined) => {
   const handleAddToCart = async () => {
     setLoading(true);
     try {
-      await addToCart(starid || "", 1);
+      if (typeof starid === "number") {
+        await addToCart(starid, 1);
+      } else {
+        setError("Invalid star ID");
+      }
       setInCart(true);
     } catch (err) {
       setError(`Erreur lors de l'ajout au panier: ${(err as Error).message}`);

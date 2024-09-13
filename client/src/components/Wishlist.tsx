@@ -1,22 +1,18 @@
-// client/src/components/Wishlist.tsx
 import { useEffect, memo } from "react";
 import { useWishlistStore } from "../stores/useWishlistStore";
-import { useAuth } from "../context/AuthContext"; // Import du contexte d'authentification
-import { useNavigate } from "react-router-dom"; // Import pour la navigation
-import { Link } from "react-router-dom"; // Import pour les liens
-import FadeInSection from "./FadeInSection"; // Si vous souhaitez l'utiliser
+import StarCard from "./StarCard";
+import FadeInSection from "./FadeInSection";
 
 const Wishlist: React.FC = () => {
-  const { wishlistItems, loading, error, fetchWishlist } = useWishlistStore();
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
+  const { wishlistItems, loading, error, fetchWishlist, removeItemFromWishlist } = useWishlistStore();
 
-  // Charger les articles de la wishlist si l'utilisateur est authentifié
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchWishlist();
-    }
-  }, [fetchWishlist, isAuthenticated]);
+    fetchWishlist();
+  }, [fetchWishlist]);
+
+  const handleRemoveFromWishlist = (starId: number) => {
+    removeItemFromWishlist(starId);
+  };
 
   if (loading) {
     return <p>Chargement de la liste d'envies...</p>;
@@ -26,61 +22,32 @@ const Wishlist: React.FC = () => {
     return <p className="text-red-600">{error}</p>;
   }
 
-  // Si l'utilisateur n'est pas authentifié
-  if (!isAuthenticated) {
+  if (!wishlistItems || wishlistItems.length === 0) {
     return (
       <div className="container mx-auto pt-20 px-4 py-8 text-center">
         <h1 className="text-3xl font-bold mb-4">Votre liste d'envies est vide</h1>
         <p className="text-lg mb-6 font-serif">
-          Vous n'êtes pas connecté. Connectez-vous ou inscrivez-vous pour commencer à ajouter des étoiles à votre liste d'envies !
+          Vous n'avez pas encore ajouté d'étoiles à votre liste d'envies. Explorez notre catalogue pour en ajouter !
         </p>
-        <div className="flex justify-center space-x-4">
-          <button
-            type="button"
-            onClick={() => navigate('/auth', { state: { from: '/wishlist', mode: 'login' } })}
-            className="btn"
-          >
-            Se connecter
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate('/auth', { state: { from: '/wishlist', mode: 'register' } })}
-            className="btn"
-          >
-            S'inscrire
-          </button>
-        </div>
+        <a href="/catalog" className="btn">Voir notre catalogue</a>
       </div>
     );
   }
 
-  // Si l'utilisateur est authentifié mais que la wishlist est vide
-  if (wishlistItems.length === 0) {
-    return (
-      <div className="container mx-auto pt-20 px-4 py-8 text-center">
-        <h1 className="text-3xl font-bold mb-4">Votre liste d'envies est vide</h1>
-        <p className="text-lg mb-6 font-serif">
-          Votre liste d'envies est actuellement vide. Parcourez notre catalogue pour ajouter des étoiles à votre liste d'envies !
-        </p>
-        <Link to="/catalog" className="btn">
-          Parcourir le catalogue
-        </Link>
-      </div>
-    );
-  }
-
-  // Si l'utilisateur est authentifié et que la wishlist contient des articles
   return (
     <div className="container mx-auto pt-20 px-4 py-8">
       <h1 className="text-3xl font-bold mb-4">Votre Liste d'envies</h1>
       <FadeInSection>
-        <ul>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {wishlistItems.map((item) => (
-            <li key={item.id} className="border p-4 mb-2">
-              {item.star.name} - {item.star.price}€
-            </li>
+            <StarCard
+              key={item.id}
+              star={item.Star} // Utilisez 'item.Star' avec une majuscule
+              context="wishlist"
+              onRemove={() => handleRemoveFromWishlist(item.starId)}
+            />
           ))}
-        </ul>
+        </div>
       </FadeInSection>
     </div>
   );

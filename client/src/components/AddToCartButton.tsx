@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { FaShoppingCart } from "react-icons/fa"; // Import de l'icône
 
 interface AddToCartButtonProps {
-  starId: string;
+  starId: number;
 }
 
 const AddToCartButton: React.FC<AddToCartButtonProps> = ({ starId }) => {

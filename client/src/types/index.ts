@@ -2,7 +2,7 @@
 
 // User related types
 export interface User {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -17,23 +17,24 @@ export interface UserProfileData {
 
 // Star related types
 export interface Star {
-  starid: string;
+  starid: number;
   name: string;
-  constellation: string;
   description: string;
-  magnitude: number;
-  price: number;
-  createdAt: string;
+  constellation: string;
   distanceFromEarth: number;
   luminosity: number;
   mass: number;
+  magnitude: number;
+  price: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // Order related types
 export type OrderStatus = "pending" | "processing" | "shipped" | "delivered" | "cancelled";
 
 export interface OrderItem {
-  starId: string;
+  starId: number;
   quantity: number;
 }
 
@@ -50,8 +51,8 @@ export interface OrderData {
 }
 
 export interface Order {
-  id: string;
-  userId: string;
+  id: number;
+  userId: number;
   items: OrderItem[];
   totalAmount: number;
   status: OrderStatus;
@@ -61,15 +62,15 @@ export interface Order {
 
 // Cart related types
 export interface Cart {
-  id: string;
-  userId: string;
+  id: number;
+  userId: number;
   cartItems: CartItem[];
   createdAt: string;
   updatedAt: string;
 }
 export interface CartItem {
-  id: string;
-  starId: string;
+  id: number;
+  starId: number;
   quantity: number;
   Star: Star;
   createdAt: string;
@@ -77,11 +78,12 @@ export interface CartItem {
   cartId: number;
 }
 
+
 // Review related types
 export interface Review {
-  id: string;
-  userId: string;
-  starId: string;
+  id: number;
+  userId: number;
+  starId: number;
   rating: number;
   comment: string;
   createdAt: string;
@@ -90,12 +92,22 @@ export interface Review {
 }
 
 // Wishlist related types
-export interface WishlistItem {
-  id: string;
-  userId: string;
-  starId: string;
-  star: Star;
+export interface GetWishlistResponse {
+  message: string;
+  wishlist: WishlistItem[];
 }
+export interface AddToWishlistResponse {
+  message: string;
+  wishlistItem: WishlistItem;
+}
+
+export interface WishlistItem {
+  id: number;
+  userId: number;
+  starId: number;
+  Star: Star;
+}
+
 
 // API response types
 export interface ApiResponse<T> {
