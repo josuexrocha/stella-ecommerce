@@ -2,6 +2,8 @@
 
 import type { ReactNode } from "react";
 import { createContext, useState, useEffect, useContext } from "react";
+import { useCartStore } from "../stores/useCartStore";
+import { useWishlistStore } from "../stores/useWishlistStore";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -17,22 +19,30 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const resetCart = useCartStore((state) => state.resetCart);
+  const resetWishlist = useWishlistStore((state) => state.resetWishlist);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       setIsAuthenticated(true);
+      useCartStore.getState().fetchCart();
+      useWishlistStore.getState().fetchWishlist();
     }
   }, []);
 
   const login = (token: string) => {
     localStorage.setItem("token", token);
     setIsAuthenticated(true);
+    useCartStore.getState().fetchCart();
+    useWishlistStore.getState().fetchWishlist();
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
+    resetCart();
+    resetWishlist();
   };
 
   return (

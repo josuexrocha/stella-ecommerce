@@ -1,9 +1,10 @@
 // client/src/components/AddToCartButton.tsx
-import { useState, useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../stores/useCartStore";
 import { useAuth } from "../context/AuthContext";
-import { FaShoppingCart } from "react-icons/fa"; // Import de l'icône
+import { FaShoppingCart } from "react-icons/fa";
+import type React from "react";
 
 interface AddToCartButtonProps {
   starId: number;
@@ -12,34 +13,35 @@ interface AddToCartButtonProps {
 const AddToCartButton: React.FC<AddToCartButtonProps> = ({ starId }) => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const { cartItems, addItem } = useCartStore();
-  const [inCart, setInCart] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const isInCart = cartItems.some((item) => item.starId === starId);
-    setInCart(isInCart);
-  }, [cartItems, starId]);
+  // Sélecteurs Zustand
+  const cartItems = useCartStore((state) => state.cartItems);
+  const addItem = useCartStore((state) => state.addItem);
+
+  // Vérifier si l'article est déjà dans le panier
+  const inCart = cartItems.some((item) => item.starId === starId);
+
+  // Extraire les états de chargement et d'erreur depuis le store
+  const loading = useCartStore((state) => state.loading);
+  const error = useCartStore((state) => state.error);
 
   const handleAddToCart = async () => {
     if (!isAuthenticated) {
-      // Affichage du message de connexion
+      // Rediriger vers la page d'authentification avec un message
       navigate("/auth", {
-        state: { from: "/cart", message: "Veuillez vous connecter pour ajouter des articles au panier." },
+        state: {
+          from: "/cart",
+          message: "Veuillez vous connecter pour ajouter des articles au panier.",
+        },
       });
       return;
     }
 
-    setLoading(true);
     try {
       await addItem(starId, 1);
-      setInCart(true);
     } catch (err) {
-      setError("Erreur lors de l'ajout au panier.");
+      // Les erreurs sont gérées directement dans le store, vous pouvez ajouter un traitement supplémentaire si nécessaire
       console.error(err);
-    } finally {
-      setLoading(false);
     }
   };
 

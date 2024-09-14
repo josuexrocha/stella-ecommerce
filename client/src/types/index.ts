@@ -78,7 +78,6 @@ export interface CartItem {
   cartId: number;
 }
 
-
 // Review related types
 export interface Review {
   id: number;
@@ -103,11 +102,12 @@ export interface AddToWishlistResponse {
 
 export interface WishlistItem {
   id: number;
+  createdAt: string;
+  updatedAt: string;
   userId: number;
   starId: number;
   Star: Star;
 }
-
 
 // API response types
 export interface ApiResponse<T> {

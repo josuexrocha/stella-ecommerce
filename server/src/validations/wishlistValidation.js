@@ -5,4 +5,8 @@ const addToWishlistSchema = Joi.object({
   starId: Joi.number().integer().positive().required(),
 });
 
-module.exports = { addToWishlistSchema };
+const removeFromWishlistSchema = Joi.object({
+  starId: Joi.number().integer().positive().required(),
+});
+
+module.exports = { addToWishlistSchema, removeFromWishlistSchema };

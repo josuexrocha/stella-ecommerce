@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+// client/src/components/AddToWishlistButton.tsx
+
 import { useNavigate } from "react-router-dom";
 import { useWishlistStore } from "../stores/useWishlistStore";
 import { useAuth } from "../context/AuthContext";
 import { FaHeart } from "react-icons/fa";
+import { useCallback, useEffect } from "react";
 
 interface AddToWishlistButtonProps {
   starId: number;
@@ -11,21 +13,26 @@ interface AddToWishlistButtonProps {
 const AddToWishlistButton: React.FC<AddToWishlistButtonProps> = ({ starId }) => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const { wishlistItems, addItemToWishlist, fetchWishlist } = useWishlistStore();
-  const [inWishlist, setInWishlist] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
+  // Sélecteurs Zustand
+  const wishlistItems = useWishlistStore((state) => state.wishlistItems);
+  const addItemToWishlist = useWishlistStore((state) => state.addItemToWishlist);
+  const fetchWishlist = useWishlistStore((state) => state.fetchWishlist);
+  const loading = useWishlistStore((state) => state.loading);
+  const error = useWishlistStore((state) => state.error);
+
+  // Vérifier si l'article est déjà dans la wishlist
+  const inWishlist = wishlistItems.some((item) => item && item.starId === starId);
 
   useEffect(() => {
     if (isAuthenticated && wishlistItems.length === 0) {
       fetchWishlist();
     }
-    const isInWishlist = wishlistItems.some((item) => item.starId === starId);
-    setInWishlist(isInWishlist);
-  }, [wishlistItems, starId, isAuthenticated, fetchWishlist]);
+  }, [isAuthenticated, wishlistItems.length, fetchWishlist]);
 
-  const handleAddToWishlist = async () => {
+  const handleAddToWishlist = useCallback(async () => {
     if (!isAuthenticated) {
+      // Rediriger vers la page d'authentification avec un message
       navigate("/auth", {
         state: {
           from: "/wishlist",
@@ -35,17 +42,12 @@ const AddToWishlistButton: React.FC<AddToWishlistButtonProps> = ({ starId }) => 
       return;
     }
 
-    setLoading(true);
     try {
       await addItemToWishlist(starId);
-      setInWishlist(true);
     } catch (err) {
-      setError("Erreur lors de l'ajout à la liste de souhaits.");
-      console.error(err);
-    } finally {
-      setLoading(false);
+      console.error("Erreur dans handleAddToWishlist:", err);
     }
-  };
+  }, [isAuthenticated, navigate, addItemToWishlist, starId]);
 
   return (
     <>

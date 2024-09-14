@@ -1,20 +1,23 @@
+// client/src/components/Profile.tsx
+
 import { useState, useEffect, memo } from "react";
-import { getUserProfile, updateUserProfile, deleteUserAccount, getWishlist } from "../services/api";
+import { getUserProfile, updateUserProfile, deleteUserAccount } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import type { WishlistItem, User } from "../types";
 import { useAuth } from "../context/AuthContext";
-import { useCart } from "../context/CartContext"; // Importation du contexte de panier
+import { useCartStore } from "../stores/useCartStore"; // Utilisation du store Zustand
+import { useWishlistStore } from "../stores/useWishlistStore"; // Utilisation du store Zustand
 import FadeInSection from "./FadeInSection";
 
 const Profile: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
-  const { cartItems } = useCart(); // Utilisation du contexte de panier pour accéder aux items
+  const { cartItems } = useCartStore(); // Utilisation du store Zustand pour le panier
+  const { wishlistItems, fetchWishlist } = useWishlistStore(); // Utilisation du store Zustand pour la wishlist
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingProfile, setLoadingProfile] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const navigate = useNavigate();
@@ -22,7 +25,7 @@ const Profile: React.FC = () => {
   useEffect(() => {
     if (isAuthenticated) {
       fetchUserProfile();
-      fetchWishlistItems();
+      fetchWishlist(); // Utiliser le store Zustand pour récupérer la wishlist
     }
   }, [isAuthenticated]);
 
@@ -32,19 +35,10 @@ const Profile: React.FC = () => {
       setFirstName(user.firstName);
       setLastName(user.lastName);
       setEmail(user.email);
-      setLoading(false);
+      setLoadingProfile(false);
     } catch (error) {
       console.error("Erreur lors de la récupération du profil utilisateur", error);
-      setLoading(false);
-    }
-  };
-
-  const fetchWishlistItems = async () => {
-    try {
-      const response = await getWishlist(); // response est de type GetWishlistResponse
-      setWishlistItems(response.wishlist || []); // Utilisez response.wishlist
-    } catch (error) {
-      console.error("Erreur lors de la récupération de la liste d'envies", error);
+      setLoadingProfile(false);
     }
   };
 
@@ -62,7 +56,7 @@ const Profile: React.FC = () => {
   };
 
   const handleLogout = () => {
-    if (window.confirm("Vous êtes déconnecté. Vous allez être redirigé vers la page d'accueil.")) {
+    if (window.confirm("Vous allez être déconnecté. Vous serez redirigé vers la page d'accueil.")) {
       logout();
       navigate("/");
     }
@@ -77,12 +71,37 @@ const Profile: React.FC = () => {
         navigate("/");
       } catch (error) {
         console.error("Erreur lors de la suppression du compte", error);
+        // Optionnel : Afficher un message d'erreur à l'utilisateur
       }
     }
   };
 
-  if (loading) {
+  if (loadingProfile) {
     return <p>Chargement des informations...</p>;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="container mx-auto pt-20 px-4 py-8 text-center">
+        <h1 className="text-3xl font-bold mb-4">Veuillez vous connecter pour accéder à votre profil</h1>
+        <div className="flex justify-center space-x-4">
+          <button
+            type="button"
+            onClick={() => navigate("/auth", { state: { from: "/profile", mode: "login" } })}
+            className="btn"
+          >
+            Se connecter
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/auth", { state: { from: "/profile", mode: "register" } })}
+            className="btn"
+          >
+            S'inscrire
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -103,6 +122,7 @@ const Profile: React.FC = () => {
                   className="w-full p-3 rounded-md bg-primary text-text"
                   aria-label="Prénom"
                   placeholder="Prénom"
+                  required
                 />
               </div>
               <div>
@@ -114,6 +134,7 @@ const Profile: React.FC = () => {
                   className="w-full p-3 rounded-md bg-primary text-text"
                   aria-label="Nom"
                   placeholder="Nom"
+                  required
                 />
               </div>
               <div>
@@ -125,6 +146,7 @@ const Profile: React.FC = () => {
                   className="w-full p-3 rounded-md bg-primary text-text"
                   aria-label="Email"
                   placeholder="Email"
+                  required
                 />
               </div>
               <button type="submit" className="btn">
@@ -158,7 +180,7 @@ const Profile: React.FC = () => {
 
           {/* Affichage du panier */}
           <div className="mt-8">
-            <h2 className="text-2xl font-bold">Votre panier</h2>
+            <h2 className="text-2xl font-bold">Votre Panier</h2>
             {cartItems.length > 0 ? (
               cartItems.map((item) =>
                 item.Star ? (
@@ -183,7 +205,18 @@ const Profile: React.FC = () => {
           <div className="mt-8">
             <h2 className="text-2xl font-bold">Votre liste d'envies</h2>
             {wishlistItems && wishlistItems.length > 0 ? (
-              wishlistItems.map((item) => <div key={item.id}>{item.Star.name}</div>)
+              wishlistItems.map((item) =>
+                item.Star ? (
+                  <div key={item.id} className="mb-4">
+                    <h2 className="text-xl">{item.Star.name}</h2>
+                    {/* Ajoutez des boutons ou actions supplémentaires si nécessaire */}
+                  </div>
+                ) : (
+                  <div key={item.id}>
+                    <p>L'étoile associée à cet article est introuvable.</p>
+                  </div>
+                ),
+              )
             ) : (
               <p>Votre liste d'envies est vide.</p>
             )}

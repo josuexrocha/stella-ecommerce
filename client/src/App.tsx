@@ -5,7 +5,7 @@ import { Route, BrowserRouter as Router, Routes, Navigate } from "react-router-d
 import ErrorBoundary from "./components/ErrorBoundary";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import ShoppingCart from "./components/Cart";
+import ShoppingCart from "./components/ShoppingCart";
 import Wishlist from "./components/Wishlist";
 
 // Lazy loading des pages

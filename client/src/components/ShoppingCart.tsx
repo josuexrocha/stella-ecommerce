@@ -1,10 +1,10 @@
+// client/src/components/ShoppingCart.tsx
+
 import { useEffect, memo } from "react";
 import { useCartStore } from "../stores/useCartStore";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import StarCard from "./StarCard";
-import type { CartItem } from "../types";
 
 const ShoppingCart: React.FC = () => {
   const { cartItems, loading, error, fetchCart, removeItem } = useCartStore();
@@ -17,6 +17,17 @@ const ShoppingCart: React.FC = () => {
       fetchCart();
     }
   }, [fetchCart, isAuthenticated]);
+
+  // Fonction pour retirer un article du panier
+  const handleRemoveFromCart = async (cartItemId: number) => {
+    try {
+      await removeItem(cartItemId);
+      // Optionnel : Afficher une notification ou mise à jour de l'interface
+    } catch (error) {
+      console.error("Erreur lors de la suppression du panier:", error);
+      // Optionnel : Afficher un message d'erreur à l'utilisateur
+    }
+  };
 
   if (loading) {
     return <p>Chargement du panier...</p>;
@@ -69,22 +80,12 @@ const ShoppingCart: React.FC = () => {
     );
   }
 
-  // Fonction pour retirer un article du panier
-  const handleRemoveFromCart = async (cartItemId: number) => {
-    try {
-      await removeItem(cartItemId);
-      alert('Article retiré du panier.');
-    } catch (error) {
-      console.error('Erreur lors de la suppression du panier:', error);
-    }
-  };
-
   // Si l'utilisateur est authentifié et que le panier contient des articles
   return (
     <div className="container mx-auto pt-20 px-4 py-8">
       <h1 className="text-3xl font-bold mb-4">Votre Panier</h1>
       <div>
-        {cartItems.map((item: CartItem) => (
+        {cartItems.map((item) => (
           item.Star && (
             <StarCard
               key={item.id}

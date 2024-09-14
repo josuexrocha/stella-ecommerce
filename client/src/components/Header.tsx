@@ -1,10 +1,13 @@
 import { useState, useEffect, memo } from "react";
 import { FaHome, FaSearch, FaUser, FaShoppingCart, FaHeart, FaStore } from "react-icons/fa";
-import { searchStars, getCart } from "../services/api";
+import { searchStars, getCart, getWishlist } from "../services/api";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import type { Star } from "../types";
 import { usePageTitleOnScroll } from "../hooks/usePageTitleOnScroll";
 import { useAuth } from "../context/AuthContext";
+import { useCartStore } from "../stores/useCartStore";
+import { useWishlistStore } from "../stores/useWishlistStore";
+
 
 const Header: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -13,26 +16,13 @@ const Header: React.FC = () => {
   const [suggestions, setSuggestions] = useState<Star[]>([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const { isTitleVisible, pageTitle } = usePageTitleOnScroll();
-  const [cartItemCount, setCartItemCount] = useState(0);
+
+  const cartItemCount = useCartStore((state) => state.cartItems.length);
+  const wishlistItemCount = useWishlistStore((state) => state.wishlistItems.length);
+
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Charger les articles du panier lorsque l'utilisateur est connecté
-  useEffect(() => {
-    if (isAuthenticated) {
-      const fetchCartItemCount = async () => {
-        try {
-          const cart = await getCart();
-          setCartItemCount(cart.cartItems.length);
-        } catch (error) {
-          console.error("Erreur lors de la récupération du panier:", error);
-        }
-      };
-      fetchCartItemCount();
-    }
-  }, [isAuthenticated, location]);
-
-  // Mise à jour des suggestions lors de la frappe dans la barre de recherche
   useEffect(() => {
     if (searchValue) {
       searchStars(searchValue).then((results) => setSuggestions(results));
@@ -138,7 +128,11 @@ const Header: React.FC = () => {
         {/* Icônes selon l'état d'authentification */}
         {isAuthenticated ? (
           <>
-            <Link to="/cart" className="relative text-lg text-text hover:text-white">
+            <Link
+              to="/cart"
+              className="relative text-lg text-text hover:text-white"
+              aria-label="Panier"
+            >
               <FaShoppingCart />
               {cartItemCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
@@ -146,22 +140,49 @@ const Header: React.FC = () => {
                 </span>
               )}
             </Link>
-            <Link to="/wishlist" className="text-lg text-text hover:text-white">
+            <Link
+              to="/wishlist"
+              className="relative text-lg text-text hover:text-white"
+              aria-label="Wishlist"
+            >
               <FaHeart />
+              {wishlistItemCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                  {wishlistItemCount}
+                </span>
+              )}
             </Link>
-            <Link to="/profile" className="text-lg text-text hover:text-white">
+            <Link to="/profile" className="text-lg text-text hover:text-white" aria-label="Profil">
               <FaUser />
             </Link>
           </>
         ) : (
           <>
-            <Link to="/cart" className="text-lg text-text hover:text-white">
+            <Link
+              to="/cart"
+              className="relative text-lg text-text hover:text-white"
+              aria-label="Panier"
+            >
               <FaShoppingCart />
+              {/* Optionnel : afficher un compteur pour les invités si nécessaire */}
             </Link>
-            <Link to="/wishlist" className="text-lg text-text hover:text-white">
+            <Link
+              to="/wishlist"
+              className="relative text-lg text-text hover:text-white"
+              aria-label="Wishlist"
+            >
               <FaHeart />
+              {wishlistItemCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                  {wishlistItemCount}
+                </span>
+              )}
             </Link>
-            <Link to="/auth" className="text-lg text-text hover:text-white">
+            <Link
+              to="/auth"
+              className="text-lg text-text hover:text-white"
+              aria-label="Authentification"
+            >
               <FaUser />
             </Link>
           </>

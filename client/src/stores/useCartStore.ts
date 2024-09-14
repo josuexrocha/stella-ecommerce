@@ -6,15 +6,16 @@ import type { CartItem } from "../types";
 interface CartState {
   cartItems: CartItem[];
   loading: boolean;
-  error: string | null; // Ajout de l'état d'erreur
+  error: string | null;
   fetchCart: () => Promise<void>;
   addItem: (starId: number, quantity: number) => Promise<void>;
   removeItem: (cartItemId: number) => Promise<void>;
+  resetCart: () => void;
 }
 
 export const useCartStore = create<CartState>((set) => ({
   cartItems: [],
-  loading: false, // Initialiser à false
+  loading: false,
   error: null,
 
   fetchCart: async () => {
@@ -47,4 +48,6 @@ export const useCartStore = create<CartState>((set) => ({
       console.error("Erreur lors de la suppression de l'article du panier:", error);
     }
   },
+
+  resetCart: () => set({ cartItems: [], loading: false, error: null }),
 }));

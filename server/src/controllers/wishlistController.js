@@ -17,12 +17,23 @@ exports.addToWishlist = async (req, res, next) => {
     await Wishlist.create({ userId, starId });
 
     // Récupérer l'étoile ajoutée pour l'inclure dans la réponse
-    const addedStar = await Star.findByPk(starId);
-
-    res.status(201).json({
-      message: "L'étoile a été ajoutée à la liste de souhaits",
-      wishlistItem: addedStar ? addedStar.toJSON() : null, // Utiliser .toJSON() pour éviter les structures circulaires
+    const addedStar = await Star.findByPk(starId, {
+      attributes: ["starid", "name", "price", "constellation"],
     });
+
+    if (addedStar) {
+      const wishlistItem = addedStar.toJSON();
+      wishlistItem.price = Number.parseFloat(wishlistItem.price); // Conversion en nombre
+      res.status(201).json({
+        message: "L'étoile a été ajoutée à la liste de souhaits",
+        wishlistItem,
+      });
+    } else {
+      res.status(201).json({
+        message: "L'étoile a été ajoutée à la liste de souhaits",
+        wishlistItem: null,
+      });
+    }
   } catch (error) {
     next(new AppError(`Erreur lors de l'ajout à la liste de souhaits: ${error.message}`, 400));
   }
@@ -44,7 +55,13 @@ exports.getWishlist = async (req, res, next) => {
     });
 
     // Transformer la liste en un format simple sans référence circulaire
-    const wishlistItems = wishlist.map((item) => item.toJSON());
+    const wishlistItems = wishlist.map((item) => {
+      const itemJson = item.toJSON();
+      if (itemJson.Star && typeof itemJson.Star.price === "string") {
+        itemJson.Star.price = Number.parseFloat(itemJson.Star.price);
+      }
+      return itemJson;
+    });
 
     res.json({
       message: "Liste de souhaits récupérée avec succès",
@@ -86,7 +103,13 @@ exports.removeFromWishlist = async (req, res, next) => {
     });
 
     // Transformer la liste mise à jour en un format simple sans référence circulaire
-    const updatedWishlistItems = updatedWishlist.map((item) => item.toJSON());
+    const updatedWishlistItems = updatedWishlist.map((item) => {
+      const itemJson = item.toJSON();
+      if (itemJson.Star && typeof itemJson.Star.price === "string") {
+        itemJson.Star.price = Number.parseFloat(itemJson.Star.price);
+      }
+      return itemJson;
+    });
 
     res.json({
       message: "L'étoile a été supprimée de la liste de souhaits",

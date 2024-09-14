@@ -8,7 +8,7 @@ import type { Star } from "../types";
 
 interface StarCardProps {
   star: Star;
-  context?: 'catalog' | 'cart' | 'wishlist';
+  context?: "catalog" | "cart" | "wishlist";
   quantity?: number;
   onRemove?: (starId: number) => void;
   isDetailedView?: boolean;
@@ -17,7 +17,7 @@ interface StarCardProps {
 
 const StarCard: React.FC<StarCardProps> = ({
   star,
-  context = 'catalog',
+  context = "catalog",
   quantity,
   onRemove,
   isDetailedView = false,
@@ -38,15 +38,29 @@ const StarCard: React.FC<StarCardProps> = ({
     <FadeInSection>
       <div
         className={`bg-secondary text-text rounded-lg shadow-lg flex ${
-          isDetailedView ? "md:flex-row" : "flex-col"
-        } h-full mb-4`}
+          isDetailedView
+            ? "md:flex-row"
+            : context === "cart" || context === "wishlist"
+              ? "flex-row"
+              : "flex-col"
+        } h-full mb-4 overflow-hidden`}
       >
         <img
           src={`/assets/images/stars/${star.name.toLowerCase().replace(/\s+/g, "")}.jpg`}
           alt={star.name}
-          className={`w-full ${isDetailedView ? "md:w-1/2" : "h-48"} object-cover`}
+          className={`object-cover ${
+            isDetailedView
+              ? "md:w-1/2 w-full"
+              : context === "cart" || context === "wishlist"
+                ? "w-1/4 flex-shrink-0"
+                : "w-full h-48"
+          }`}
         />
-        <div className={`p-4 flex-grow ${isDetailedView ? "md:pl-8" : ""}`}>
+        <div
+          className={`p-4 flex-grow flex flex-col justify-between ${
+            isDetailedView ? "md:pl-8" : ""
+          }`}
+        >
           <h2 className="text-xl font-serif mb-2">{star.name}</h2>
 
           {isDetailedView ? (
@@ -76,13 +90,11 @@ const StarCard: React.FC<StarCardProps> = ({
 
           <div className="flex items-center justify-between">
             <span className="text-lg font-semibold">{star.price} €</span>
-            {quantity !== undefined && (
-              <span className="text-sm">Quantité : {quantity}</span>
-            )}
+            {quantity !== undefined && <span className="text-sm">Quantité : {quantity}</span>}
           </div>
 
           {/* Barre de boutons */}
-          <div className="flex mt-4 space-x-2">
+          <div className="flex mt-4">
             {isDetailedView ? (
               <button type="button" onClick={handleBackClick} className="btn mt-2">
                 <FaArrowLeft className="text-xl" />
@@ -95,14 +107,14 @@ const StarCard: React.FC<StarCardProps> = ({
               </Link>
             )}
 
-            {context === 'catalog' && (
+            {context === "catalog" && (
               <>
                 <AddToCartButton starId={star.starid} />
                 <AddToWishlistButton starId={star.starid} />
               </>
             )}
 
-            {context === 'cart' && (
+            {context === "cart" && (
               <>
                 <button type="button" onClick={handleRemoveClick} className="btn mt-2">
                   <FaTrash className="text-xl" />
@@ -111,7 +123,7 @@ const StarCard: React.FC<StarCardProps> = ({
               </>
             )}
 
-            {context === 'wishlist' && (
+            {context === "wishlist" && (
               <>
                 <AddToCartButton starId={star.starid} />
                 <button type="button" onClick={handleRemoveClick} className="btn mt-2">

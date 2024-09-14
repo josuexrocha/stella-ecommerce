@@ -117,7 +117,7 @@ const Home: React.FC = () => {
                 window.location.href = "/auth";
               }}
             >
-              S'inscrire
+              Se connecter
             </button>
           </section>
         </FadeInSection>
