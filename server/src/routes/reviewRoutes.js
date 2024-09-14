@@ -6,7 +6,6 @@ const { requireAuth } = require("../middlewares/authMiddleware");
 const validate = require("../middlewares/validate");
 const { addReviewSchema, updateReviewSchema } = require("../validations/reviewValidation");
 
-// Toutes les routes d'avis nécessitent une authentification
 router.use(requireAuth);
 
 /**

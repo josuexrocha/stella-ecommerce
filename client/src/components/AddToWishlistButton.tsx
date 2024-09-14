@@ -14,14 +14,12 @@ const AddToWishlistButton: React.FC<AddToWishlistButtonProps> = ({ starId }) => 
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  // Sélecteurs Zustand
   const wishlistItems = useWishlistStore((state) => state.wishlistItems);
   const addItemToWishlist = useWishlistStore((state) => state.addItemToWishlist);
   const fetchWishlist = useWishlistStore((state) => state.fetchWishlist);
   const loading = useWishlistStore((state) => state.loading);
   const error = useWishlistStore((state) => state.error);
 
-  // Vérifier si l'article est déjà dans la wishlist
   const inWishlist = wishlistItems.some((item) => item && item.starId === starId);
 
   useEffect(() => {
@@ -32,7 +30,6 @@ const AddToWishlistButton: React.FC<AddToWishlistButtonProps> = ({ starId }) => 
 
   const handleAddToWishlist = useCallback(async () => {
     if (!isAuthenticated) {
-      // Rediriger vers la page d'authentification avec un message
       navigate("/auth", {
         state: {
           from: "/wishlist",

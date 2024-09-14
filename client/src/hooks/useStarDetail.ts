@@ -20,7 +20,6 @@ export const useStarDetail = (id: number | undefined) => {
       try {
         setLoading(true);
 
-        // Récupérer les détails de l'étoile par ID
         const starResponse = await fetchStarById(id);
         if (starResponse?.data) {
           setStar(starResponse.data);
@@ -28,10 +27,8 @@ export const useStarDetail = (id: number | undefined) => {
           throw new Error("Erreur lors de la récupération des détails de l'étoile.");
         }
 
-        // Récupérer les étoiles similaires (ici je récupère simplement les autres étoiles)
         const relatedStarsResponse = await fetchStars();
         if (relatedStarsResponse?.data) {
-          // Filtrer pour exclure l'étoile actuelle des étoiles similaires
           const filteredStars = relatedStarsResponse.data.filter(
             (relatedStar: Star) => String(relatedStar.starid) !== String(id), // Convertir pour comparer correctement
           );

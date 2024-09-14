@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaArrowLeft, FaTrash } from "react-icons/fa"; // Import de l'icône de suppression
+import { FaEye, FaArrowLeft, FaTrash } from "react-icons/fa";
 import AddToCartButton from "../components/AddToCartButton";
 import AddToWishlistButton from "../components/AddToWishlistButton";
 import FadeInSection from "./FadeInSection";
@@ -12,7 +12,7 @@ interface StarCardProps {
   quantity?: number;
   onRemove?: (starId: number) => void;
   isDetailedView?: boolean;
-  showAddToCartButton?: boolean; // Ajoutez cette ligne
+  showAddToCartButton?: boolean;
 }
 
 const StarCard: React.FC<StarCardProps> = ({
@@ -25,7 +25,7 @@ const StarCard: React.FC<StarCardProps> = ({
   const navigate = useNavigate();
 
   const handleBackClick = () => {
-    navigate(-1); // Retour à la page précédente
+    navigate(-1);
   };
 
   const handleRemoveClick = () => {

@@ -6,7 +6,6 @@ const idSchema = Joi.object({
 });
 
 const filterSchema = Joi.object({
-  // Ajoutez ici les critères de filtrage pertinents
   constellation: Joi.string(),
   minMagnitude: Joi.number(),
   maxMagnitude: Joi.number(),

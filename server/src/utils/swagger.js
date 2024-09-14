@@ -183,7 +183,7 @@ const options = {
       },
     },
   },
-  apis: ["./src/routes/*.js"], // Chemin vers vos fichiers de routes
+  apis: ["./src/routes/*.js"],
 };
 
 const specs = swaggerJsdoc(options);

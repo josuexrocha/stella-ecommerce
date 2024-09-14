@@ -14,7 +14,6 @@ const sequelize = new Sequelize({
 
 const models = {};
 
-// Charger automatiquement tous les modèles du dossier actuel
 const files = fs.readdirSync(__dirname)
   .filter(file => file.indexOf(".") !== 0 && file !== "index.js" && file.slice(-3) === ".js");
 
@@ -23,7 +22,6 @@ for (const file of files) {
   models[model.name] = model;
 }
 
-// Appliquer les associations
 for (const modelName of Object.keys(models)) {
   if (models[modelName].associate) {
     models[modelName].associate(models);

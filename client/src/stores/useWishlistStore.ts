@@ -22,7 +22,6 @@ export const useWishlistStore = create<WishlistState>((set) => ({
     set({ loading: true, error: null });
     try {
       const { wishlist } = await getWishlist();
-      // Transformation si nécessaire (ex: conversion de types)
       const transformedWishlist = wishlist.map((item) => ({
         ...item,
         Star: {

@@ -9,7 +9,6 @@ const {
   removeFromWishlistSchema,
 } = require("../validations/wishlistValidation");
 
-// Toutes les routes de la liste de souhaits nécessitent une authentification
 router.use(requireAuth);
 
 /**

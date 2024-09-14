@@ -21,7 +21,7 @@ const Header: React.FC = () => {
   const wishlistItemCount = useWishlistStore((state) => state.wishlistItems.length);
 
   const navigate = useNavigate();
-  const location = useLocation();
+  const _location = useLocation();
 
   useEffect(() => {
     if (searchValue) {
@@ -164,7 +164,6 @@ const Header: React.FC = () => {
               aria-label="Panier"
             >
               <FaShoppingCart />
-              {/* Optionnel : afficher un compteur pour les invités si nécessaire */}
             </Link>
             <Link
               to="/wishlist"

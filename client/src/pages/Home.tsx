@@ -1,6 +1,6 @@
 // client/src/pages/Home.tsx
 
-import { useEffect, memo } from "react";
+import { memo } from "react";
 import HeroSection from "../components/HeroSection";
 import { useHeroPhrases } from "../hooks/useHeroPhrases";
 import StarCard from "../components/StarCard";
@@ -76,7 +76,6 @@ const Home: React.FC = () => {
           {!loading && !error && (
             <div className="relative px-8">
               {" "}
-              {/* Ajustement du padding pour aligner le contenu */}
               <div className="flex overflow-y-auto pb-6 space-x-6 scrollbar-thumb-rounded scrollbar-thin scrollbar-thumb-gray-400">
                 {stars.slice(0, 10).map((star) => (
                   <div key={star.starid} className="min-w-[200px] flex justify-evenly">
@@ -92,7 +91,6 @@ const Home: React.FC = () => {
       <FadeInSection>
         <section className="my-12 text-text py-8 text-center">
           {" "}
-          {/* Ajustement de l'espacement */}
           <p className="mx-auto font-serif text-2xl text-secondary inline-block max-w-2xl">
             <span className="bg-special px-2 py-1">{currentFact}</span>
           </p>

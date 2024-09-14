@@ -42,18 +42,15 @@ const handleJWTExpiredError = () =>
   new AppError("Your token has expired! Please log in again.", 401);
 
 const sendErrorDev = (err, res) => {
-  // Filtrer l'erreur pour éviter des objets circulaires
   const filteredError = {
     status: err.status,
     message: err.message,
     stack: err.stack,
-    // Filtrer les détails complexes qui pourraient être circulaires
     error: {
       name: err.name,
       code: err.code,
       isOperational: err.isOperational,
       path: err.path,
-      // Vous pouvez exclure d'autres propriétés complexes ici
     },
   };
 

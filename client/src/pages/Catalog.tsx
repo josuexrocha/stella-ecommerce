@@ -1,6 +1,6 @@
 // client/src/pages/Catalog.tsx
 
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, useMemo, memo } from "react";
 import StarCard from "../components/StarCard";
 import { fetchStars } from "../services/api";
 import type { Star } from "../types";
@@ -9,8 +9,6 @@ import FadeInSection from "../components/FadeInSection";
 
 const Catalogue: React.FC = () => {
   const [stars, setStars] = useState<Star[]>([]);
-  const [filteredStars, setFilteredStars] = useState<Star[]>([]);
-
   const [isAlphabetical, setIsAlphabetical] = useState<boolean | null>(null);
   const [priceOrder, setPriceOrder] = useState<"asc" | "desc" | null>(null);
   const [selectedConstellations, setSelectedConstellations] = useState<string[]>([]);
@@ -20,35 +18,26 @@ const Catalogue: React.FC = () => {
 
   const [showConstellationFilter, setShowConstellationFilter] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-  const [filterHeight, setFilterHeight] = useState<number>(0); // Ajout pour la hauteur dynamique
+  const [filterHeight, setFilterHeight] = useState<number>(0);
 
-  // Obtenir les constellations uniques à partir des étoiles
-  const uniqueConstellations: string[] = Array.from(
-    new Set(stars.map((star: Star) => star.constellation)),
-  );
+  const uniqueConstellations: string[] = useMemo(() => {
+    return Array.from(new Set(stars.map((star: Star) => star.constellation)));
+  }, [stars]);
 
   useEffect(() => {
+    const loadAllStars = async () => {
+      try {
+        const response = await fetchStars();
+        setStars(response.data);
+      } catch (error) {
+        console.error("Erreur lors du chargement des étoiles :", error);
+      }
+    };
+
     loadAllStars();
   }, []);
 
-  useEffect(() => {
-    applyFiltersAndSorting();
-  }, [
-    stars,
-    isAlphabetical,
-    priceOrder,
-    selectedConstellations,
-    distanceOrder,
-    luminosityOrder,
-    massOrder,
-  ]);
-
-  const loadAllStars = async () => {
-    const response = await fetchStars();
-    setStars(response.data);
-  };
-
-  const applyFiltersAndSorting = () => {
+  const filteredStars = useMemo(() => {
     let filtered = [...stars];
     if (isAlphabetical !== null) {
       filtered.sort((a, b) =>
@@ -76,8 +65,16 @@ const Catalogue: React.FC = () => {
     if (massOrder !== null) {
       filtered.sort((a, b) => (massOrder === "asc" ? a.mass - b.mass : b.mass - a.mass));
     }
-    setFilteredStars(filtered);
-  };
+    return filtered;
+  }, [
+    stars,
+    isAlphabetical,
+    priceOrder,
+    selectedConstellations,
+    distanceOrder,
+    luminosityOrder,
+    massOrder,
+  ]);
 
   const toggleAlphabeticalOrder = () => {
     setIsAlphabetical((prev) => (prev === true ? false : prev === false ? null : true));
@@ -107,17 +104,16 @@ const Catalogue: React.FC = () => {
     setShowConstellationFilter((prev) => !prev);
   };
 
-  // Gestion de la barre sticky
   useEffect(() => {
     const filterSection = document.querySelector("#filter-section") as HTMLElement | null;
 
     const handleScroll = () => {
-      if (!filterSection) return; // Ajoute cette ligne pour gérer le cas où filterSection est null
+      if (!filterSection) return;
 
       const topPosition = filterSection.getBoundingClientRect().top || 0;
       if (topPosition <= 0 && !isSticky) {
         setIsSticky(true);
-        setFilterHeight(filterSection.offsetHeight); // Stocke la hauteur de la section sticky
+        setFilterHeight(filterSection.offsetHeight);
       } else if (window.scrollY < (filterSection.offsetTop || 0)) {
         setIsSticky(false);
       }
@@ -147,7 +143,7 @@ const Catalogue: React.FC = () => {
               isSticky ? "fixed top-12 left-0 w-full bg-background-inverse z-40 shadow-md py-2" : ""
             }`}
           >
-            {/* Filtre par ordre alphabetique */}
+            {/* Filtre par ordre alphabétique */}
             <button
               type="button"
               className={`btn-filter ${isAlphabetical !== null ? "active-filter" : ""}`}

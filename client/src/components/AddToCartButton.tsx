@@ -14,20 +14,16 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({ starId }) => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  // Sélecteurs Zustand
   const cartItems = useCartStore((state) => state.cartItems);
   const addItem = useCartStore((state) => state.addItem);
 
-  // Vérifier si l'article est déjà dans le panier
   const inCart = cartItems.some((item) => item.starId === starId);
 
-  // Extraire les états de chargement et d'erreur depuis le store
   const loading = useCartStore((state) => state.loading);
   const error = useCartStore((state) => state.error);
 
   const handleAddToCart = async () => {
     if (!isAuthenticated) {
-      // Rediriger vers la page d'authentification avec un message
       navigate("/auth", {
         state: {
           from: "/cart",
@@ -40,7 +36,6 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({ starId }) => {
     try {
       await addItem(starId, 1);
     } catch (err) {
-      // Les erreurs sont gérées directement dans le store, vous pouvez ajouter un traitement supplémentaire si nécessaire
       console.error(err);
     }
   };

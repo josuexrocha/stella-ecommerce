@@ -3,7 +3,7 @@ import { memo } from "react";
 import { useParams } from "react-router-dom";
 import { useStarDetail } from "../hooks/useStarDetail";
 import StarCard from "../components/StarCard";
-import { Star } from "../types";
+import type { Star } from "../types";
 import FadeInSection from "../components/FadeInSection";
 
 const ProductDetail: React.FC = () => {

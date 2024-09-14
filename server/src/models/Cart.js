@@ -4,7 +4,7 @@ module.exports = (sequelize, _DataTypes) => {
   const Cart = sequelize.define(
     "Cart",
     {
-      // Aucun champ défini explicitement ici
+      // Aucun champ défini ici
     },
     {
       tableName: "Carts",

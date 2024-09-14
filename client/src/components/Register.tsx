@@ -29,7 +29,7 @@ const Register: React.FC = () => {
 
       if (token) {
         login(token);
-        navigate(from); // Redirige vers la page d'origine
+        navigate(from);
       }
     } catch (error) {
       console.error("Erreur d'inscription :", error);

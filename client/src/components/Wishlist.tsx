@@ -8,7 +8,8 @@ import StarCard from "./StarCard";
 import FadeInSection from "./FadeInSection";
 
 const Wishlist: React.FC = () => {
-  const { wishlistItems, loading, error, fetchWishlist, removeItemFromWishlist } = useWishlistStore();
+  const { wishlistItems, loading, error, fetchWishlist, removeItemFromWishlist } =
+    useWishlistStore();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -18,14 +19,16 @@ const Wishlist: React.FC = () => {
     }
   }, [fetchWishlist, isAuthenticated]);
 
-  // Fonction pour retirer un article de la wishlist
-  const handleRemoveFromWishlist = useCallback(async (starId: number) => {
-    try {
-      await removeItemFromWishlist(starId);
-    } catch (error) {
-      console.error("Erreur lors de la suppression de la wishlist:", error);
-    }
-  }, [removeItemFromWishlist]);
+  const handleRemoveFromWishlist = useCallback(
+    async (starId: number) => {
+      try {
+        await removeItemFromWishlist(starId);
+      } catch (error) {
+        console.error("Erreur lors de la suppression de la wishlist:", error);
+      }
+    },
+    [removeItemFromWishlist],
+  );
 
   // Si l'utilisateur n'est pas authentifié
   if (!isAuthenticated) {
@@ -84,7 +87,7 @@ const Wishlist: React.FC = () => {
       <h1 className="text-3xl font-bold mb-4">Votre liste d'envies</h1>
       <FadeInSection>
         <div className="space-y-6">
-          {wishlistItems.map((item) => (
+          {wishlistItems.map((item) =>
             item?.starId && item?.Star ? (
               <StarCard
                 key={item.id}
@@ -96,8 +99,8 @@ const Wishlist: React.FC = () => {
               <div key={item?.id || Math.random()} className="mb-4">
                 <p>L'étoile associée à cet article est introuvable.</p>
               </div>
-            )
-          ))}
+            ),
+          )}
         </div>
       </FadeInSection>
     </div>

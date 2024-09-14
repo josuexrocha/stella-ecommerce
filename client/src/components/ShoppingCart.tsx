@@ -11,21 +11,17 @@ const ShoppingCart: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  // Charger les articles du panier si l'utilisateur est authentifié
   useEffect(() => {
     if (isAuthenticated) {
       fetchCart();
     }
   }, [fetchCart, isAuthenticated]);
 
-  // Fonction pour retirer un article du panier
   const handleRemoveFromCart = async (cartItemId: number) => {
     try {
       await removeItem(cartItemId);
-      // Optionnel : Afficher une notification ou mise à jour de l'interface
     } catch (error) {
       console.error("Erreur lors de la suppression du panier:", error);
-      // Optionnel : Afficher un message d'erreur à l'utilisateur
     }
   };
 

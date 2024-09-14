@@ -10,7 +10,6 @@ const {
   removeFromCartSchema,
 } = require("../validations/cartValidation");
 
-// Toutes les routes du panier nécessitent une authentification
 router.use(requireAuth);
 
 /**

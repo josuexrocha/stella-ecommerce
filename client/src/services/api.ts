@@ -89,7 +89,7 @@ export const registerUser = async (userData: {
   lastName: string;
 }): Promise<{ token: string; userId: number }> => {
   const response = await api.post<{ token: string; userId: number }>("/users/register", userData);
-  return response.data; // On retourne directement le token et l'ID de l'utilisateur
+  return response.data;
 };
 
 // Fonction pour connecter un utilisateur
@@ -121,9 +121,8 @@ export const getCart = async (): Promise<Cart> => {
   try {
     const response = await api.get("/cart");
 
-    // Effectue un casting explicite vers le type Cart
     const cart: Cart = response.data as Cart;
-    return cart; // Retourne l'objet Cart
+    return cart;
   } catch (error) {
     console.error("Erreur lors de la récupération du panier:", error);
     throw error;

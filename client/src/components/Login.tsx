@@ -11,7 +11,6 @@ const Login: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Récupère la page d'origine pour la redirection
   const from = location.state?.from || "/profile";
   const message = location.state?.message || "Connectez-vous pour accéder à votre compte.";
 
@@ -27,7 +26,7 @@ const Login: React.FC = () => {
 
       if (token) {
         login(token);
-        navigate(from); // Redirige vers la page d'origine
+        navigate(from);
       }
     } catch (error) {
       console.error("Erreur de connexion :", error);
@@ -37,7 +36,6 @@ const Login: React.FC = () => {
   return (
     <FadeInSection>
       <div className="container mx-auto px-4 max-w-md">
-        {/* Message personnalisé */}
         <p className="text-center text-lg mb-6">{message}</p>
         <form
           onSubmit={handleSubmit}

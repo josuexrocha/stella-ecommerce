@@ -6,7 +6,6 @@ const { requireAuth } = require("../middlewares/authMiddleware");
 const validate = require("../middlewares/validate");
 const { createOrderSchema, updateOrderStatusSchema } = require("../validations/orderValidation");
 
-// Toutes les routes d'ordre nécessitent une authentification
 router.use(requireAuth);
 
 /**

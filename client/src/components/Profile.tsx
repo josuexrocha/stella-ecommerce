@@ -3,16 +3,16 @@
 import { useState, useEffect, memo } from "react";
 import { getUserProfile, updateUserProfile, deleteUserAccount } from "../services/api";
 import { useNavigate } from "react-router-dom";
-import type { WishlistItem, User } from "../types";
+import type { User } from "../types";
 import { useAuth } from "../context/AuthContext";
-import { useCartStore } from "../stores/useCartStore"; // Utilisation du store Zustand
-import { useWishlistStore } from "../stores/useWishlistStore"; // Utilisation du store Zustand
+import { useCartStore } from "../stores/useCartStore";
+import { useWishlistStore } from "../stores/useWishlistStore";
 import FadeInSection from "./FadeInSection";
 
 const Profile: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
-  const { cartItems } = useCartStore(); // Utilisation du store Zustand pour le panier
-  const { wishlistItems, fetchWishlist } = useWishlistStore(); // Utilisation du store Zustand pour la wishlist
+  const { cartItems } = useCartStore();
+  const { wishlistItems, fetchWishlist } = useWishlistStore();
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -23,24 +23,24 @@ const Profile: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const user: User = await getUserProfile();
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+        setEmail(user.email);
+        setLoadingProfile(false);
+      } catch (error) {
+        console.error("Erreur lors de la récupération du profil utilisateur", error);
+        setLoadingProfile(false);
+      }
+    };
+
     if (isAuthenticated) {
       fetchUserProfile();
-      fetchWishlist(); // Utiliser le store Zustand pour récupérer la wishlist
+      fetchWishlist();
     }
-  }, [isAuthenticated]);
-
-  const fetchUserProfile = async () => {
-    try {
-      const user: User = await getUserProfile();
-      setFirstName(user.firstName);
-      setLastName(user.lastName);
-      setEmail(user.email);
-      setLoadingProfile(false);
-    } catch (error) {
-      console.error("Erreur lors de la récupération du profil utilisateur", error);
-      setLoadingProfile(false);
-    }
-  };
+  }, [isAuthenticated, fetchWishlist]);
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +48,6 @@ const Profile: React.FC = () => {
       await updateUserProfile({ firstName, lastName, email });
       alert("Profil mis à jour avec succès !");
       setIsEditingProfile(false);
-      fetchUserProfile();
     } catch (error) {
       console.error("Erreur lors de la mise à jour du profil", error);
       setErrorMessage("Erreur lors de la mise à jour du profil.");
@@ -71,7 +70,6 @@ const Profile: React.FC = () => {
         navigate("/");
       } catch (error) {
         console.error("Erreur lors de la suppression du compte", error);
-        // Optionnel : Afficher un message d'erreur à l'utilisateur
       }
     }
   };
@@ -209,7 +207,6 @@ const Profile: React.FC = () => {
                 item.Star ? (
                   <div key={item.id} className="mb-4">
                     <h2 className="text-xl">{item.Star.name}</h2>
-                    {/* Ajoutez des boutons ou actions supplémentaires si nécessaire */}
                   </div>
                 ) : (
                   <div key={item.id}>

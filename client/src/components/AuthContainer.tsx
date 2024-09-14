@@ -8,10 +8,8 @@ const AuthContainer: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  // Récupère le mode depuis l'état de navigation ou utilise 'login' par défaut
   const mode = location.state?.mode || 'login';
 
-  // Initialise isLogin en fonction du mode
   const [isLogin, setIsLogin] = useState(mode === 'login');
 
   if (isAuthenticated) {

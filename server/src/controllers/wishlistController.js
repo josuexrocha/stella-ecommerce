@@ -14,16 +14,20 @@ exports.addToWishlist = async (req, res, next) => {
     }
 
     // Ajouter l'étoile à la liste de souhaits
-    await Wishlist.create({ userId, starId });
+    const createdWishlistItem = await Wishlist.create({ userId, starId });
 
-    // Récupérer l'étoile ajoutée pour l'inclure dans la réponse
-    const addedStar = await Star.findByPk(starId, {
-      attributes: ["starid", "name", "price", "constellation"],
+    // Récupérer l'article de la wishlist avec l'étoile incluse
+    const wishlistItemWithStar = await Wishlist.findOne({
+      where: { id: createdWishlistItem.id },
+      include: [{
+        model: Star,
+        attributes: ["starid", "name", "price", "constellation"],
+      }],
     });
 
-    if (addedStar) {
-      const wishlistItem = addedStar.toJSON();
-      wishlistItem.price = Number.parseFloat(wishlistItem.price); // Conversion en nombre
+    if (wishlistItemWithStar?.Star) {
+      const wishlistItem = wishlistItemWithStar.toJSON();
+      wishlistItem.Star.price = Number.parseFloat(wishlistItem.Star.price); // Assurez-vous que price est un nombre
       res.status(201).json({
         message: "L'étoile a été ajoutée à la liste de souhaits",
         wishlistItem,
@@ -79,9 +83,15 @@ exports.removeFromWishlist = async (req, res, next) => {
     const { starId } = req.params;
     const userId = req.user.userId;
 
+    // Assurez-vous que starId est un nombre
+    const parsedStarId = Number.parseInt(starId, 10);
+    if (Number.isNaN(parsedStarId)) {
+      return next(new AppError("starId doit être un nombre valide", 400));
+    }
+
     // Trouver l'article de la liste de souhaits
     const wishlistItem = await Wishlist.findOne({
-      where: { userId, starId },
+      where: { userId, starId: parsedStarId },
     });
 
     if (!wishlistItem) {
@@ -116,6 +126,7 @@ exports.removeFromWishlist = async (req, res, next) => {
       wishlist: updatedWishlistItems,
     });
   } catch (error) {
+    console.error("Erreur lors de la suppression de la wishlist:", error);
     next(
       new AppError(
         `Erreur lors de la suppression de l'étoile de la liste de souhaits: ${error.message}`,
