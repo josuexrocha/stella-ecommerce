@@ -1,6 +1,6 @@
 // client/src/pages/Catalog.tsx
 
-import { useState, useEffect, useMemo, memo } from "react";
+import { useState, useEffect, useMemo, useRef, memo } from "react";
 import StarCard from "../components/StarCard";
 import { fetchStars } from "../services/api";
 import type { Star } from "../types";
@@ -104,26 +104,33 @@ const Catalogue: React.FC = () => {
     setShowConstellationFilter((prev) => !prev);
   };
 
+  // Utilisation de l'Intersection Observer
+  const filterRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
-    const filterSection = document.querySelector("#filter-section") as HTMLElement | null;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsSticky(!entry.isIntersecting);
+        if (!entry.isIntersecting && filterRef.current) {
+          setFilterHeight(filterRef.current.offsetHeight);
+        }
+      },
+      {
+        root: null,
+        threshold: 0,
+      }
+    );
 
-    const handleScroll = () => {
-      if (!filterSection) return;
+    if (filterRef.current) {
+      observer.observe(filterRef.current);
+    }
 
-      const topPosition = filterSection.getBoundingClientRect().top || 0;
-      if (topPosition <= 0 && !isSticky) {
-        setIsSticky(true);
-        setFilterHeight(filterSection.offsetHeight);
-      } else if (window.scrollY < (filterSection.offsetTop || 0)) {
-        setIsSticky(false);
+    return () => {
+      if (filterRef.current) {
+        observer.unobserve(filterRef.current);
       }
     };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [isSticky]);
+  }, []);
 
   return (
     <div className="container mx-auto pt-12 px-4">
@@ -138,12 +145,14 @@ const Catalogue: React.FC = () => {
         {/* Filtres */}
         <FadeInSection>
           <div
+            ref={filterRef}
             id="filter-section"
             className={`flex flex-wrap justify-center gap-4 mb-8 transition-all duration-300 ${
               isSticky ? "fixed top-12 left-0 w-full bg-background-inverse z-40 shadow-md py-2" : ""
             }`}
+            style={isSticky ? { height: `${filterHeight}px` } : {}}
           >
-            {/* Filtre par ordre alphabétique */}
+            {/* Boutons de filtre */}
             <button
               type="button"
               className={`btn-filter ${isAlphabetical !== null ? "active-filter" : ""}`}
