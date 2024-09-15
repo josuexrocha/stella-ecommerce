@@ -51,15 +51,6 @@ Voici quelques captures d'écran de l'application :
 
 *Profile*
 
-### Vidéo de Démonstration
-
-Voici une vidéo de démonstration de l'application :
-
-<video controls>
-  <source src="./docs/screenshots/demo.m4v" type="video/mp4">
-  Votre navigateur ne supporte pas la balise vidéo.
-</video>
-
 ## Technologies utilisées
 
 ### Frontend
