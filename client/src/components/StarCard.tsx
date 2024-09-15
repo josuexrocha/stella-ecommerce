@@ -61,7 +61,7 @@ const StarCard: React.FC<StarCardProps> = ({
             isDetailedView ? "md:pl-8" : ""
           }`}
         >
-          <h2 className="text-xl font-serif mb-2">{star.name}</h2>
+          <h2 className="text-xl font-display mb-2">{star.name}</h2>
 
           {isDetailedView ? (
             <>

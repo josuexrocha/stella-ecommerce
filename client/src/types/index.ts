@@ -3,6 +3,7 @@
 // User related types
 export interface User {
   id: number;
+  username: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -10,6 +11,7 @@ export interface User {
 }
 
 export interface UserProfileData {
+  username?: string;
   firstName?: string;
   lastName?: string;
   email?: string;

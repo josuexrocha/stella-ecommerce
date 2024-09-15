@@ -100,7 +100,7 @@
 
 /* Sticky filters styles */
 .sticky-filters {
-  @apply fixed top-0 left-0 w-full bg-background-inverse z-40 shadow-md py-2 transition-all duration-300;
+  @apply sticky top-12 left-0 w-full z-40 py-2 transition-all duration-300;
 }
 
 .compact-filter {
