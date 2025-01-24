@@ -1,20 +1,49 @@
 // app.js
 
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
+const { json, urlencoded } = express;
+const expressStatic = express.static;
 const morgan = require("morgan");
-const path = require("node:path");
+const { join } = require("node:path");
 const cors = require("cors");
 const { sequelize } = require("./models");
 const { errorHandler, AppError } = require("./middlewares/errorHandler");
 const routes = require("./routes");
-const config = require("./config/config");
-const logger = require("./utils/logger");
-const swaggerDocs = require("./utils/swagger");
+const { NODE_ENV, PORT: _PORT } = require("./config/config");
+const { info, error: _error } = require("./utils/logger");
+const { serve, setup } = require("./utils/swagger");
+const helmet = require("helmet");
+const cookieParser = require("cookie-parser");
+const csurf = require("csurf");
 
 const app = express();
 
-// Configuration CORS
+// Helmet before other middlewares
+app.use(helmet());
+
+// Ajouter cookie-parser pour lire/écrire les cookies
+app.use(cookieParser());
+
+// Ajouter le middleware CSRF
+app.use(csurf({ cookie: true }));
+
+// Middleware pour ajouter le token CSRF aux réponses
+app.use((req, res, next) => {
+  const csrfToken = req.csrfToken(); // Génère un nouveau token
+  res.cookie("XSRF-TOKEN", csrfToken, { httpOnly: false }); // Partage le token CSRF avec le frontend
+  next();
+});
+
+// Gérer les erreurs CSRF
+app.use((err, _req, res, next) => {
+  if (err.code === "EBADCSRFTOKEN") {
+    return res.status(403).json({ message: "Invalid CSRF token" });
+  }
+  next(err);
+});
+
+// CORS configuration
 const corsOptions = {
 	origin: "http://localhost:3001",
 	optionsSuccessStatus: 200,
@@ -22,58 +51,55 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Logging middleware
-if (config.NODE_ENV !== "test") {
+if (NODE_ENV !== "test") {
 	app.use(
 		morgan("combined", {
-			stream: { write: (message) => logger.info(message.trim()) },
+			stream: { write: (message) => info(message.trim()) },
 		}),
 	);
 }
 
-// Middleware pour parser le JSON
-app.use(express.json());
+// Middleware to parse JSON
+app.use(json());
 
-// Middleware pour parser les données de formulaire
-app.use(express.urlencoded({ extended: true }));
+// Middleware to parse form data
+app.use(urlencoded({ extended: true }));
 
 // Swagger UI
-app.use("/api-docs", swaggerDocs.serve, swaggerDocs.setup);
+app.use("/api-docs", serve, setup);
 
-// Servir les fichiers statiques
-app.use(express.static(path.join(__dirname, "public")));
+app.use(expressStatic(join(__dirname, "public")));
 
-// Routes API centralisées
+// Centralized API routes
 app.use("/api", routes);
 
-// Route pour gérer toutes les requêtes non-API
+// Route to handle all non-API requests
 app.get("*", (_, res) => {
-	res.sendFile(path.join(__dirname, "public", "index.html"));
+	res.sendFile(join(__dirname, "public", "index.html"));
 });
 
-// Gestion des erreurs 404 pour l'API
+// Handle 404 errors for the API
 app.use("/api", (req, _, next) => {
 	next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-// Gestion globale des erreurs
+// Global error handling
 app.use(errorHandler);
 
-const PORT = config.PORT || 3000;
+const PORT = _PORT || 3000;
 
-// Fonction pour démarrer le serveur
+// Function to start the server
 const startServer = async () => {
 	try {
 		await sequelize.sync({ force: false });
-		logger.info("Database synced");
-		logger.info(`Connected to database: ${sequelize.config.database}`);
+		info("Database synced");
+		info(`Connected to database: ${sequelize.config.database}`);
 
 		app.listen(PORT, () => {
-			logger.info(
-				`Server is running in ${config.NODE_ENV} mode on port ${PORT}`,
-			);
+			info(`Server is running in ${NODE_ENV} mode on port ${PORT}`);
 		});
 	} catch (error) {
-		logger.error("Unable to start server:", error);
+		_error("Unable to start server:", error);
 		process.exit(1);
 	}
 };

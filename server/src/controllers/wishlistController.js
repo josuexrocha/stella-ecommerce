@@ -19,10 +19,12 @@ exports.addToWishlist = async (req, res, next) => {
     // Récupérer l'article de la wishlist avec l'étoile incluse
     const wishlistItemWithStar = await Wishlist.findOne({
       where: { id: createdWishlistItem.id },
-      include: [{
-        model: Star,
-        attributes: ["starid", "name", "price", "constellation"],
-      }],
+      include: [
+        {
+          model: Star,
+          attributes: ["starid", "name", "price", "constellation"],
+        },
+      ],
     });
 
     if (wishlistItemWithStar?.Star) {

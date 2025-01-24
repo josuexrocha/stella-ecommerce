@@ -1,5 +1,3 @@
-// client/src/services/api.ts
-
 import axios from "axios";
 import type { AxiosInstance } from "axios";
 import type {
@@ -11,58 +9,61 @@ import type {
   OrderStatus,
   Cart,
   Review,
-  WishlistItem,
   GetWishlistResponse,
   AddToWishlistResponse,
   ApiResponse,
 } from "../types";
 
-// Configuration de l'instance Axios
+// Utility function to read a cookie by its name
+function getCookie(name: string): string | undefined {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(";").shift();
+  return undefined;
+}
+
+// Axios instance configuration
 const api: AxiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL || "http://localhost:3000/api",
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // Allows sending cookies
 });
 
-// Intercepteur pour ajouter le token d'authentification dans chaque requête
+// Interceptor to add authentication and CSRF tokens to each request
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    // Add CSRF token from cookie
+    const csrfToken = getCookie("XSRF-TOKEN");
+    if (csrfToken) {
+      config.headers["X-CSRF-Token"] = csrfToken;
+    }
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    // Add authentication token if present
+    const authToken = localStorage.getItem("token");
+    if (authToken) {
+      config.headers.Authorization = `Bearer ${authToken}`;
     }
 
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  },
+  (error) => Promise.reject(error),
 );
 
-// Fonction pour récupérer toutes les étoiles
+// Function to fetch all stars
 export const fetchStars = async (): Promise<ApiResponse<Star[]>> => {
   const response = await api.get<ApiResponse<Star[]>>("/stars");
   return response.data;
 };
 
-// Fonction pour récupérer une étoile par ID
-export const fetchStarById = async (starid: number) => {
-  try {
-    const response = await api.get(`/stars/${starid}`);
-    // Conversion en chaîne si nécessaire
-    if (response?.data?.starid) {
-      response.data.starid = String(response.data.starid);
-    }
-    return response;
-  } catch (error) {
-    console.error("Erreur lors de la récupération de l'étoile par ID:", error);
-    throw error;
-  }
+// Function to fetch a star by ID
+export const fetchStarById = async (starid: number): Promise<Star> => {
+  const response = await api.get(`/stars/${starid}`);
+  return response.data;
 };
 
-// Fonction pour filtrer les étoiles
+// Function to filter stars
 export const filterStars = async (params: {
   constellation?: string;
   minMagnitude?: number;
@@ -72,15 +73,13 @@ export const filterStars = async (params: {
   return response.data;
 };
 
-// Focntion pour la recherche d'étoiles
+// Function to search stars
 export const searchStars = async (query: string): Promise<Star[]> => {
-  const response = await api.get<Star[]>("/stars/search", {
-    params: { q: query },
-  });
+  const response = await api.get<Star[]>("/stars/search", { params: { q: query } });
   return response.data;
 };
 
-// Fonction pour inscrire un utilisateur
+// Authentication
 export const registerUser = async (userData: {
   username: string;
   email: string;
@@ -92,9 +91,11 @@ export const registerUser = async (userData: {
   return response.data;
 };
 
-// Fonction pour connecter un utilisateur
-export const loginUser = async (loginData: { email: string; password: string }) => {
-  return api.post<{ token: string }>("/users/login", loginData);
+export const loginUser = async (loginData: { email: string; password: string }): Promise<{
+  data: User; token: string 
+}> => {
+  const response = await api.post<{ data: User; token: string }>("/users/login", loginData);
+  return response.data;
 };
 
 export const getUserProfile = async (): Promise<User> => {
@@ -113,20 +114,14 @@ export const logoutUser = async (): Promise<ApiResponse<null>> => {
 };
 
 export const deleteUserAccount = async (): Promise<ApiResponse<null>> => {
-  return api.delete("/users/me");
+  const response = await api.delete<ApiResponse<null>>("/users/me");
+  return response.data;
 };
 
-// Cart
+// Cart management
 export const getCart = async (): Promise<Cart> => {
-  try {
-    const response = await api.get("/cart");
-
-    const cart: Cart = response.data as Cart;
-    return cart;
-  } catch (error) {
-    console.error("Erreur lors de la récupération du panier:", error);
-    throw error;
-  }
+  const response = await api.get<Cart>("/cart");
+  return response.data;
 };
 
 export const addToCart = async (starId: number, quantity: number): Promise<ApiResponse<Cart>> => {
@@ -183,9 +178,7 @@ export const updateOrderStatus = async (
   orderId: number,
   status: OrderStatus,
 ): Promise<ApiResponse<Order>> => {
-  const response = await api.put<ApiResponse<Order>>(`/orders/${orderId}/update-status`, {
-    status,
-  });
+  const response = await api.put<ApiResponse<Order>>(`/orders/${orderId}/update-status`, { status });
   return response.data;
 };
 

@@ -1,8 +1,9 @@
 // src/routes/cartRoutes.js
 const express = require("express");
 const router = express.Router();
-const { requireAuth } = require("../middlewares/authMiddleware");
 const cartController = require("../controllers/cartController");
+const csrfProtection = require("csurf")({ cookie: true });
+const { requireAuth } = require("../middlewares/authMiddleware");
 const validate = require("../middlewares/validate");
 const {
   addToCartSchema,
@@ -58,7 +59,7 @@ router.get("/", cartController.getCart);
  *       401:
  *         description: Unauthorized
  */
-router.post("/add", validate(addToCartSchema), cartController.addToCart);
+router.post("/add", csrfProtection, validate(addToCartSchema), cartController.addToCart);
 
 /**
  * @swagger
@@ -88,7 +89,12 @@ router.post("/add", validate(addToCartSchema), cartController.addToCart);
  *       404:
  *         description: Cart item not found
  */
-router.put("/update", validate(updateCartItemSchema), cartController.updateCartItem);
+router.put(
+  "/update",
+  csrfProtection,
+  validate(updateCartItemSchema),
+  cartController.updateCartItem,
+);
 
 /**
  * @swagger
@@ -118,6 +124,7 @@ router.put("/update", validate(updateCartItemSchema), cartController.updateCartI
  */
 router.delete(
   "/remove/:cartItemId",
+  csrfProtection,
   validate(removeFromCartSchema, "params"),
   cartController.removeFromCart,
 );

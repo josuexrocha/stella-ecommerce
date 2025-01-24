@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
+csrfProtection = require("csurf")({ cookie: true });
 const { authenticateUser, requireAuth } = require("../middlewares/authMiddleware");
 const validate = require("../middlewares/validate");
 const { registerSchema, loginSchema } = require("../validations/userValidation");
@@ -30,7 +31,7 @@ router.use(authenticateUser);
  *       400:
  *         description: Invalid input
  */
-router.post("/register", validate(registerSchema), userController.register);
+router.post("/register", csrfProtection, validate(registerSchema), userController.register);
 
 /**
  * @swagger
@@ -59,7 +60,7 @@ router.post("/register", validate(registerSchema), userController.register);
  *       400:
  *         description: Invalid credentials
  */
-router.post("/login", validate(loginSchema), userController.login);
+router.post("/login", csrfProtection, validate(loginSchema), userController.login);
 
 /**
  * @swagger
@@ -105,7 +106,7 @@ router.get("/profile", requireAuth, userController.getUserProfile);
  *       401:
  *         description: Unauthorized
  */
-router.put("/profile", requireAuth, userController.updateProfile);
+router.put("/profile", csrfProtection, requireAuth, userController.updateProfile);
 
 /**
  * @swagger
@@ -121,7 +122,7 @@ router.put("/profile", requireAuth, userController.updateProfile);
  *       401:
  *         description: Unauthorized
  */
-router.post("/logout", requireAuth, userController.logout);
+router.post("/logout", csrfProtection, requireAuth, userController.logout);
 
 /**
  * @swagger
@@ -139,6 +140,6 @@ router.post("/logout", requireAuth, userController.logout);
  *       500:
  *         description: Server error
  */
-router.delete("/me", requireAuth, userController.deleteAccount);
+router.delete("/me", csrfProtection, requireAuth, userController.deleteAccount);
 
 module.exports = router;

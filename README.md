@@ -150,14 +150,6 @@ Si il y a des problèmes ou des idées d'amélioration, go issues sur le dépôt
 
 ## Roadmap
 
-Voici quelques fonctionnalités que je prévois d'ajouter :
-
-- [ ] Terminer le formulaire de contact avec validation et envoi d'email
-- [ ] Améliorer l'experience utilisateur, notament sur la page de profile et catalogue
-- [ ] Intégration d'un système de paiement
-- [ ] Implementer la gestions pour les commandes
-- [ ] Tests tests tests tests...
-
 ## Licence
 
 [Informations sur la licence à venir]

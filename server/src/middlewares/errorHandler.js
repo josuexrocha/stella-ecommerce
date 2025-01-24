@@ -1,25 +1,26 @@
 // src/middlewares/errorHandler.js
 
-const winston = require("winston");
+const { createLogger, format, transports } = require("winston");
 
-const logger = winston.createLogger({
+const logger = createLogger({
   level: "error",
-  format: winston.format.json(),
+  format: format.json(),
   defaultMeta: { service: "user-service" },
   transports: [
-    new winston.transports.File({ filename: "error.log", level: "error" }),
-    new winston.transports.Console({
-      format: winston.format.simple(),
+    new transports.File({ filename: "error.log", level: "error" }),
+    new transports.Console({
+      format: format.simple(),
     }),
   ],
 });
 
 class AppError extends Error {
-  constructor(message, statusCode) {
+  constructor(message, statusCode, errors = []) {
     super(message);
     this.statusCode = statusCode;
     this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
     this.isOperational = true;
+    this.errors = errors;
 
     Error.captureStackTrace(this, this.constructor);
   }
@@ -76,7 +77,7 @@ const sendErrorProd = (err, res) => {
   }
 };
 
-const errorHandler = (err, res, _next) => {
+const errorHandler = (err, _req, res, _next) => {
   console.error("Error caught in errorHandler:", err);
 
   err.statusCode = err.statusCode || 500;
@@ -85,7 +86,7 @@ const errorHandler = (err, res, _next) => {
   if (process.env.NODE_ENV === "development") {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "test") {
-    let error = Object.assign({}, err);
+    let error = { ...err };
     error.message = err.message;
 
     if (error.name === "SequelizeValidationError") {

@@ -2,6 +2,7 @@
 
 // User related types
 export interface User {
+  token: any;
   id: number;
   username: string;
   firstName: string;
@@ -19,6 +20,7 @@ export interface UserProfileData {
 
 // Star related types
 export interface Star {
+  data: any;
   starid: number;
   name: string;
   description: string;

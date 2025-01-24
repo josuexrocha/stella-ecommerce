@@ -1,21 +1,22 @@
 // src/middlewares/validate.js
 
-const Joi = require("joi");
+const { compile } = require("joi");
+const { AppError } = require("./errorHandler");
 
 const validate =
   (schema, property = "body") =>
-  (req, res, next) => {
+  (req, _res, next) => {
     const options = {
       abortEarly: false,
       allowUnknown: true,
       stripUnknown: true,
     };
 
-    const { error, value } = Joi.compile(schema).validate(req[property], options);
+    const { error, value } = compile(schema).validate(req[property], options);
 
     if (error) {
       const errors = error.details.map((detail) => detail.message);
-      return res.status(400).json({ errors });
+      return next(new AppError("Validation failed", 400, errors));
     }
 
     req[property] = value;

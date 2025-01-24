@@ -1,6 +1,6 @@
 // server/src/routes/index.js
-const express = require("express");
-const router = express.Router();
+const { Router } = require("express");
+const router = Router();
 const { authenticateUser } = require("../middlewares/authMiddleware");
 
 const starsRoutes = require("./starsRoutes");
@@ -10,16 +10,16 @@ const cartRoutes = require("./cartRoutes");
 const wishlistRoutes = require("./wishlistRoutes");
 const reviewRoutes = require("./reviewRoutes");
 
-// Routes publiques
+// Public routes
 router.use("/stars", starsRoutes);
 
-// Middleware d'authentification appliqué à toutes les routes nécessitant une authentification
+// Authentication middleware applied to all routes requiring authentication
 router.use(authenticateUser);
 
-// Routes utilisateur nécessitant authentification
+// User routes requiring authentication
 router.use("/users", usersRoutes);
 
-// Routes nécessitant authentification
+// Routes requiring authentication
 router.use("/orders", ordersRoutes);
 router.use("/cart", cartRoutes);
 router.use("/wishlist", wishlistRoutes);

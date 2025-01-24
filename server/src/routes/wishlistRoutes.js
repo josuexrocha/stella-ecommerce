@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const wishlistController = require("../controllers/wishlistController");
+const csrfProtection = require("csurf")({ cookie: true });
 const { requireAuth } = require("../middlewares/authMiddleware");
 const validate = require("../middlewares/validate");
 const {
@@ -57,7 +58,12 @@ router.get("/", wishlistController.getWishlist);
  *       401:
  *         description: Unauthorized
  */
-router.post("/add", validate(addToWishlistSchema), wishlistController.addToWishlist);
+router.post(
+  "/add",
+  csrfProtection,
+  validate(addToWishlistSchema),
+  wishlistController.addToWishlist,
+);
 
 /**
  * @swagger
@@ -87,6 +93,7 @@ router.post("/add", validate(addToWishlistSchema), wishlistController.addToWishl
  */
 router.delete(
   "/remove/:starId",
+  csrfProtection,
   validate(removeFromWishlistSchema, "params"),
   wishlistController.removeFromWishlist,
 );

@@ -15,14 +15,17 @@ exports.createOrder = async (req, res, next) => {
     }
 
     // Création de la commande avec transaction
-    const order = await Order.create({
-      UserId: req.user.userId,
-      date: new Date(),
-      status: "pending",
-      totalAmount: 0, // Calculé plus tard
-      shippingAddress,
-      paymentMethod,
-    }, { transaction });
+    const order = await Order.create(
+      {
+        UserId: req.user.userId,
+        date: new Date(),
+        status: "pending",
+        totalAmount: 0, // Calculé plus tard
+        shippingAddress,
+        paymentMethod,
+      },
+      { transaction },
+    );
 
     if (!order || !order.id) {
       throw new AppError("Order creation failed", 500);
@@ -36,11 +39,14 @@ exports.createOrder = async (req, res, next) => {
       }
 
       // Création des éléments dans OrderStar avec transaction
-      await OrderStar.create({
-        orderId: order.id, // Utilise 'orderId' cohérent avec la BDD
-        starId: star.id, // Utilise 'starId' cohérent avec la BDD
-        quantity: item.quantity,
-      }, { transaction });
+      await OrderStar.create(
+        {
+          orderId: order.id, // Utilise 'orderId' cohérent avec la BDD
+          starId: star.id, // Utilise 'starId' cohérent avec la BDD
+          quantity: item.quantity,
+        },
+        { transaction },
+      );
 
       totalAmount += star.price * item.quantity;
     }

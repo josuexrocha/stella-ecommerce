@@ -42,8 +42,11 @@ const Login: React.FC = () => {
           className="space-y-4 bg-secondary text-text p-6 rounded-md shadow-lg"
         >
           <div>
-            <label className="block text-sm font-serif mb-2">Email :</label>
+            <label htmlFor="email" className="block text-sm font-serif mb-2">
+              Email :
+            </label>
             <input
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -53,8 +56,11 @@ const Login: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-serif mb-2">Mot de passe :</label>
+            <label htmlFor="password" className="block text-sm font-serif mb-2">
+              Mot de passe :
+            </label>
             <input
+              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
